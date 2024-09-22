@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al Matsurat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sofadi+One&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Sofadi+One&display=swap" rel="stylesheet">
+
+    <style>
+        .sofadi-one-regular {
+        font-family: "Sofadi One", system-ui;
+        font-weight: 400;
+        font-style: normal;
+        }
+        .montserrat-400 {
+        font-family: "Montserrat", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        }
+        .button-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40vh;
+            font-weight: bold;
+        }
+        h1, sub {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        h1 {
+            margin: 0;
+        }
+        .button {
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            margin: 0 20px;
+        }
+        .button:hover {
+            transform: scale(1.1);
+        }
+        .button img {
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="montserrat-400">Al-Matsurat Sugra</h1>
+    <sub class="sofadi-one-regular">Pagi dan Petang</sub>
+    <div class="button-container">
+        <button class="button" onclick="window.location.href='AlMatsurat_Sugro_Petang.html'">
+            <img src="rsc\svg\moon.svg" alt="Moon">
+        </button>
+        <button class="button" onclick="window.location.href='AlMatsurat_Sugro_Pagi.html'">
+            <img src="rsc\svg\sun.svg" alt="Sun">
+        </button>
+    </div>
+</body>
+</html>
