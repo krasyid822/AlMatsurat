@@ -65,9 +65,52 @@ Content-Location: https://almatsurat.vercel.app/ -->
             --tw-bg-opacity:0.6;
             background-color:rgb(63 63 70/var(--tw-bg-opacity))
         }
-    </style>  
+
+        /* Gaya untuk overlay */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Warna hitam transparan */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Gaya untuk kotak pesan */
+        #message-box {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Gaya untuk konten utama (di belakang overlay) */
+        #main-content {
+            display: none; /* Tidak ditampilkan saat overlay aktif */
+            padding: 20px;
+            text-align: center;
+        }
+
+    </style>
+
 </head>
 <body>
+
+    <div id="overlay">
+        <div id="message-box">
+            <h1>Under Development</h1>
+            <p>Halaman ini sedang dalam pengembangan.</p>
+        </div>
+    </div>
+
+    <div id="main-content">
     <div class="container max-w-xl mx-auto">
         
         <div class="text-center my-9 dark:text-white">
@@ -344,4 +387,5 @@ Content-Location: https://almatsurat.vercel.app/ -->
         
         
     </div>
+</div>
 </body></html>
