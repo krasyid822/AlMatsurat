@@ -40,6 +40,8 @@ Content-Location: https://almatsurat.vercel.app/ -->
     <meta property="og:title" content="Al-Matsurat Online">
     <meta property="og:description" content="website untuk membaca al-matsurat dan dzikir pagi petang sugro dan kubro.">
     <meta property="og:image" content="/img/og.jpg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
 
     <style>
             @font-face {
@@ -64,9 +66,23 @@ Content-Location: https://almatsurat.vercel.app/ -->
             --tw-bg-opacity:0.6;
             background-color:rgb(63 63 70/var(--tw-bg-opacity))
         }
+        .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+        }
     </style>
+
+    <script>
+        // source: https://github.com/Jabinsarsaragih/studyVocabulary/blob/jabin/assets/js/script.js
+        const data = new Audio();
+        data.src = "rsc/opus/Rabithah.opus";
+    </script>
 </head>
 <body>
+    
     <div class="container max-w-xl mx-auto">
         
         <div class="text-center my-9 dark:text-white">
@@ -332,6 +348,11 @@ Content-Location: https://almatsurat.vercel.app/ -->
                                 <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, sesungguhnya ini adalah siang-Mu yang telah menjelang dan siang-Mu yang tengah berlalu serta suara-suara penyeru-Mu, maka ampunilah aku.</p>
                             </div><div class="m-4 mt-8 border-b-2 border-green-600">
                                 <div class="flex justify-between p-4 bg-green-600 text-white sticky top-0">
+                                    <button onclick="data.play();">
+                                        <span class="material-symbols-outlined">
+                                            text_to_speech
+                                        </span>
+                                    </button>
                                     <p>Doa Robitoh</p>
                                     <p>1x baca</p>
                                 </div>
@@ -340,7 +361,7 @@ Content-Location: https://almatsurat.vercel.app/ -->
                             </div></div>
 
         <footer class="text-center text-sm lg:text-base mt-10 mx-4 my-4 p-4 bold dark:text-white dark:border-zinc-700">
-            Referensi: <br><a href="https://almatsurat.vercel.app/" target="_blank" title="yogyakarta. we love open source">AAM</a> , <a href="https://play.google.com/store/apps/details?id=com.walukustudio.almatsurat" target="_blank" title="play store app">Waluku Studio</a> dan <a href="https://play.google.com/store/apps/details?id=com.andi.alquran.id" target="_blank" title="play store app">Andi Unpam</a>
+            Referensi: <br><a href="https://almatsurat.vercel.app/" target="_blank" title="yogyakarta. we love open source">AAM</a> , <a href="https://play.google.com/store/apps/details?id=com.walukustudio.almatsurat" target="_blank" title="play store app">Waluku Studio</a>, <a href="https://play.google.com/store/apps/details?id=com.andi.alquran.id" target="_blank" title="play store app">Andi Unpam</a> dan <a href="https://m.youtube.com/watch?v=bHl-YNM9MRM&list=LL&index=2&pp=gAQBiAQB" target="_blank" title="youtube channel">SANTRI DIGITAL</a>
         </footer>
         
     </div>

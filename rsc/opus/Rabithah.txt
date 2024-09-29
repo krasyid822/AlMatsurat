@@ -1,0 +1,1 @@
+ffmpeg -i "Rabithah.mp3" -ss 10 -to 85 "Rabithah.opus"
