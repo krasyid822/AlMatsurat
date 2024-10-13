@@ -40,6 +40,10 @@ Content-Location: https://almatsurat.vercel.app/ -->
     <meta property="og:image" content="/img/og.jpg">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
+    <button class="fly-button-3 bg-orange-600 text-white" id="resetButton">Reset<br>Count</button>
+    <span id="counter" class="fly-button-1 fly-button fly-button-2 bg-blue-600 text-white"><b>0</b></span>
+    <button class="fly-button bg-blue-600 text-white" id="clickButton">Count</button>
+
 
     <style>
             @font-face {
@@ -60,9 +64,17 @@ Content-Location: https://almatsurat.vercel.app/ -->
             --tw-bg-opacity:0.6;
             background-color:rgb(22 163 74/var(--tw-bg-opacity))
         }
+        .bg-blue-600 {
+            --tw-bg-opacity:0.6;
+            background-color:rgb(0 0 255/var(--tw-bg-opacity))
+        }
         .bg-red-600 {
             --tw-bg-opacity:0.6;
             background-color:rgb(255 0 0/var(--tw-bg-opacity))
+        }
+        .bg-orange-600 {
+            --tw-bg-opacity:0.6;
+            background-color:rgb(255 165 0/var(--tw-bg-opacity))
         }
         .bg-zinc-700 {
             --tw-bg-opacity:0.6;
@@ -82,17 +94,83 @@ Content-Location: https://almatsurat.vercel.app/ -->
         html {
             scroll-behavior: smooth;
         }
+        .fly-button {
+            bottom: 1rem;
+            position: fixed;
+            padding: .75rem;
+            border-radius: 9999px;
+            right: 1rem;
+            z-index: 9999;
+        }
+        .fly-button-1 {
+            right: 6rem;
+        }
+        .fly-button-2 {
+            border-radius: 1px;
+        }
+        .fly-button-3 {
+            bottom: 1rem;
+            position: fixed;
+            padding: .75rem;
+            border-radius: 1;
+            left: 1rem;
+            z-index: 9999;
+        }
     </style>
 
     <script>
         // source: https://github.com/Jabinsarsaragih/studyVocabulary/blob/jabin/assets/js/script.js
         const data = new Audio();
         data.src = "rsc/opus/Rabithah_ai.opus";
+
+        // Inisialisasi variabel count dengan nilai awal 0
+        let count = 0;
+        // Menambahkan event listener untuk menangani klik pada tombol
+        document.getElementById('clickButton').addEventListener('click', function() {
+            count++;  // Menambahkan nilai count setiap kali tombol diklik
+            document.getElementById('counter').textContent = count;  // Memperbarui teks di elemen <span>
+
+            // Memeriksa apakah Vibration API didukung
+            if (navigator.vibrate) {
+                navigator.vibrate(100); // Getaran selama 200ms
+            }
+
+            // Bergetar saat mencapai 100
+            if (count === 100 || count === 10 || count === 3) {
+                navigator.vibrate([200, 40, 100]); // Getaran selama 200ms
+
+                // Memainkan nada tuk-deng
+                const audio2 = new Audio();
+                audio2.src = "rsc/wav/info_boost.wav";
+                audio2.play();
+                
+            }
+
+            // Memainkan nada tuk-deng
+            const audio1 = new Audio();
+            audio1.src = "rsc/wav/nav_boost.wav";
+            audio1.play();
+        });
+        // Fungsi untuk menangani klik pada tombol 'Reset'
+        document.getElementById('resetButton').addEventListener('click', function() {
+            count = 0;  // Mengatur ulang nilai count menjadi 0
+            document.getElementById('counter').textContent = count;  // Memperbarui teks di elemen <span> kembali ke 0
+
+            // Memeriksa apakah Vibration API didukung
+            if (navigator.vibrate) {
+                navigator.vibrate(1000); // Getaran selama 200ms
+            }
+
+            // Memainkan nada tuk-deng
+            const audio = new Audio();
+            audio.src = "rsc/wav/recycle_boost.wav";
+            audio.play();
+        });
     </script>
 
 </head>
 <body>
-    
+
     <div class="container max-w-xl mx-auto">
         
         <div class="text-center my-9 dark:text-white">
