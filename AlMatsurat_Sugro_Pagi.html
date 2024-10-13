@@ -60,9 +60,17 @@ Content-Location: https://almatsurat.vercel.app/ -->
             --tw-bg-opacity:0.6;
             background-color:rgb(22 163 74/var(--tw-bg-opacity))
         }
+        .bg-red-600 {
+            --tw-bg-opacity:0.6;
+            background-color:rgb(255 0 0/var(--tw-bg-opacity))
+        }
         .bg-zinc-700 {
             --tw-bg-opacity:0.6;
             background-color:rgb(63 63 70/var(--tw-bg-opacity))
+        }
+        .border-red-600 {
+            --tw-border-opacity: 1;
+            border-color: rgb(255 0 0 / var(--tw-border-opacity));
         }
         .material-symbols-outlined {
         font-variation-settings:
@@ -70,6 +78,9 @@ Content-Location: https://almatsurat.vercel.app/ -->
         'wght' 400,
         'GRAD' 0,
         'opsz' 24
+        }
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 
@@ -265,10 +276,10 @@ Content-Location: https://almatsurat.vercel.app/ -->
                                 </div>
                                 <p class="indopak" dir="rtl">اللّٰهُـمَّ إِنِّي أَعُوْذُبِكَ مِنَ الْكُفْرِ وَالْفَقْرِ , وَأَعُوْذُبِكَ مِنْ عَذَابِ الْقَبْرِ , لَآ إِلَهَ إِلَّا أَنْتَ</p> 
                                 <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah sungguh aku berlindung kepadaMu dari kekufuran dan kefaqiran, Ya Allah sungguh aku berlindung kepadaMu dari azab kubur, tidak ada Ilah kecuali Engkau.</p>
-                            </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
-                                <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
-                                    <p>Do'a Al-Matsurat / Dzikir Do'a</p>
-                                    <p>3x baca</p>
+                            </div><div class="m-4 mt-8 border-b-2 border-zinc-700" id="section1">
+                                <div class="flex justify-between p-4 bg-red-600 text-white sticky top-0">
+                                    <p>Do'a Al-Matsurat / Dzikir Do'a / Istighfar Sayyid</p>
+                                    <p>3x / 100x baca</p>
                                 </div>
                                 <p class="indopak" dir="rtl">اَللّٰهُـمَّ أَنْتَ رَبِّيْ لاَ إِلَهَ إِلاَّ أَنْتَ ,  خَلَقْتَنِيْ وَأَنَا عَبْدُكَ , وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ , أَعُوْذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ , أَبُوْءُ لَكَ بِنِعْمَتِكَ عَلَيَّ , وَأَبُوْءُ بِذَنْبِيْ فَاغْفِرْ لِيْ فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوْبَ إِلاَّ أَنْتَ</p> 
                                 <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, Engkau Tuhanku, tiada Tuhan kecuali Engkau. Engkau ciptakan aku dan aku adalah hamba-Mu. Aku berada di atas janjiMu, semampuku. Aku berlindung kepadaMu dari keburukan perbuatanku. Aku mengakui banyaknya nikmat (yang Engkau anugerahkan) kepadaku dan aku mengakui dosa-dosaku, maka ampunilah aku. Karena sesungguhnya tiada yang mengampuni dosa-dosa melainkan Engkau</p>
@@ -345,7 +356,8 @@ Content-Location: https://almatsurat.vercel.app/ -->
                                 </div>
                                 <p class="indopak" dir="rtl">اَللَّهُمَّ إِنَّ هَذَا إِقْبَالُ نَهَارِكَ وَإِدْبَارُ لَيْلِكَ وَأَصْوَاتُ دُعَاتِكَ فَاغْفِرْلِي</p> 
                                 <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, sesungguhnya ini adalah siang-Mu yang telah menjelang dan siang-Mu yang tengah berlalu serta suara-suara penyeru-Mu, maka ampunilah aku.</p>
-                            </div><div class="m-4 mt-8 border-b-2 border-green-600">
+                            </div>
+                            <div class="m-4 mt-8 border-b-2 border-green-600">
                                 <div class="flex justify-between p-4 bg-green-600 text-white sticky top-0">
                                     <button onclick="data.play();">
                                         <span class="material-symbols-outlined">
@@ -357,10 +369,24 @@ Content-Location: https://almatsurat.vercel.app/ -->
                                 </div>
                                 <p class="indopak" dir="rtl">اَللّهُمَّ إِنَّكَ تَعْلَمُ أَنَّ هَذِهِ الْقُلُوْبَ، قَدِ اجْتَمَعَتْ عَلَى مَحَبَّتِكَ وَالْتَقَتْ عَلَى طَاعَتِكَ، وَتَوَحَّدَتْ عَلَى دَعْوَتِكَ وَتَعَاهَدَتْ عَلَى نُصْرَةِ شَرِيْعَتِكَ فَوَثِّقِ اللَّهُمَّ رَابِطَتَهَا، وَأَدِمْ وُدَّهَا، وَاهْدِهَا سُبُلَهَا وَامْلَأَهَا بِنُوْرِكَ الَّذِيْ لاَ يَخْبُوْا وَاشْرَحْ صُدُوْرَهَا بِفَيْضِ الْإِيْمَانِ بِكَ، وَجَمِيْلِ التَّوَكُّلِ عَلَيْكَ وَاَحْيِهَا بِمَعْرِفَتِكَ، وَأَمِتْهَا عَلَى الشَّهَادَةِ فِي سَبِيْلِكَ إِنَّكَ نِعْمَ الْمَوْلَى وَنِعْمَ النَّصِيْرِ. اَللَّهُمَّ أَمِيْنَ. وَصَلِّ اللَّهُمَّ عَلَى سَيِّدَنَا مُحَمَّدٍ وَعَلَى آلِهِ وَصَحْبِهِ وَسَلِّمَ</p> 
                                 <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, sesungguhnya Engkau Maha Mengetahui bahawa hati-hati ini, telah berhimpun di atas dasar kecintaan terhadapmu, bertemu di atas ketaatan kepada-Mu dan bersatu bagi memikul beban dakwah-Mu, hati-hati ini telah mengikat persetiaan untuk menolong meninggikan syariat-Mu. Oleh itu, Ya Allah, Engkau perkukuhkan ikatannya dan Engkau kekalkan kemesraan hati-hati ini, tunjukilah hati-hati ini akan jalan yang sebenar,  serta penuhkanlah (piala) hati-hati ini dengan cahaya Rabbani-Mu yang tidak kunjung redup, lapangkanlah hati-hati dengan limpahan keimanan serta keindahan tawakkal kepada-Mu, hidup suburkanlah hati-hati ini dengan makrifat (pengenalan yang sebenarnya) tentang-Mu.  (Jika Engkau takdirkan kami mati) maka matikanlah hati-hati ini sebagai para syuhada dalam perjuangan agama-Mu. Sesungguhnya Engkau sebaik-baik pelindung dan sebaik-baik penolong.  Ya Allah perkenankanlah doa kami. Dan semoga shalawat serta salam selalu tercurah kepada Nabi Muhammad, keluarganya dan kepada semua sahabatnya.</p>
-                            </div></div>
+                            </div>
+                            <div class="m-4 mt-8 border-b-2 border-red-600">
+                                <div class="flex justify-between p-4 bg-red-600 text-white sticky top-0">
+                                    <p>Amalan Yaumiyah (Istighfar)</p>
+                                    <a href="#section1"><span class="material-symbols-outlined">read_more</span></a>
+                                    <p>100x baca</p>
+                                </div>
+                                <p class="indopak" dir="rtl">أَسْتَغْفِرُ اللهَ| العَظِيْمَ</p> 
+                                <p class="text-justify mb-6 dark:text-zinc-300">Aku memohon ampunan kepada Allah | Yang Maha Agung.</p>
+                            </div>
+                        </div>
 
         <footer class="text-center text-sm lg:text-base mt-10 mx-4 my-4 p-4 bold dark:text-white dark:border-zinc-700">
-            Referensi: <br><a href="https://almatsurat.vercel.app/" target="_blank" title="yogyakarta. we love open source">AAM</a> , <a href="https://play.google.com/store/apps/details?id=com.walukustudio.almatsurat" target="_blank" title="play store app">Waluku Studio</a>, <a href="https://play.google.com/store/apps/details?id=com.andi.alquran.id" target="_blank" title="play store app">Andi Unpam</a> <!-- , <a href="https://m.youtube.com/watch?v=bHl-YNM9MRM&list=LL&index=2&pp=gAQBiAQB" target="_blank" title="youtube channel">SANTRI DIGITAL</a> --> dan <a href="https://www.naturalreaders.com/online/" target="_blank" title="web site">Natural Reader AI</a>
+            Referensi: <br><a href="https://almatsurat.vercel.app/" target="_blank" title="yogyakarta. we love open source">AAM</a>, <a href="https://play.google.com/store/apps/details?id=com.walukustudio.almatsurat" target="_blank" title="play store app">Waluku Studio</a>, <a href="https://play.google.com/store/apps/details?id=com.andi.alquran.id" target="_blank" title="play store app">Andi Unpam</a>,  <a href="https://docs.google.com/spreadsheets/d/1LumnHQXxxukTrm2_4yrBxzRcpWKQOfbFy-ueoTmVkGM/edit?usp=sharing" target="_blank" title="google spreadsheet">Amalan Yaumiyah</a>, <a href="https://openulis.com/bacaan-istighfar/" target="_blank" title="kalimat istighfar">Openulis</a>
+            <br>
+            <br>Alat Pendukung: <br><a href="https://www.naturalreaders.com/online/" target="_blank" title="web site">Natural Reader AI</a>, <a href="https://www.arabic-keyboard.org/editor/" target="_blank" title="teks editor kalimat arab">Arabic Online Editor</a>, <a href="https://fonts.google.com/icons" target="_blank" title="ikon-ikon yang dipakai">Google Fonts</a>
+            <br>
+            <!-- <br>Tidak Digunakan: <br><a href="https://m.youtube.com/watch?v=bHl-YNM9MRM&list=LL&index=2&pp=gAQBiAQB" target="_blank" title="youtube channel">SANTRI DIGITAL</a>, -->
         </footer>
         
     </div>
