@@ -95,6 +95,9 @@ Content-Location: https://almatsurat.vercel.app/ -->
             scroll-behavior: smooth;
             user-select: none;
         }
+        body.no-scroll {
+            overflow: hidden;
+        }
         .fly-button {
             bottom: 1rem;
             position: fixed;
@@ -151,11 +154,23 @@ Content-Location: https://almatsurat.vercel.app/ -->
             const audio1 = new Audio();
             audio1.src = "rsc/wav/nav_boost.wav";
             audio1.play();
+
+            // Bekukan halaman saat count tidak 0
+            if (count != 0) {
+                document.body.classList.add('no-scroll');
+            }
+
         });
+
         // Fungsi untuk menangani klik pada tombol 'Reset'
         document.getElementById('resetButton').addEventListener('click', function() {
             count = 0;  // Mengatur ulang nilai count menjadi 0
             document.getElementById('counter').textContent = count;  // Memperbarui teks di elemen <span> kembali ke 0
+            
+            // Menghapus class 'no-scroll' saat count 0
+            if (count == 0) {
+                document.body.classList.remove('no-scroll');
+            }
 
             // Memeriksa apakah Vibration API didukung
             if (navigator.vibrate) {
