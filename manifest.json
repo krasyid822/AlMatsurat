@@ -4,7 +4,7 @@
     "description": "Al-Matsurat adalah kumpulan doa-doa yang diajarkan oleh Rasulullah SAW untuk dibaca setiap pagi dan petang.",
     "start_url": "index.html",
     "display": "minimal-ui",
-    "background_color": "#ffffff",
+    "background_color": "#000000",
     "theme_color": "#000000",
     "icons": [
         {
