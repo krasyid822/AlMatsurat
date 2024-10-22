@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="id">
-<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Al Matsurat</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="32x32" href="rsc\png\icon.png">
-    <base href="base.html">
+    <!-- <base href="base.html"> -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sofadi+One&display=swap" rel="stylesheet">
@@ -60,6 +59,9 @@
         .pagi, #pagi {
             display: none;
         }
+        .pagi-dis {
+            display: block;
+        }
         .petang {
             display: none;
         }
@@ -70,8 +72,9 @@
             background-color: black;
             color: white;
         }
-        html {
+        html, body {
             scroll-behavior: smooth;
+            overscroll-behavior: contain;
         }
         
         
@@ -87,9 +90,19 @@
             });
         }
 
+        window.addEventListener('beforeunload', (event) => {
+        event.preventDefault();
+        event.returnValue = ''; // Menampilkan dialog konfirmasi
+        });
+
+
         function pagi() {
         var element = document.getElementById("pagi");
         element.style.display = "block";
+        var element002 = document.getElementById("pagi-dis");
+        element002.style.display = "block";
+        var element00 = document.getElementById("petang");
+        element00.style.display = "none";
         var element1 = document.getElementById("home");
         element1.style.display = "none";
         var element2 = document.getElementById("bdy");
@@ -99,6 +112,10 @@
         function petang() {
         var element00 = document.getElementById("petang");
         element00.style.display = "block";
+        var element001 = document.getElementById("pagi");
+        element001.style.display = "block";
+        var element002 = document.getElementById("pagi-dis");
+        element002.style.display = "none";
         var element11 = document.getElementById("home");
         element11.style.display = "none";
         var element22 = document.getElementById("bdy");
@@ -135,14 +152,10 @@
 
     <!-- project created by Rasyid Kurniawan -->
      <!-- new source finded "https://akuislam.com/panduan/al-mathurat-sughra-kubra-rumi/" -->
-      <div id="petang" class="petang">
-        <botton onclick="kembali()"><span class="material-symbols-outlined">arrow_back</span>Kembali</botton>
-        <h1>Page is not available</h1>
-      </div>
 
      <div id="pagi" class="pagi">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=arrow_back" />
-        <botton onclick="kembali()"><span class="material-symbols-outlined">arrow_back</span>Kembali</botton>
+        <botton onclick="kembali()" class="fly-button-back"><span class="material-symbols-outlined">arrow_back</span>Kembali</botton>
         
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" type="text/css"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -169,7 +182,8 @@
         <meta property="og:image" content="/img/og.jpg">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
-        <button class="fly-button-3 bg-orange-600 text-white" id="resetButton">Reset<br>Count</button>
+        <!-- Count -->
+        <button class="fly-button-3 bg-orange-600 text-white" id="resetButton">Rst. <br>Cnt.</button>
         <span id="counter" class="fly-button-1 fly-button fly-button-2 bg-blue-600 text-white"><b>0</b></span>
         <button class="fly-button bg-blue-600 text-white" id="clickButton">Count</button>
 
@@ -181,7 +195,10 @@
             }
             .indopak {
                 font-family: 'MyCustomFont', sans-serif;
-                font-size: 40px;
+                font-size: 45px;
+            }
+            .mb-6 {
+                font-size: medium;
             }
             .bold {
                 font-weight: bold;
@@ -236,6 +253,13 @@
                 border-radius: 9999px;
                 right: 1rem;
                 z-index: 9999;
+            }
+            .fly-button-back {
+                background-color: rgba(255, 255, 255, 0.507);
+                top: 10;
+                right: 0;
+                z-index: 9999;
+                position: fixed;
             }
             .fly-button-1 {
                 right: 6rem;
@@ -317,9 +341,18 @@
 
         <div class="container max-w-xl mx-auto">
             
-            <div class="text-center my-9 dark:text-white">
-                <h1 class="font-bold text-2xl" id="judul_main">Al - Matsurat Sugro Pagi</h1>
-                <p class="" id="deskripsi_main">Biasakan membaca Al - Matsurat sugro setiap pagi</p>
+            <div id="pagi-dis">
+                <div class="text-center my-9 dark:text-white">
+                    <h1 class="font-bold text-2xl" id="judul_main">Al Matsurat Sugro Pagi</h1>
+                    <p class="" id="deskripsi_main">Biasakan membaca Al Matsurat sugro setiap pagi</p>
+                </div>
+            </div>
+            <div id="petang">
+                <div class="text-center my-9 dark:text-white">
+                    *Belum selesai,semetara jangan digunakan
+                    <h1 class="font-bold text-2xl" id="judul_main">Al Matsurat Sugro Sore</h1>
+                    <p class="" id="deskripsi_main">Biasakan membaca Al Matsurat sugro setiap sore</p>
+                </div>
             </div>
             
             <div id="content"><div class="m-4 mt-8 border-b-2 border-zinc-700">
@@ -603,7 +636,7 @@
                                 </div>
                             </div>
 
-            <footer class="text-center text-sm lg:text-base mt-10 mx-4 my-4 p-4 bold dark:text-white dark:border-zinc-700">
+            <footer style="font-size: small;" class="text-center text-sm lg:text-base mt-10 mx-4 my-4 p-4 bold dark:text-white dark:border-zinc-700">
                 Referensi: <br><a href="https://almatsurat.vercel.app/" target="_blank" title="yogyakarta. we love open source">AAM</a>, <a href="https://play.google.com/store/apps/details?id=com.walukustudio.almatsurat" target="_blank" title="play store app">Waluku Studio</a>, <a href="https://play.google.com/store/apps/details?id=com.andi.alquran.id" target="_blank" title="play store app">Andi Unpam</a>,  <a href="https://docs.google.com/spreadsheets/d/1LumnHQXxxukTrm2_4yrBxzRcpWKQOfbFy-ueoTmVkGM/edit?usp=sharing" target="_blank" title="google spreadsheet">Amalan Yaumiyah</a>, <a href="https://openulis.com/bacaan-istighfar/" target="_blank" title="kalimat istighfar">Openulis</a>
                 <br>
                 <br>Alat Pendukung: <br><a href="https://www.naturalreaders.com/online/" target="_blank" title="web site">Natural Reader AI</a>, <a href="https://www.arabic-keyboard.org/editor/" target="_blank" title="teks editor kalimat arab">Arabic Online Editor</a>, <a href="https://fonts.google.com/icons" target="_blank" title="ikon-ikon yang dipakai">Google Fonts</a>
