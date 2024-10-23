@@ -16,6 +16,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=dark_mode" />
 
     <style>
+        @media (orientation: portrait) {
+            .potrait {
+                font-size-adjust: 0.49;
+            }
+        }
         .sofadi-one-regular {
         font-family: "Sofadi One", system-ui;
         font-weight: 400;
@@ -24,24 +29,22 @@
         .montserrat-400 {
         font-family: "Montserrat", sans-serif;
         font-optical-sizing: auto;
-        font-weight: 400;
+        /* font-weight: 400; */
         font-style: normal;
         }
         .button-container{
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 40vh;
+            /* align-items: center; */
+            height: 200px;
             font-weight: bold;
+            place-items: center;
         }
         h1, sub, .center {
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: bold;
-        }
-        h1 {
-            margin: 0;
         }
         .button {
             border: none;
@@ -62,7 +65,7 @@
         .pagi-dis {
             display: block;
         }
-        .petang {
+        .sore {
             display: none;
         }
         .home, #home {
@@ -75,6 +78,7 @@
         html, body {
             scroll-behavior: smooth;
             overscroll-behavior: contain;
+            overscroll-behavior-y: contain;
         }
         
         
@@ -90,27 +94,72 @@
             });
         }
 
-        window.addEventListener('beforeunload', (event) => {
+        function saveScrollPosition() {
+            localStorage.setItem("scrollPosition", window.scrollY); // Simpan posisi scroll
+        }
+
+        function loadScrollPosition() {
+            const pagiElement = document.getElementById('pagi');
+            const soreElement = document.getElementById('sore');
+            const pagiPosition = pagiElement.getBoundingClientRect().top + window.scrollY;
+            const sorePosition = soreElement.getBoundingClientRect().top + window.scrollY;
+            const scrollPosition = window.scrollY + window.innerHeight / 2;
+
+            function load() {
+            let savedPosition = localStorage.getItem("scrollPosition");
+            if (savedPosition) {
+                window.scrollTo(0, savedPosition); // Kembalikan ke posisi scroll yang disimpan
+            }}
+
+            if (!sessionStorage.getItem("loadCalled")) {
+                if (scrollPosition >= pagiPosition && scrollPosition < sorePosition) {
+                console.log('Currently in Pagi section');
+                pagi();
+                load();
+            } else if (scrollPosition >= sorePosition) {
+                console.log('Currently in Sore section');
+                sore();
+                load();
+            } else {
+                console.log('Currently not in Pagi or Sore section');
+                kembali();
+            }  
+            sessionStorage.setItem("loadCalled", "true"); // Set flag agar tidak dipanggil lagi
+        }            
+        }
+        window.addEventListener('scroll', loadScrollPosition);
+        window.addEventListener('load', loadScrollPosition);
+        // Simpan posisi scroll setiap kali pengguna scroll
+        window.onscroll = saveScrollPosition;
+        // Kembalikan posisi scroll saat halaman dimuat
+        window.onload = loadScrollPosition;
+
+        // Menampilkan dialog konfirmasi saat akan menutup tab atau browser
+        /* window.addEventListener('beforeunload', (event) => {
         event.preventDefault();
         event.returnValue = ''; // Menampilkan dialog konfirmasi
-        });
+        }); */
 
 
+        // Fungsi untuk halaman pagi
         function pagi() {
         var element = document.getElementById("pagi");
         element.style.display = "block";
         var element002 = document.getElementById("pagi-dis");
         element002.style.display = "block";
-        var element00 = document.getElementById("petang");
+        var element00 = document.getElementById("sore");
         element00.style.display = "none";
         var element1 = document.getElementById("home");
         element1.style.display = "none";
         var element2 = document.getElementById("bdy");
-        element2.style.backgroundColor = "white";
+        element2.style.backgroundColor = "palegoldenrod";
         element2.style.color = "black";
+        /* element2.style.height = "2000px"; */
         }
-        function petang() {
-        var element00 = document.getElementById("petang");
+
+        // Fungsi untuk halaman sore
+        function sore() {
+        var element00 = document.getElementById("sore");
         element00.style.display = "block";
         var element001 = document.getElementById("pagi");
         element001.style.display = "block";
@@ -119,40 +168,50 @@
         var element11 = document.getElementById("home");
         element11.style.display = "none";
         var element22 = document.getElementById("bdy");
-        element22.style.backgroundColor = "black";
-        element22.style.color = "white";
+        element22.style.backgroundColor = "lightcoral";
+        element22.style.color = "black";
+        /* element22.style.height = "2000px"; */
         }
+
+        // Fungsi untuk tombol kembali ke halaman utama
         function kembali() {
         var element000 = document.getElementById("pagi");
         element000.style.display = "none";
-        var element000 = document.getElementById("petang");
+        var element000 = document.getElementById("sore");
         element000.style.display = "none";
         var element111 = document.getElementById("home");
         element111.style.display = "block";
         }
     </script>
 </head>
+
+<!-- Home -->
 <body id="bdy">
     <div id="home" class="home">
-        <h1 class="montserrat-400">Al Matsurat Sugra</h1>
-        <sub class="sofadi-one-regular">Pagi dan Petang</sub>
+        <h1 class="montserrat-400 potrait"><b><u>Al Matsurat Sugra</u></b></h1>
+        <sub class="sofadi-one-regular potrait">Biasakan membaca al matsurat sebelum berangkat dan sepulang kerja</sub>
         <div class="button-container">
-            <button class="button" onclick="petang()">
-                <span class="material-symbols-outlined" style="font-size: 148px;">
-                    dark_mode
-                    </span>
-            </button>
             <button class="button" onclick="pagi()">
                 <span class="material-symbols-outlined" style="font-size: 148px;">
                     light_mode
                     </span>
+                    <div class="sofadi-one-regular">Pagi</div>
             </button>
+            <div class="sofadi-one-regular button">dan</div>
+            <button class="button" onclick="sore()">
+                <span class="material-symbols-outlined" style="font-size: 148px;">
+                    wb_twilight
+                    </span>
+                    <div class="sofadi-one-regular">Sore</div>
+            </button>
+            
         </div>
     </div>
 
     <!-- project created by Rasyid Kurniawan -->
      <!-- new source finded "https://akuislam.com/panduan/al-mathurat-sughra-kubra-rumi/" -->
 
+     <!-- Almatsurat pagi -->
      <div id="pagi" class="pagi">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=arrow_back" />
         <botton onclick="kembali()" class="fly-button-back"><span class="material-symbols-outlined">arrow_back</span>Kembali</botton>
@@ -160,17 +219,17 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" type="text/css"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://almatsurat.vercel.app/style.css">
+        <link rel="stylesheet" href="rsc/css/style.css">
         <link rel="icon" type="image/png" sizes="32x32" href="rsc/png/IMG_20241008_080446.png">
         <link rel="shortcut icon" href="rsc/png/IMG_20241008_080446.png" type="image/x-icon">
         <title id="judul_browser">Al Matsurat Sugro Pagi</title>
-        <meta name="description" content="website untuk membaca al-matsurat dan dzikir pagi petang sugro dan kubro.">
+        <meta name="description" content="website untuk membaca al-matsurat dan dzikir pagi sore sugro dan kubro.">
         <meta name="keywords" content="Al-Matsurat, almatsurat, almatsurat web, almatsurat online">
         <meta name="google-site-verification" content="upN7jUrhwfOZ1VG5OUB0fBHKpY_UlUdytzKAgIU10ks">
         <meta property="og:title" content="Al-Matsurat Online">
         <meta property="og:site_name" content="Al-Matsurat Online">
         <meta property="og:url" content="https://almatsurat.vercel.app/">
-        <meta property="og:description" content="website untuk membaca al-matsurat dan dzikir pagi petang sugro dan kubro.">
+        <meta property="og:description" content="website untuk membaca al-matsurat dan dzikir pagi sore sugro dan kubro.">
         <meta property="og:type" content="website">
         <meta property="og:image" content="/img/og.jpg">
         <meta name="twitter:card" content="summary_large_image">
@@ -178,14 +237,14 @@
         <meta name="twitter:creator" content="@hialiif">
         <meta property="og:url" content="https://almatsurat.vercel.app/">
         <meta property="og:title" content="Al-Matsurat Online">
-        <meta property="og:description" content="website untuk membaca al-matsurat dan dzikir pagi petang sugro dan kubro.">
+        <meta property="og:description" content="website untuk membaca al-matsurat dan dzikir pagi sore sugro dan kubro.">
         <meta property="og:image" content="/img/og.jpg">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
         <!-- Count -->
-        <button class="fly-button-3 bg-orange-600 text-white" id="resetButton">Rst. <br>Cnt.</button>
+        <button class="fly-button-3 bg-orange-600 text-white" id="resetButton">Reset<br>Count</button>
         <span id="counter" class="fly-button-1 fly-button fly-button-2 bg-blue-600 text-white"><b>0</b></span>
-        <button class="fly-button bg-blue-600 text-white" id="clickButton">Count</button>
+        <button class="fly-button bg-blue-600 text-white" id="clickButton"><br><br>Count</button>
 
 
         <style>
@@ -347,7 +406,7 @@
                     <p class="" id="deskripsi_main">Biasakan membaca Al Matsurat sugro setiap pagi</p>
                 </div>
             </div>
-            <div id="petang">
+            <div id="sore">
                 <div class="text-center my-9 dark:text-white">
                     *Belum selesai,semetara jangan digunakan
                     <h1 class="font-bold text-2xl" id="judul_main">Al Matsurat Sugro Sore</h1>
