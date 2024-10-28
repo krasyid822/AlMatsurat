@@ -99,35 +99,32 @@
         }
 
         function loadScrollPosition() {
-            let judulHalaman = document.title;
-            console.log(judulHalaman);
-
-            /* const pagiElement = document.getElementById('pagi');
+            const pagiElement = document.getElementById('pagi');
             const soreElement = document.getElementById('sore');
             const pagiPosition = pagiElement.getBoundingClientRect().top + window.scrollY;
             const sorePosition = soreElement.getBoundingClientRect().top + window.scrollY;
-            const scrollPosition = window.scrollY + window.innerHeight / 2; */
+            const scrollPosition = window.scrollY + window.innerHeight / 2;
+            let judulHalaman = document.title;
+            console.log(judulHalaman);
 
-            // Simpan posisi scroll
             function load() {
             let savedPosition = localStorage.getItem("scrollPosition");
             if (savedPosition) {
                 window.scrollTo(0, savedPosition); // Kembalikan ke posisi scroll yang disimpan
             }}
 
-            // Logika untuk menampilkan halaman berdasarkan
             if (!sessionStorage.getItem("loadCalled")) {
-                if (judulHalaman === "Al Matsurat Pagi") {
+            if (judulHalaman=="Al Matsurat Pagi") {
                 console.log('Currently in Pagi section');
                 pagi();
                 load();
-            } else if (judulHalaman === "Al Matsurat Sore") {
+            } else if (judulHalaman=="Al Matsurat Sore") {
                 console.log('Currently in Sore section');
                 sore();
                 load();
             } else {
                 console.log('Currently not in Pagi or Sore section');
-                kembali();
+                /* kembali(); */
             }  
             sessionStorage.setItem("loadCalled", "true"); // Set flag agar tidak dipanggil lagi
         }            
@@ -148,6 +145,7 @@
 
         // Fungsi untuk halaman pagi
         function pagi() {
+        window.pagiel = "pagi";
         var element = document.getElementById("pagi");
         element.style.display = "block";
         var element002 = document.getElementById("pagi-dis");
@@ -165,6 +163,7 @@
 
         // Fungsi untuk halaman sore
         function sore() {
+        window.soreel = "sore";
         var element00 = document.getElementById("sore");
         element00.style.display = "block";
         var element001 = document.getElementById("pagi");
