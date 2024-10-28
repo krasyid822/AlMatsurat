@@ -113,21 +113,26 @@
                 window.scrollTo(0, savedPosition); // Kembalikan ke posisi scroll yang disimpan
             }}
 
-            if (!sessionStorage.getItem("loadCalled")) {
+            /* if (!sessionStorage.getItem("loadCalled")) { */
             if (judulHalaman=="Al Matsurat Pagi") {
-                console.log('Currently in Pagi section');
-                pagi();
-                load();
+                setTimeout(() => {
+                    console.log('Currently in Pagi section');
+                    pagi();
+                    load();
+                }, 2000);
             } else if (judulHalaman=="Al Matsurat Sore") {
-                console.log('Currently in Sore section');
-                sore();
-                load();
+                setTimeout(() => {
+                    console.log('Currently in Sore section');
+                    sore();
+                    load();
+                }, 2000);
+                
             } else {
                 console.log('Currently not in Pagi or Sore section');
                 /* kembali(); */
             }  
-            sessionStorage.setItem("loadCalled", "true"); // Set flag agar tidak dipanggil lagi
-        }            
+               /* sessionStorage.setItem("loadCalled", "true"); // Set flag agar tidak dipanggil lagi
+        }  */        
         }
         window.addEventListener('scroll', loadScrollPosition);
         window.addEventListener('load', loadScrollPosition);
