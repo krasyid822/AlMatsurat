@@ -59,7 +59,7 @@
             width: 150px;
             height: 150px;
         }
-        .pagi, #pagi {
+        .pagi {
             display: none;
         }
         .pagi-dis {
@@ -68,19 +68,32 @@
         .sore {
             display: none;
         }
-        .home, #home {
+        .home {
             display: block;
         }
-        .bdy, #bdy {
+        .bdy {
             background-color: black;
             color: white;
+
+            /* background-image: none;
+            background-position: center;
+            background-size: 200%;
+            background-repeat: no-repeat; */
         }
-        html, body {
+        html, body, .body {
             scroll-behavior: smooth;
             overscroll-behavior: contain;
             overscroll-behavior-y: contain;
         }
-        
+        .usr-feedback {
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            padding: 60px;
+        }
         
     </style>
     <script>
@@ -94,114 +107,86 @@
             });
         }
 
-        function saveScrollPosition() {
-            localStorage.setItem("scrollPosition", window.scrollY); // Simpan posisi scroll
-        }
-
-        function loadScrollPosition() {
-            const pagiElement = document.getElementById('pagi');
-            const soreElement = document.getElementById('sore');
-            const pagiPosition = pagiElement.getBoundingClientRect().top + window.scrollY;
-            const sorePosition = soreElement.getBoundingClientRect().top + window.scrollY;
-            const scrollPosition = window.scrollY + window.innerHeight / 2;
-            let judulHalaman = document.title;
-            console.log(judulHalaman);
-
-            function load() {
-            let savedPosition = localStorage.getItem("scrollPosition");
-            if (savedPosition) {
-                window.scrollTo(0, savedPosition); // Kembalikan ke posisi scroll yang disimpan
-            }}
-
-            /* if (!sessionStorage.getItem("loadCalled")) { */
-            if (judulHalaman=="Al Matsurat Pagi") {
-                setTimeout(() => {
-                    console.log('Currently in Pagi section');
-                    pagi();
-                    load();
-                }, 2000);
-            } else if (judulHalaman=="Al Matsurat Sore") {
-                setTimeout(() => {
-                    console.log('Currently in Sore section');
-                    sore();
-                    load();
-                }, 2000);
-                
-            } else {
-                console.log('Currently not in Pagi or Sore section');
-                /* kembali(); */
-            }  
-               /* sessionStorage.setItem("loadCalled", "true"); // Set flag agar tidak dipanggil lagi
-        }  */        
-        }
-        window.addEventListener('scroll', loadScrollPosition);
-        window.addEventListener('load', loadScrollPosition);
-        // Simpan posisi scroll setiap kali pengguna scroll
-        window.onscroll = saveScrollPosition;
-        // Kembalikan posisi scroll saat halaman dimuat
-        window.onload = loadScrollPosition;
-
-        // Menampilkan dialog konfirmasi saat akan menutup tab atau browser
-        /* window.addEventListener('beforeunload', (event) => {
-        event.preventDefault();
-        event.returnValue = ''; // Menampilkan dialog konfirmasi
-        }); */
-
-
         // Fungsi untuk halaman pagi
         function pagi() {
-        window.pagiel = "pagi";
-        var element = document.getElementById("pagi");
-        element.style.display = "block";
-        var element002 = document.getElementById("pagi-dis");
-        element002.style.display = "block";
-        var element00 = document.getElementById("sore");
-        element00.style.display = "none";
-        var element1 = document.getElementById("home");
-        element1.style.display = "none";
-        var element2 = document.getElementById("bdy");
-        element2.style.backgroundColor = "palegoldenrod";
-        element2.style.color = "black";
-        /* element2.style.height = "2000px"; */
+        var element = document.getElementsByClassName("pagi");
+        for (let i = 0; i < element.length; i++) {
+            element[i].style.display = "block";
+        }
+        var element002 = document.getElementsByClassName("pagi-dis");
+        for (let i = 0; i < element002.length; i++) {
+            element002[i].style.display = "block";
+        }
+        var element00 = document.getElementsByClassName("sore");
+        for (let i = 0; i < element00.length; i++) {
+            element00[i].style.display = "none";
+        }
+        var element1 = document.getElementsByClassName("home");
+        for (let i = 0; i < element1.length; i++) {
+            element1[i].style.display = "none";
+        }
+        var element2 = document.getElementsByClassName("bdy");
+        for (let i = 0; i < element2.length; i++) {
+            element2[i].style.backgroundColor = "palegoldenrod";
+            element2[i].style.color = "black";
+        }
+        var element3 = document.getElementsByClassName("bdy");
+        /* for (let i = 0; i < element3.length; i++) {
+            element3[i].style.backgroundImage = "url('rsc/png/sore-bg.png')";
+        } */
         document.title = "Al Matsurat Pagi";
         }
 
         // Fungsi untuk halaman sore
         function sore() {
-        window.soreel = "sore";
-        var element00 = document.getElementById("sore");
-        element00.style.display = "block";
-        var element001 = document.getElementById("pagi");
-        element001.style.display = "block";
-        var element002 = document.getElementById("pagi-dis");
-        element002.style.display = "none";
-        var element11 = document.getElementById("home");
-        element11.style.display = "none";
-        var element22 = document.getElementById("bdy");
-        element22.style.backgroundColor = "lightcoral";
-        element22.style.color = "black";
-        /* element22.style.height = "2000px"; */
+        var element00 = document.getElementsByClassName("sore");
+        for (let i = 0; i < element00.length; i++) {
+            element00[i].style.display = "block";
+        }
+        var element001 = document.getElementsByClassName("pagi");
+        for (let i = 0; i < element001.length; i++) {
+            element001[i].style.display = "block";
+        }
+        var element002 = document.getElementsByClassName("pagi-dis");
+        for (let i = 0; i < element002.length; i++) {
+            element002[i].style.display = "none";
+        }
+        var element11 = document.getElementsByClassName("home");
+        for (let i = 0; i < element11.length; i++) {
+            element11[i].style.display = "none";
+        }
+        var element22 = document.getElementsByClassName("bdy");
+        for (let i = 0; i < element22.length; i++) {
+            element22[i].style.backgroundColor = "lightcoral";
+            element22[i].style.color = "black";
+        }
         document.title = "Al Matsurat Sore";
         }
 
         // Fungsi untuk tombol kembali ke halaman utama
         function kembali() {
-        var element000 = document.getElementById("pagi");
-        element000.style.display = "none";
-        var element000 = document.getElementById("sore");
-        element000.style.display = "none";
-        var element111 = document.getElementById("home");
-        element111.style.display = "block";
+        var element000 = document.getElementsByClassName("pagi");
+        for (let i = 0; i < element000.length; i++) {
+            element000[i].style.display = "none";
+        }
+        var element0010 = document.getElementsByClassName("sore");
+        for (let i = 0; i < element0010.length; i++) {
+            element0010[i].style.display = "none";
+        }
+        var element111 = document.getElementsByClassName("home");
+        for (let i = 0; i < element111.length; i++) {
+            element111[i].style.display = "block";
+        }
         document.title = "Al Matsurat";
         }
     </script>
 </head>
 
 <!-- Home -->
-<body id="bdy">
-    <div id="home" class="home">
+<body class="bdy">
+    <div class="home">
         <h1 class="montserrat-400 potrait"><b><u>Al Matsurat Sugra</u></b></h1>
-        <sub class="sofadi-one-regular potrait">Biasakan membaca al matsurat sebelum berangkat dan sepulang kerja</sub>
+        <sub class="sofadi-one-regular potrait">Bacalah al matsurat sebelum berangkat dan sepulang kerja</sub>
         <div class="button-container">
             <button class="button" onclick="pagi()">
                 <span class="material-symbols-outlined" style="font-size: 148px;">
@@ -218,13 +203,16 @@
             </button>
             
         </div>
+        <div class="usr-feedback">
+            <p>Mohon untuk juga membantu saya memeriksa kesalahan web ini. <br>Jika Anda menemukan kejanggalan silahkan buat sebuah 'issue' di repository proyek ini, di <a href="https://github.com/krasyid822/AlMatsurat/issues">https://github.com/krasyid822/AlMatsurat/issues</a></p> 
+        </div>
     </div>
 
     <!-- project created by Rasyid Kurniawan -->
      <!-- new source finded "https://akuislam.com/panduan/al-mathurat-sughra-kubra-rumi/" -->
 
      <!-- Almatsurat pagi -->
-     <div id="pagi" class="pagi">
+     <div class="pagi">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=arrow_back" />
         <botton onclick="kembali()" class="fly-button-back"><span class="material-symbols-outlined">arrow_back</span>Kembali</botton>
         
@@ -412,15 +400,14 @@
 
         <div class="container max-w-xl mx-auto">
             
-            <div id="pagi-dis">
+            <div class="pagi-dis">
                 <div class="text-center my-9 dark:text-white">
                     <h1 class="font-bold text-2xl" id="judul_main">Al Matsurat Sugro Pagi</h1>
                     <p class="" id="deskripsi_main">Biasakan membaca Al Matsurat sugro setiap pagi</p>
                 </div>
             </div>
-            <div id="sore">
+            <div class="sore">
                 <div class="text-center my-9 dark:text-white">
-                    *Belum selesai,semetara jangan digunakan
                     <h1 class="font-bold text-2xl" id="judul_main">Al Matsurat Sugro Sore</h1>
                     <p class="" id="deskripsi_main">Biasakan membaca Al Matsurat sugro setiap sore</p>
                 </div>
@@ -511,35 +498,73 @@
                                     </div>
                                     <p class="indopak" dir="rtl">قُلْ اَعُوْذُ بِرَبِّ النَّاسِۙ ۝  مَلِكِ النَّاسِۙ ۝  اِلٰهِ النَّاسِۙ ۝ مِنْ شَرِّ الْوَسْوَاسِ ەۙ الْخَنَّاسِۖ ۝  الَّذِيْ يُوَسْوِسُ فِيْ صُدُوْرِ النَّاسِۙ ۝  مِنَ الْجِنَّةِ وَالنَّاسِ ۝</p> 
                                     <p class="text-justify mb-6 dark:text-zinc-300">(1) Katakanlah: “Aku berlindung kepada Tuhan (yang memelihara dan menguasai) manusia. (2) Raja manusia. (3) Sembahan manusia. (4) dari kejahatan (bisikan) syaithan yang biasa bersembunyi,(5) yang membisikkan (kejahatan) ke dalam dada manusia. (6) dari (golongan) jin dan manusia.</p>
-                                </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
-                                    <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
-                                        <p>Do'a Al-Matsurat Pagi / Dzikir</p>
-                                        <p>3x baca</p>
+                                </div>
+                                
+                                <div class="pagi-dis">
+                                    <div class="pagi-dis m-4 mt-8 border-b-2 border-zinc-700">
+                                        <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            <p>Do'a Al-Matsurat Pagi / Dzikir</p>
+                                            <p>3x baca</p>
+                                        </div>
+                                        <p class="indopak" dir="rtl">أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلّٰهِ , وَالْحَمْدُ لِلّٰهِ لَا شَرِيْكَ لَهُ , لَا إِلَهَ إِلَّا هُوَ وَإِلَيْهِ النُّشُوْرُ</p> 
+                                        <p class="text-justify mb-6 dark:text-zinc-300">Kami berpagi hari dan berpagi hari pula kerjaan milik Allah. Segala puji bagi Allah, tiada sekutu bagi-Nya, tiada Tuhan melainkan Dia dan kepada-Nya tempat kembali.</p>
                                     </div>
-                                    <p class="indopak" dir="rtl">أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلّٰهِ , وَالْحَمْدُ لِلّٰهِ لَا شَرِيْكَ لَهُ , لَا إِلَهَ إِلَّا هُوَ وَإِلَيْهِ النُّشُوْرُ</p> 
-                                    <p class="text-justify mb-6 dark:text-zinc-300">Kami berpagi hari dan berpagi hari pula kerjaan milik Allah. Segala puji bagi Allah, tiada sekutu bagi-Nya, tiada Tuhan melainkan Dia dan kepada-Nya tempat kembali.</p>
-                                </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
-                                    <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
-                                        <p>Do'a Al-Matsurat Pagi / Dzikir</p>
-                                        <p>3x baca</p>
+                                    <div class="m-4 mt-8 border-b-2 border-zinc-700">
+                                        <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            <p>Do'a Al-Matsurat Pagi / Dzikir</p>
+                                            <p>3x baca</p>
+                                        </div>
+                                        <p class="indopak" dir="rtl">اَصْبَحْنَا عَلَى فِطْرَةِ الْإِسْلَامِ، وَكَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِيْنِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ وَعَلَى مِلَّةِ أَبِيْنَا إِبْرَاهِيْمَ حَنِيْفًا وَمَا كَانَ مِنَ الْمُشْرِكِيْنَ</p> 
+                                        <p class="text-justify mb-6 dark:text-zinc-300">Di waktu pagi kami memegang agama Islam, kalimat ikhlas, agama Nabi kita Muhammad shallallahu ‘alaihi wa sallam, dan agama ayah kami Ibrahim, yang berdiri di atas jalan yang lurus, muslim dan tidak tergolong orang-orang musyrik.</p>
+                                    </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
+                                        <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            <p>Do'a Al-Matsurat Pagi / Dzikir Do'a</p>
+                                            <p>3x baca</p>
+                                        </div>
+                                        <p class="indopak" dir="rtl">اللّٰهُـمَّ إِنِّيْ أَصْبَحْتُ مِنْكَ فِيْ نِعْمَةٍ وَعَافِيَةٍ وَسِتْرٍ , فَأَتِمَّ عَلَيَّ نِعْمَتَكَ وَعَافِيَتَكَ وَسِتْرَكَ فِيْ الدِّيْنِ وَالدُّنْيَا وَالْأَخِرَةِ</p> 
+                                        <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, sesungguhnya aku berpagi hari dari-Mu dalam kenikmatan, kesehatan dan perlindungan. Maka sempurnakannlah untukku kenikmatan, kesehatan dan perlindungan-Mu itu di dunia dan akhirat.</p>
+                                    </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
+                                        <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            <p>Do'a Al-Matsurat Pagi / Dzikir</p>
+                                            <p>3x baca</p>
+                                        </div>
+                                        <p class="indopak" dir="rtl">اَللّٰهُـمَّ مَا أَصْبَحَ بِيْ مِنْ نِعْمَةٍ , أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ , لَا شَرِيْكَ لَكَ , فَلَكَ الْحَمْدُ , وَلَكَ الشُّكْرُ</p> 
+                                        <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, kenikmatan yang aku atau salah seorang dari makhluk-Mu berpagi hari dengannya adalah dari-Mu semata; tiada sekutu bagi-Mu. Maka bagi-Mu segala puji dan rasa syukur.</p>
                                     </div>
-                                    <p class="indopak" dir="rtl">اَصْبَحْنَا عَلَى فِطْرَةِ الْإِسْلَامِ، وَكَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِيْنِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ وَعَلَى مِلَّةِ أَبِيْنَا إِبْرَاهِيْمَ حَنِيْفًا وَمَا كَانَ مِنَ الْمُشْرِكِيْنَ</p> 
-                                    <p class="text-justify mb-6 dark:text-zinc-300">Di waktu pagi kami memegang agama Islam, kalimat ikhlas, agama Nabi kita Muhammad shallallahu ‘alaihi wa sallam, dan agama ayah kami Ibrahim, yang berdiri di atas jalan yang lurus, muslim dan tidak tergolong orang-orang musyrik.</p>
-                                </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
-                                    <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
-                                        <p>Do'a Al-Matsurat Pagi / Dzikir Do'a</p>
-                                        <p>3x baca</p>
+                                </div>
+                                <div class="sore">
+                                    <div class="m-4 mt-8 border-b-2 border-zinc-700">
+                                        <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            <p>Do'a Al-Matsurat Sore</p>
+                                            <p>3x baca</p>
+                                        </div>
+                                        <p class="indopak" dir="rtl">أَمْسَيْنَا وَ أَمْسَ الْمُلْكُ لِلَّهِ وَلْحَمْدُ لِلهِ لَا شَرِيْكَ لَهُ لَا إِلَهَ إِلَّاهُوَ وَإِلَيْهِ الْمَصِيْرُ</p> 
+                                        <p class="text-justify mb-6 dark:text-zinc-300">Kami bersore hari dan bersore hari pula kerajaan milik Allah. Segala puji bagi Allah, tiada sekutu bagi-Nya, tiada Tuhan melainkan Dia dan kepada-Nya tempat kembali.</p>
+                                    </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
+                                        <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            <p>Do'a Al-Matsurat Sore</p>
+                                            <p>3x baca</p>
+                                        </div>
+                                        <p class="indopak" dir="rtl"> أَمْسَيْنَا عَلَى فِطْرَةِ اْلإِسْلاَمِ وَعَلَى كَلِمَةِ اْلإِخْلاَصِ وَعَلَى دِيْنِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ وَعَلَى مِلَّةِ أَبِيْنَا إِبْرَاهِيْمَ حَنِيْفًا مُسْلِمًا وَمَا كَانَ مِنَ الْمُشْرِكِيْنَ</p> 
+                                        <p class="text-justify mb-6 dark:text-zinc-300">Di waktu sore kami memegang agama Islam, kalimat ikhlas, agama Nabi kita Muhammad shallallahu ‘alaihi wa sallam, dan agama ayah kami Ibrahim, yang berdiri di atas jalan yang lurus, muslim dan tidak tergolong orang-orang musyrik.</p>
+                                    </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
+                                        <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            <p>Do'a Al-Matsurat Sore</p>
+                                            <p>3x baca</p>
+                                        </div>
+                                        <p class="indopak" dir="rtl">اللَّهُمَّ إِنِّي أَمْسَيتُ مِنْكَ فِي نِعْمَةٍ وَعَافِيَةٍ وَسِتْر فَأَتِمَّ عَلَيَّ نِعْمَتَكَ وَعَافِيَتَكَ وَسِتْرَكَ فِي الدُّنْيَا وَالآخِرَة</p> 
+                                        <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, sesungguhnya aku bersore hari dari-Mu dalam kenikmatan, kesehatan dan perlindungan. Maka sempurnakannlah untukku kenikmatan, kesehatan dan perlindungan-Mu itu di dunia dan akhirat.</p>
+                                    </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
+                                        <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            <p>Do'a Al-Matsurat Sore</p>
+                                            <p>3x baca</p>
+                                        </div>
+                                        <p class="indopak" dir="rtl">اللَّهُمَّ مَا أَمْسَ بِيْ مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لاَ شَرِيْكَ لَكَ فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ</p> 
+                                        <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, kenikmatan yang aku atau salah seorang dari makhluk-Mu bersore hari dengannya adalah dari-Mu semata; tiada sekutu bagi-Mu. Maka bagi-Mu segala puji dan rasa syukur.</p>
                                     </div>
-                                    <p class="indopak" dir="rtl">اللّٰهُـمَّ إِنِّيْ أَصْبَحْتُ مِنْكَ فِيْ نِعْمَةٍ وَعَافِيَةٍ وَسِتْرٍ , فَأَتِمَّ عَلَيَّ نِعْمَتَكَ وَعَافِيَتَكَ وَسِتْرَكَ فِيْ الدِّيْنِ وَالدُّنْيَا وَالْأَخِرَةِ</p> 
-                                    <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, sesungguhnya aku berpagi hari dari-Mu dalam kenikmatan, kesehatan dan perlindungan. Maka sempurnakannlah untukku kenikmatan, kesehatan dan perlindungan-Mu itu di dunia dan akhirat.</p>
-                                </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
-                                    <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
-                                        <p>Do'a Al-Matsurat Pagi / Dzikir</p>
-                                        <p>3x baca</p>
-                                    </div>
-                                    <p class="indopak" dir="rtl">اَللّٰهُـمَّ مَا أَصْبَحَ بِيْ مِنْ نِعْمَةٍ , أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ , لَا شَرِيْكَ لَكَ , فَلَكَ الْحَمْدُ , وَلَكَ الشُّكْرُ</p> 
-                                    <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, kenikmatan yang aku atau salah seorang dari makhluk-Mu berpagi hari dengannya adalah dari-Mu semata; tiada sekutu bagi-Mu. Maka bagi-Mu segala puji dan rasa syukur.</p>
-                                </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
+                                </div>
+                                
+                                <div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
                                         <p>Do'a Al-Matsurat / Dzikir</p>
                                         <p>3x baca</p>
