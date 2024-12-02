@@ -181,11 +181,11 @@
 
         // Kode untuk hotkey
         document.addEventListener('keydown', function(e) {
-            if (e.key == 'k') {
+            if (e.key == 'ArrowRight') {
                 e.preventDefault();
                 document.getElementById('clickButton').click();
             }
-            if (e.key == 'r') {
+            if (e.key == 'Control') {
                 e.preventDefault();
                 document.getElementById('resetButton').click();
             }
@@ -253,9 +253,9 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
         <!-- Count -->
-        <button class="fly-button-3 bg-orange-600 text-white" id="resetButton">Reset<br>Count<br>(r)</button>
+        <button class="fly-button-3 bg-orange-600 text-white" id="resetButton">Reset<br>Count<br>(Ctrl)</button>
         <span id="counter" class="fly-button-1 fly-button fly-button-2 bg-blue-600 text-white"><b>0</b></span>
-        <button class="fly-button bg-blue-600 text-white" id="clickButton"><br><br>Count<br>(k)</button>
+        <button class="fly-button bg-blue-600 text-white" id="clickButton"><br><br>Count<br>(→)</button>
 
 
         <style>
