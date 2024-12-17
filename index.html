@@ -434,16 +434,20 @@
                 <div class="text-center my-9 dark:text-white">
                     <h1 class="font-bold text-2xl" id="judul_main">Al Matsurat Sugro Pagi</h1>
                     <p class="" id="deskripsi_main">Biasakan membaca Al Matsurat sugro setiap pagi</p>
-                    <script>
-                        const listen = new Audio();
-                        listen.src = "https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Pagi.opus";
-                    </script>
+                    
                     <br>
-                    <button onclick="listen.play();" style="text-align: center;">
+                    <button id="listenn" style="text-align: center;">
                         <span class="material-symbols-outlined">
                             speaker
                         </span><br>Dengarkan
                     </button>
+                    <script>
+                        const listen = new Audio();
+                        document.getElementById('listenn').addEventListener('click', function() {
+                            listen.src = "https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Pagi.opus";
+                            listen.play();
+                        });
+                    </script>
                 </div>
             </div>
             <div class="sore">
@@ -751,16 +755,20 @@
                                 </div>
                                 <div class="m-4 mt-8 border-b-2 border-green-600">
                                     <div class="flex justify-between p-4 bg-green-600 text-white sticky top-0">
-                                        <script>
-                                            // source: https://github.com/Jabinsarsaragih/studyVocabulary/blob/jabin/assets/js/script.js
-                                            const data = new Audio();
-                                            data.src = "https://github.com/krasyid822/AlMatsurat/releases/download/1/Rabithah_ai.opus";
-                                        </script>
-                                        <button onclick="data.play();">
+                                        
+                                        <button id="robitohh">
                                             <span class="material-symbols-outlined">
                                                 text_to_speech
                                             </span>
                                         </button>
+                                        <script>
+                                            // source: https://github.com/Jabinsarsaragih/studyVocabulary/blob/jabin/assets/js/script.js
+                                            const data = new Audio();
+                                            document.getElementById('robitohh').addEventListener('click', function() {
+                                                data.src = "https://github.com/krasyid822/AlMatsurat/releases/download/1/Rabithah_ai.opus";
+                                                data.play();
+                                            });
+                                        </script>
                                         <p>Doa Robitoh</p>
                                         <p>1x baca</p>
                                     </div>
