@@ -211,7 +211,10 @@
                     </span>
                     <div class="sofadi-one-regular">Sore</div>
             </button>
-            
+        </div>
+        <div class="sofadi-one-regular">
+            <h2>Tentang Al-Matsurat</h2>
+            <p>Diciptakan oleh <a href="https://www.google.com/search?&q=Imam+Hasan+Al-Banna">Imam Hasan Al-Banna</a>.</p>
         </div>
         <div class="usr-feedback">
             <p>Mohon untuk juga membantu saya memeriksa kesalahan web ini. <br>Jika Anda menemukan kejanggalan silahkan buat sebuah 'issue' di repository proyek ini, di <a href="https://github.com/krasyid822/AlMatsurat/issues">https://github.com/krasyid822/AlMatsurat/issues</a></p> 
@@ -455,6 +458,19 @@
                     <h1 class="font-bold text-2xl" id="judul_main">Al Matsurat Sugro Sore</h1>
                     <p class="" id="deskripsi_main">Biasakan membaca Al Matsurat sugro setiap sore</p>
                     
+                    <br>
+                    <button id="listenn-sore" style="text-align: center;">
+                        <span class="material-symbols-outlined">
+                            speaker
+                        </span><br>Dengarkan
+                    </button>
+                    <script>
+                        const listenSore = new Audio();
+                        document.getElementById('listenn-sore').addEventListener('click', function() {
+                            listenSore.src = "https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Petang.opus";
+                            listenSore.play();
+                        });
+                    </script>
                 </div>
             </div>
             
@@ -765,7 +781,7 @@
                                             // source: https://github.com/Jabinsarsaragih/studyVocabulary/blob/jabin/assets/js/script.js
                                             const data = new Audio();
                                             document.getElementById('robitohh').addEventListener('click', function() {
-                                                data.src = "https://github.com/krasyid822/AlMatsurat/releases/download/1/Rabithah_ai.opus";
+                                                data.src = "rsc\\opus\\Rabithah_ai.opus";
                                                 data.play();
                                             });
                                         </script>
