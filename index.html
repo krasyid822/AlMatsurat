@@ -17,7 +17,7 @@
     <style>
         @media (orientation: portrait) {
             .potrait {
-                font-size-adjust: 0.49;
+                font-size-adjust: 0.48; /* 0.49 */
             }
         }
         .sofadi-one-regular {
@@ -91,6 +91,78 @@
             width: 100%;
             padding: 10px;
             
+        }
+
+        #loading-screen {
+            text-align: center;
+            background-color: transparent;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        #complete-icon {
+            display: none;
+            font-size: 50px;
+            color: #4caf50;
+            margin: 0 auto 20px;
+        }
+        #loading-info {
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+        #progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        #progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            /*background-color: #4caf50;*/
+            background-color: blue;
+            transition: width 0.3s;
+        }
+        #percentage {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        #dotting, .dot {
+            text-align: center;
+            font-size: 40px;
+            margin: 20px auto;
+        }
+
+        #dotting span {
+            animation: dotting 1.5s infinite;
+            display: inline-block;
+            opacity: 0;
+        }
+
+        #dotting span:nth-child(1) {
+            animation-delay: 0s;
+        }
+        #dotting span:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        #dotting span:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes dotting {
+            0%, 20% {
+                opacity: 0;
+            }
+            40%, 100% {
+                opacity: 1;
+            }
         }
         
     </style>
@@ -189,35 +261,184 @@
                 document.getElementById('resetButton').click();
             }
         });
+
     </script>
 </head>
 
 <!-- Home -->
 <body class="bdy">
+
+    <div id="loading-screen">
+        <div id="dotting">
+            <span>(((</span><span>&lt;&gt;</span><span>)))</span>
+        </div>
+        <div id="complete-icon"><span class="dot">&lt;&gt;</span></div> <!-- Ikon Selesai (<> hijau) -->
+        <div id="loading-info" style="color: gray;">Preparing to load...</div>
+        <div id="progress-bar">
+            <div id="progress-bar-fill"></div>
+        </div>
+        <div id="percentage" style="color: blue;">0%</div>
+    </div>
+    <script>
+        const progressBarFill = document.getElementById("progress-bar-fill");
+        const percentageText = document.getElementById("percentage");
+        const loadingInfo = document.getElementById("loading-info");
+        const dotting = document.getElementById("dotting");
+        const completeIcon = document.getElementById("complete-icon");
+
+        const filesToFetch = [
+            "index.html",
+            "rsc/css/style.css",
+            "rsc/woff2/AlQuran-IndoPak-by-QuranWBW.v.4.2.2-WL.woff2",
+            "rsc/woff2/material-icon.woff2",
+            "rsc/png/icon.png",
+            "manifest.json",
+            "service-worker.js",
+            "rsc/opus/Rabithah_ai.opus",
+            "rsc/opus/ast.opus",
+            "rsc/opus/Al.Matsurat.Pagi-000.opus",
+            "rsc/opus/Al.Matsurat.Pagi-001.opus",
+            "rsc/opus/Al.Matsurat.Petang-Trim.opus",
+            "rsc/wav/recycle_boost",
+            "rsc/wav/nav_boost",
+            "rsc/wav/info_boost"
+        ];
+
+        let progress = 0;
+        const totalFiles = filesToFetch.length;
+
+        async function fetchFiles() {
+            for (let i = 0; i < totalFiles; i++) {
+                loadingInfo.textContent = `Fetching: ${filesToFetch[i]}`;
+                try {
+                    const response = await fetch(filesToFetch[i]);
+                    if (response.ok) {
+                        console.log(await response.json()); // Simulasi pemrosesan data
+                    }
+                } catch (error) {}
+                // Update progress bar
+                progress = ((i + 1) / totalFiles) * 100;
+                progressBarFill.style.width = progress + "%";
+                percentageText.textContent = Math.round(progress) + "%";
+            }
+
+            // Semua file selesai dimuat
+            loadingInfo.textContent = "System ready :), let's go!";
+            dotting.style.display = "none"; // Hilangkan dotting css
+            completeIcon.style.display = "block"; // Tampilkan ikon selesai
+            setTimeout(() => {
+                document.getElementById("loading-screen").style.display = "none"; // Sembunyikan layar loading
+                document.getElementById("utama").style.display = "block"; // Tampilkan konten utama
+            }, 1000); // Tambahkan jeda waktu jika diinginkan
+        }
+
+        fetchFiles();
+    </script>
+
+    <div id="utama" style="display: none;">
+    <audio id="audioF" src="rsc\opus\Al.Matsurat.Pagi-000.opus"></audio>
+    <audio id="audioF2" src="rsc\opus\Al.Matsurat.Pagi-001.opus"></audio>
+    <audio id="audioFSore" src="rsc\opus\Al.Matsurat.Petang-Trim.opus"></audio>
+    <script>
+        //Kode untuk fungsi berhenti otomatis di masing-masing bagian
+        const audio = document.getElementById('audioF');
+        const audio2 = document.getElementById('audioF2');
+        const audioSore = document.getElementById('audioFSore');
+        
+        // Hentikan setelah durasi yang ditentukan
+        let stopPlaybackListener = null; // Variabel global untuk menyimpan referensi event listener
+        
+        function playSegment(startTime, endTime) {
+            // Pastikan audio tidak terganggu oleh event listener sebelumnya
+            if (stopPlaybackListener) {
+                audio.removeEventListener('timeupdate', stopPlaybackListener);
+            }
+            // Setel waktu mulai dan mulai memutar audio
+            audio.currentTime = startTime;
+            audio.play();
+            // Buat listener baru untuk memutar ulang segmen
+            stopPlaybackListener = () => {
+                if (audio.currentTime >= endTime) {
+                    audio.currentTime = startTime; // Kembali ke waktu mulai
+                    audio.play(); // Mulai ulang
+                }
+            };
+            // Tambahkan event listener baru
+            audio.addEventListener('timeupdate', stopPlaybackListener);
+        }
+        function pauseAudio() {
+            audio.pause();
+        }
+
+        function playSegment2(startTime, endTime) {
+            // Pastikan audio tidak terganggu oleh event listener sebelumnya
+            if (stopPlaybackListener) {
+                audio2.removeEventListener('timeupdate', stopPlaybackListener);
+            }
+            // Setel waktu mulai dan mulai memutar audio
+            audio2.currentTime = startTime;
+            audio2.play();
+            // Buat listener baru untuk memutar ulang segmen
+            stopPlaybackListener = () => {
+                if (audio2.currentTime >= endTime) {
+                    audio2.currentTime = startTime; // Kembali ke waktu mulai
+                    audio2.play(); // Mulai ulang
+                }
+            };
+            // Tambahkan event listener baru
+            audio2.addEventListener('timeupdate', stopPlaybackListener);
+        }
+        function pauseAudio2() {
+            audio2.pause();
+        }
+
+        function playSegmentS(startTime, endTime) {
+            // Pastikan audio tidak terganggu oleh event listener sebelumnya
+            if (stopPlaybackListener) {
+                audioSore.removeEventListener('timeupdate', stopPlaybackListener);
+            }
+            // Setel waktu mulai dan mulai memutar audio
+            audioSore.currentTime = startTime;
+            audioSore.play();
+            // Buat listener baru untuk memutar ulang segmen
+            stopPlaybackListener = () => {
+                if (audioSore.currentTime >= endTime) {
+                    audioSore.currentTime = startTime; // Kembali ke waktu mulai
+                    audioSore.play(); // Mulai ulang
+                }
+            };
+            // Tambahkan event listener baru
+            audioSore.addEventListener('timeupdate', stopPlaybackListener);
+        }
+        function pauseAudioS() {
+            audioSore.pause();
+        }
+    </script>
+
     <div class="home">
         <h1 class="montserrat-400 potrait"><b><u>Al Matsurat Sugra</u></b></h1>
-        <sub class="sofadi-one-regular potrait">Bacalah al matsurat sebelum berangkat dan sepulang kerja</sub>
+        <sub class="sofadi-one-regular potrait">Bacalah al matsurat sebelum dan sepulang kerja</sub>
         <div class="button-container">
             <button class="button" onclick="pagi()">
-                <span class="material-symbols-outlined" style="font-size: 148px;">
+                <span class="material-symbols-outlined" style="font-size: 700%;"> <!-- 148px -->
                     light_mode
                     </span>
                     <div class="sofadi-one-regular">Pagi</div>
             </button>
             <div class="sofadi-one-regular button">dan</div>
             <button class="button" onclick="sore()">
-                <span class="material-symbols-outlined" style="font-size: 148px;">
+                <span class="material-symbols-outlined" style="font-size: 700%;">
                     wb_twilight
                     </span>
                     <div class="sofadi-one-regular">Sore</div>
             </button>
         </div>
-        <div class="sofadi-one-regular">
-            <h2>Tentang Al-Matsurat</h2>
-            <p>Diciptakan oleh <a href="https://www.google.com/search?&q=Imam+Hasan+Al-Banna">Imam Hasan Al-Banna</a>, aliran <a href="https://www.google.com/search?&q=Ikhwanul+Muslimin">Ikhwanul Muslimin (IM)</a>. <a href="https://ukmipolmed.com/">UKMI</a> juga condong ke aliran ini.</p>
+        <div class="montserrat-400">
+            <h2><b>Tentang Al-Matsurat</b></h2>
+            <p class="sofadi-one-regular">Diciptakan oleh <a href="https://www.google.com/search?&q=Imam+Hasan+Al-Banna">Imam Hasan Al-Banna</a>, pendiri <a href="https://www.google.com/search?&q=Ikhwanul+Muslimin">Ikhwanul Muslimin (IM)</a>. Diketahui <a href="https://ukmipolmed.com/">UKMI</a> juga terlihat berada di jalan ini.</p>
         </div>
         <div class="usr-feedback">
-            <p>Saat pertama kali membuka atau ada update pada web ini mungkin mengonsumsi paket data ~5mB.<br>Mohon untuk juga membantu saya memeriksa kesalahan web ini. <br>Jika Anda menemukan kejanggalan silahkan buat sebuah 'issue' di repository proyek ini, di <a href="https://github.com/krasyid822/AlMatsurat/issues">https://github.com/krasyid822/AlMatsurat/issues</a></p> 
+            <p>report anomaly <a href="https://github.com/krasyid822/AlMatsurat/issues"><u>here</u></a></p> 
         </div>
     </div>
 
@@ -392,14 +613,14 @@
 
                     // Memainkan nada tuk-deng
                     const audio2 = new Audio();
-                    audio2.src = "rsc/wav/info_boost.wav";
+                    audio2.src = "rsc/wav/info_boost";
                     audio2.play();
                     
                 }
 
                 // Memainkan nada tuk-deng
                 const audio1 = new Audio();
-                audio1.src = "rsc/wav/nav_boost.wav";
+                audio1.src = "rsc/wav/nav_boost";
                 audio1.play();
 
                 // Bekukan halaman saat count tidak 0
@@ -426,7 +647,7 @@
 
                 // Memainkan nada tuk-deng
                 const audio = new Audio();
-                audio.src = "rsc/wav/recycle_boost.wav";
+                audio.src = "rsc/wav/recycle_boost";
                 audio.play();
             });
         </script>
@@ -435,40 +656,48 @@
             
             <div class="pagi-dis">
                 <div class="text-center my-9 dark:text-white">
-                    <h1 class="font-bold text-2xl" id="judul_main">Al Matsurat Sugro Pagi</h1>
-                    <p class="" id="deskripsi_main">Biasakan membaca Al Matsurat sugro setiap pagi</p>
+                    <h1 class="font-bold text-2xl">Al Matsurat Sugro Pagi</h1>
+                    <p>Biasakan membaca Al Matsurat sugro setiap pagi</p>
                     
                     <br>
-                    <button id="listenn" style="text-align: center;">
+                    <button id="btn-listenn" style="text-align: center;">
                         <span class="material-symbols-outlined">
                             speaker
                         </span><br>Dengarkan
                     </button>
+                    <div style="justify-content: center; display: flex;">
+                        <!-- AlMatsurat.Pagi=aud-listenn -->
+                        <audio id="aud-listenn" style="display: none;" src="https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Pagi.opus" controls controlslist="nodownload" preload="none"></audio></div>
                     <script>
-                        const listen = new Audio();
-                        document.getElementById('listenn').addEventListener('click', function() {
-                            listen.src = "https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Pagi.opus";
-                            listen.play();
+                        var aud = document.getElementById('aud-listenn');
+                        var btn = document.getElementById('btn-listenn');
+                        document.getElementById('btn-listenn').addEventListener('click', function() {
+                            aud.style.display = 'block';
+                            aud.play();
+                            btn.style.display = 'none';
                         });
                     </script>
                 </div>
             </div>
             <div class="sore">
                 <div class="text-center my-9 dark:text-white">
-                    <h1 class="font-bold text-2xl" id="judul_main">Al Matsurat Sugro Sore</h1>
-                    <p class="" id="deskripsi_main">Biasakan membaca Al Matsurat sugro setiap sore</p>
+                    <h1 class="font-bold text-2xl">Al Matsurat Sugro Sore</h1>
+                    <p>Biasakan membaca Al Matsurat sugro setiap sore</p>
                     
                     <br>
-                    <button id="listenn-sore" style="text-align: center;">
+                    <button id="btn-listenn-sore" style="text-align: center;">
                         <span class="material-symbols-outlined">
                             speaker
                         </span><br>Dengarkan
                     </button>
+                    <div style="justify-content: center; display: flex;"><audio id="aud-listenn-sore" style="display: none;" src="https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Petang.opus" controls controlslist="nodownload" preload="none"></audio></div>
                     <script>
-                        const listenSore = new Audio();
-                        document.getElementById('listenn-sore').addEventListener('click', function() {
-                            listenSore.src = "https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Petang.opus";
-                            listenSore.play();
+                        var audSore = document.getElementById('aud-listenn-sore');
+                        var btnSore = document.getElementById('btn-listenn-sore');
+                        document.getElementById('btn-listenn-sore').addEventListener('click', function() {
+                            audSore.style.display = 'block';
+                            audSore.play();
+                            btnSore.style.display = 'none';
                         });
                     </script>
                 </div>
@@ -476,6 +705,25 @@
             
             <div id="content"><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        
+                                        <button id="a1"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a1S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a1 = document.getElementById('a1');
+                                            var a1S = document.getElementById('a1S');
+                                            document.getElementById('a1').addEventListener('click', function() {
+                                                playSegment(2, 10);
+                                                a1.style.display = 'none';
+                                                a1S.style.display = 'block';
+                                            });
+                                            document.getElementById('a1S').addEventListener('click', function() {
+                                                pauseAudio();
+                                                a1.style.display = 'block';
+                                                a1S.style.display = 'none';
+                                            });
+                                        </script>
+
                                         <p>Ta'awudz</p>
                                         <p>1x baca</p>
                                     </div>
@@ -483,6 +731,27 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetetahui dari godaan setan yang terkutuk.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                       
+                                        <button id="a2"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a2S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a2 = document.getElementById('a2');
+                                            var a2S = document.getElementById('a2S');
+                                            document.getElementById('a2').addEventListener('click', function() {
+                                                document.getElementById('a2').removeEventListener;
+                                                playSegment(10, 56);
+                                                a2.style.display = 'none';
+                                                a2S.style.display = 'block';
+                                            });
+                                            document.getElementById('a2S').addEventListener('click', function() {
+                                                document.getElementById('a2S').removeEventListener;
+                                                pauseAudio();
+                                                a2.style.display = 'block';
+                                                a2S.style.display = 'none';
+                                            });
+                                        </script>
+
                                         <p>Surat Al - Fatihah</p>
                                         <p>1x baca</p>
                                     </div>
@@ -490,6 +759,27 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">(1) Dengan menyebut nama Allah Yang Maha Pemurah lagi Maha Penyayang. (2) Segala puji bagi Allah, Tuhan semesta alam. (3) Maha Pemurah lagi Maha Penyayang. (4) Yang menguasai di Hari Pembalasan. (5) Hanya Engkaulah yang kami sembah, dan hanya kepada Engkaulah kami meminta pertolongan. (6) Tunjukilah kami jalan yang lurus, (7) (yaitu) Jalan orang-orang yang telah Engkau beri nikmat kepada mereka; bukan (jalan) mereka yang dimurkai dan bukan (pula jalan) mereka yang sesat.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        
+                                        <button id="a3"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a3S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a3 = document.getElementById('a3');
+                                            var a3S = document.getElementById('a3S');
+                                            document.getElementById('a3').addEventListener('click', function() {
+                                                document.getElementById('a3').removeEventListener;
+                                                playSegment(66, 123);
+                                                a3.style.display = 'none';
+                                                a3S.style.display = 'block';
+                                            });
+                                            document.getElementById('a3S').addEventListener('click', function() {
+                                                document.getElementById('a3S').removeEventListener;
+                                                pauseAudio();
+                                                a3.style.display = 'block';
+                                                a3S.style.display = 'none';
+                                            });
+                                        </script>
+
                                         <p>Surat Al - Baqarah Ayat 1-5</p>
                                         <p>1x baca</p>
                                     </div>
@@ -497,6 +787,27 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">(1) Alif Laam Miim. (2) Kitab (Al Qur’an) ini tidak ada keraguan padanya; petunjuk bagi mereka yang bertaqwa, (3) (yaitu) mereka yang beriman kepada yang gaib, yang mendirikan shalat dan menafkahkan sebahagian rezki yang Kami anugerahkan kepada mereka, (4) dan mereka yang beriman kepada Kitab (Al Qur’an) yang telah diturunkan kepadamu dan Kitab-kitab yang telah diturunkan sebelummu, serta mereka yakin akan adanya (kehidupan) akhirat. (5) Mereka itulah yang tetap mendapat petunjuk dari Tuhan mereka, dan merekalah orang-orang yang beruntung.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        
+                                        <button id="a4"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a4S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a4 = document.getElementById('a4');
+                                            var a4S = document.getElementById('a4S');
+                                            document.getElementById('a4').addEventListener('click', function() {
+                                                document.getElementById('a4').removeEventListener;
+                                                playSegment(123, 181);
+                                                a4.style.display = 'none';
+                                                a4S.style.display = 'block';
+                                            });
+                                            document.getElementById('a4S').addEventListener('click', function() {
+                                                document.getElementById('a4S').removeEventListener;
+                                                pauseAudio();
+                                                a4.style.display = 'block';
+                                                a4S.style.display = 'none';
+                                            });
+                                        </script>
+
                                         <p>Surat Al-Baqarah Ayat 255</p>
                                         <p>1x baca</p>
                                     </div>
@@ -505,6 +816,27 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Allah, tidak ada Tuhan (yang berhak disembah) melainkan Dia Yang Hidup kekal lagi terus menerus mengurus (makhluk-Nya); tidak mengantuk dan tidak tidur. Kepunyaan-Nya apa yang di langit dan di bumi. Tiada yang dapat memberi syafaat di sisi Allah tanpa izin-Nya. Allah mengetahui apa-apa yang di hadapan mereka dan di belakang mereka, dan mereka tidak mengetahui apa-apa dari ilmu Allah melainkan apa yang dikehendaki-Nya. Kursi Allah meliputi langit dan bumi. Dan Allah tidak merasa berat memelihara keduanya, dan Allah Maha Tinggi lagi Maha Besar</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        
+                                        <button id="a5"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a5S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a5 = document.getElementById('a5');
+                                            var a5S = document.getElementById('a5S');
+                                            document.getElementById('a5').addEventListener('click', function() {
+                                                document.getElementById('a5').removeEventListener;
+                                                playSegment(181, 207);
+                                                a5.style.display = 'none';
+                                                a5S.style.display = 'block';
+                                            });
+                                            document.getElementById('a5S').addEventListener('click', function() {
+                                                document.getElementById('a5S').removeEventListener;
+                                                pauseAudio();
+                                                a5.style.display = 'block';
+                                                a5S.style.display = 'none';
+                                            });
+                                        </script>
+                                        
                                         <p>Surat Al-Baqarah Ayat 256</p>
                                         <p>1x baca</p>
                                     </div>
@@ -512,6 +844,27 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Tidak ada paksaan untuk (memasuki) agama (Islam); sesungguhnya telah jelas jalan yang benar daripada jalan yang sesat. Karena itu barang siapa yang ingkar kepada Thaghut dan beriman kepada Allah, maka sesungguhnya ia telah berpegang kepada buhu tali yang amat kuat yang tidak akan putus. Dan Allah Maha Mendengar lagi Maha Mengetahui.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        
+                                        <button id="a6"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a6S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a6 = document.getElementById('a6');
+                                            var a6S = document.getElementById('a6S');
+                                            document.getElementById('a6').addEventListener('click', function() {
+                                                document.getElementById('a6').removeEventListener;
+                                                playSegment(207, 240);
+                                                a6.style.display = 'none';
+                                                a6S.style.display = 'block';
+                                            });
+                                            document.getElementById('a6S').addEventListener('click', function() {
+                                                document.getElementById('a6S').removeEventListener;
+                                                pauseAudio();
+                                                a6.style.display = 'block';
+                                                a6S.style.display = 'none';
+                                            });
+                                        </script>
+
                                         <p>Surat Al-Baqarah Ayat 257</p>
                                         <p>1x baca</p>
                                     </div>
@@ -519,6 +872,27 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Allah Pelindung orang-orang yang beriman; Dia mengeluarkan mereka dari kegelapan (kekafiran) kepada cahaya (iman). Dan orang-orang yang kafir, pelindung-pelindungnya ialah setan, yang mengeluarkan mereka dari cahaya kepada kegelapan (kekafiran). Mereka itu adalah penghuni neraka; mereka kekal di dalamnya.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        
+                                        <button id="a7"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a7S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a7 = document.getElementById('a7');
+                                            var a7S = document.getElementById('a7S');
+                                            document.getElementById('a7').addEventListener('click', function() {
+                                                document.getElementById('a7').removeEventListener;
+                                                playSegment(240, 271);
+                                                a7.style.display = 'none';
+                                                a7S.style.display = 'block';
+                                            });
+                                            document.getElementById('a7S').addEventListener('click', function() {
+                                                document.getElementById('a7S').removeEventListener;
+                                                pauseAudio();
+                                                a7.style.display = 'block';
+                                                a7S.style.display = 'none';
+                                            });
+                                        </script>
+                                        
                                         <p>Surat Al-Baqarah Ayat 284</p>
                                         <p>1x baca</p>
                                     </div>
@@ -526,6 +900,27 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Kepunyaan Allah-lah segala apa yang ada di langit dan apa yang ada di bumi. Dan jika kamu melahirkan apa yang ada di dalam hatimu atau kamu menyembunyikannya, niscaya Allah akan membuat perhitungan dengan kamu tentang perbuatanmu itu. Maka Allah mengampuni siapa yang dikehendaki-Nya dan menyiksa siapa yang dikehendaki-Nya; dan Allah Maha Kuasa atas segala sesuatu</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        
+                                        <button id="a8"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a8S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a8 = document.getElementById('a8');
+                                            var a8S = document.getElementById('a8S');
+                                            document.getElementById('a8').addEventListener('click', function() {
+                                                document.getElementById('a8').removeEventListener;
+                                                playSegment(271, 307);
+                                                a8.style.display = 'none';
+                                                a8S.style.display = 'block';
+                                            });
+                                            document.getElementById('a8S').addEventListener('click', function() {
+                                                document.getElementById('a8S').removeEventListener;
+                                                pauseAudio();
+                                                a8.style.display = 'block';
+                                                a8S.style.display = 'none';
+                                            });
+                                        </script>
+                                        
                                         <p>Surat Al-Baqarah Ayat 285</p>
                                         <p>1x baca</p>
                                     </div>
@@ -533,6 +928,27 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Rasul telah beriman kepada Al Qur'an yang diturunkan kepadanya dari Tuhannya, demikian pula orang-orang yang beriman. Semuanya beriman kepada Allah, malaikat-malaikat-Nya, kitab-kitab-Nya dan rasul-rasul-Nya. (Mereka mengatakan): "Kami tidak membeda-bedakan antara seseorang pun (dengan yang lain) dari rasul rasul-Nya", dan mereka mengatakan: "Kami dengar dan kami taat". (Mereka berdoa):"Ampunilah kami ya Tuhan kami dan kepada Engkaulah tempat kembali"</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        
+                                        <button id="a9"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a9S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a9 = document.getElementById('a9');
+                                            var a9S = document.getElementById('a9S');
+                                            document.getElementById('a9').addEventListener('click', function() {
+                                                document.getElementById('a9').removeEventListener;
+                                                playSegment(308, 377);
+                                                a9.style.display = 'none';
+                                                a9S.style.display = 'block';
+                                            });
+                                            document.getElementById('a9S').addEventListener('click', function() {
+                                                document.getElementById('a9S').removeEventListener;
+                                                pauseAudio();
+                                                a9.style.display = 'block';
+                                                a9S.style.display = 'none';
+                                            });
+                                        </script>
+                                        
                                         <p>Surat Al-Baqarah Ayat 286</p>
                                         <p>1x baca</p>
                                     </div>
@@ -540,6 +956,27 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Allah tidak membebani seseorang melainkan sesuai dengan kesanggupannya. Ia mendapat pahala (dari kebajikan) yang diusahakannya dan ia mendapat siksa (dari kejahatan) yang dikerjakannya. (Mereka berdo`a): "Ya Tuhan kami, janganlah Engkau hukum kami jika kami lupa atau kami tersalah. Ya Tuhan kami, janganlah Engkau bebankan kepada kami beban yang berat sebagaimana Engkau bebankan kepada orang-orang yang sebelum kami. Ya Tuhan kami, janganlah Engkau pikulkan kepada kami apa yang tak sanggup kami memikulnya. Beri maaflah kami; ampunilah kami; dan rahmatilah kami. Engkaulah Penolong kami, maka tolonglah kami terhadap kaum yang kafir"</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        
+                                        <button id="a10"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a10S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a10 = document.getElementById('a10');
+                                            var a10S = document.getElementById('a10S');
+                                            document.getElementById('a10').addEventListener('click', function() {
+                                                document.getElementById('a10').removeEventListener;
+                                                playSegment(384, 397);
+                                                a10.style.display = 'none';
+                                                a10S.style.display = 'block';
+                                            });
+                                            document.getElementById('a10S').addEventListener('click', function() {
+                                                document.getElementById('a10S').removeEventListener;
+                                                pauseAudio();
+                                                a10.style.display = 'block';
+                                                a10S.style.display = 'none';
+                                            });
+                                        </script>
+
                                         <p>Surat Al-Ikhlas</p>
                                         <p>3x baca</p>
                                     </div>
@@ -547,6 +984,27 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">(1) Katakanlah: “Dia-lah Allah, Yang Maha Esa, (2) Allah adalah Tuhan yang bergantung kepada-Nya segala sesuatu. (3) Dia tiada beranak dan tiada pula diperanakkan, (4) dan tidak ada seorang pun yang setara dengan Dia”.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        
+                                        <button id="a11"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a11S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a11 = document.getElementById('a11');
+                                            var a11S = document.getElementById('a11S');
+                                            document.getElementById('a11').addEventListener('click', function() {
+                                                document.getElementById('a11').removeEventListener;
+                                                playSegment(441, 465);
+                                                a11.style.display = 'none';
+                                                a11S.style.display = 'block';
+                                            });
+                                            document.getElementById('a11S').addEventListener('click', function() {
+                                                document.getElementById('a11S').removeEventListener;
+                                                pauseAudio();
+                                                a11.style.display = 'block';
+                                                a11S.style.display = 'none';
+                                            });
+                                        </script>
+
                                         <p>Surat Al-Falaq</p>
                                         <p>3x baca</p>
                                     </div>
@@ -554,6 +1012,27 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300"> (1) Katakanlah: “Aku berlindung kepada Tuhan Yang Menguasai subuh, (2) dari kejahatan makhluk-Nya, (3) dan dari kejahatan malam apabila telah gelap gulita, (4) dan dari kejahatan wanita-wanita tukang sihir yang menghembus pada buhul-buhul, (5) dan dari kejahatan orang yang dengki apabila ia dengki”.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        
+                                        <button id="a12"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a12S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a12 = document.getElementById('a12');
+                                            var a12S = document.getElementById('a12S');
+                                            document.getElementById('a12').addEventListener('click', function() {
+                                                document.getElementById('a12').removeEventListener;
+                                                playSegment(529, 559);
+                                                a12.style.display = 'none';
+                                                a12S.style.display = 'block';
+                                            });
+                                            document.getElementById('a12S').addEventListener('click', function() {
+                                                document.getElementById('a12S').removeEventListener;
+                                                pauseAudio();
+                                                a12.style.display = 'block';
+                                                a12S.style.display = 'none';
+                                            });
+                                        </script>
+                                        
                                         <p>Surat An-Nas</p>
                                         <p>3x baca</p>
                                     </div>
@@ -564,6 +1043,27 @@
                                 <div class="pagi-dis">
                                     <div class="pagi-dis m-4 mt-8 border-b-2 border-zinc-700">
                                         <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            
+                                            <button id="a13"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a13S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a13 = document.getElementById('a13');
+                                            var a13S = document.getElementById('a13S');
+                                            document.getElementById('a13').addEventListener('click', function() {
+                                                document.getElementById('a13').removeEventListener;
+                                                playSegment(627, 643);
+                                                a13.style.display = 'none';
+                                                a13S.style.display = 'block';
+                                            });
+                                            document.getElementById('a13S').addEventListener('click', function() {
+                                                document.getElementById('a13S').removeEventListener;
+                                                pauseAudio();
+                                                a13.style.display = 'block';
+                                                a13S.style.display = 'none';
+                                            });
+                                        </script>
+                                            
                                             <p>Do'a Al-Matsurat Pagi / Dzikir</p>
                                             <p>3x baca</p>
                                         </div>
@@ -572,6 +1072,27 @@
                                     </div>
                                     <div class="m-4 mt-8 border-b-2 border-zinc-700">
                                         <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            
+                                            <button id="a14"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a14S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a14 = document.getElementById('a14');
+                                            var a14S = document.getElementById('a14S');
+                                            document.getElementById('a14').addEventListener('click', function() {
+                                                document.getElementById('a14').removeEventListener;
+                                                playSegment(673, 697);
+                                                a14.style.display = 'none';
+                                                a14S.style.display = 'block';
+                                            });
+                                            document.getElementById('a14S').addEventListener('click', function() {
+                                                document.getElementById('a14S').removeEventListener;
+                                                pauseAudio();
+                                                a14.style.display = 'block';
+                                                a14S.style.display = 'none';
+                                            });
+                                        </script>
+
                                             <p>Do'a Al-Matsurat Pagi / Dzikir</p>
                                             <p>3x baca</p>
                                         </div>
@@ -579,6 +1100,27 @@
                                         <p class="text-justify mb-6 dark:text-zinc-300">Di waktu pagi kami memegang agama Islam, kalimat ikhlas, agama Nabi kita Muhammad shallallahu ‘alaihi wa sallam, dan agama ayah kami Ibrahim, yang berdiri di atas jalan yang lurus, muslim dan tidak tergolong orang-orang musyrik.</p>
                                     </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                         <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            
+                                            <button id="a15"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a15S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a15 = document.getElementById('a15');
+                                            var a15S = document.getElementById('a15S');
+                                            document.getElementById('a15').addEventListener('click', function() {
+                                                document.getElementById('a15').removeEventListener;
+                                                playSegment(747,765);
+                                                a15.style.display = 'none';
+                                                a15S.style.display = 'block';
+                                            });
+                                            document.getElementById('a15S').addEventListener('click', function() {
+                                                document.getElementById('a15S').removeEventListener;
+                                                pauseAudio();
+                                                a15.style.display = 'block';
+                                                a15S.style.display = 'none';
+                                            });
+                                        </script>
+                                            
                                             <p>Do'a Al-Matsurat Pagi / Dzikir Do'a</p>
                                             <p>3x baca</p>
                                         </div>
@@ -586,6 +1128,27 @@
                                         <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, sesungguhnya aku berpagi hari dari-Mu dalam kenikmatan, kesehatan dan perlindungan. Maka sempurnakannlah untukku kenikmatan, kesehatan dan perlindungan-Mu itu di dunia dan akhirat.</p>
                                     </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                         <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            
+                                            <button id="a16"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a16S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a16 = document.getElementById('a16');
+                                            var a16S = document.getElementById('a16S');
+                                            document.getElementById('a16').addEventListener('click', function() {
+                                                document.getElementById('a16').removeEventListener;
+                                                playSegment(801,815);
+                                                a16.style.display = 'none';
+                                                a16S.style.display = 'block';
+                                            });
+                                            document.getElementById('a16S').addEventListener('click', function() {
+                                                document.getElementById('a16S').removeEventListener;
+                                                pauseAudio();
+                                                a16.style.display = 'block';
+                                                a16S.style.display = 'none';
+                                            });
+                                        </script>
+                                            
                                             <p>Do'a Al-Matsurat Pagi / Dzikir</p>
                                             <p>3x baca</p>
                                         </div>
@@ -596,6 +1159,27 @@
                                 <div class="sore">
                                     <div class="m-4 mt-8 border-b-2 border-zinc-700">
                                         <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            
+                                            <button id="a17"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a17S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a17 = document.getElementById('a17');
+                                            var a17S = document.getElementById('a17S');
+                                            document.getElementById('a17').addEventListener('click', function() {
+                                                document.getElementById('a17').removeEventListener;
+                                                playSegmentS(1,15);
+                                                a17.style.display = 'none';
+                                                a17S.style.display = 'block';
+                                            });
+                                            document.getElementById('a17S').addEventListener('click', function() {
+                                                document.getElementById('a17S').removeEventListener;
+                                                pauseAudioS();
+                                                a17.style.display = 'block';
+                                                a17S.style.display = 'none';
+                                            });
+                                        </script>
+
                                             <p>Do'a Al-Matsurat Sore</p>
                                             <p>3x baca</p>
                                         </div>
@@ -603,6 +1187,27 @@
                                         <p class="text-justify mb-6 dark:text-zinc-300">Kami bersore hari dan bersore hari pula kerajaan milik Allah. Segala puji bagi Allah, tiada sekutu bagi-Nya, tiada Tuhan melainkan Dia dan kepada-Nya tempat kembali.</p>
                                     </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                         <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            
+                                            <button id="a18"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a18S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a18 = document.getElementById('a18');
+                                            var a18S = document.getElementById('a18S');
+                                            document.getElementById('a18').addEventListener('click', function() {
+                                                document.getElementById('a18').removeEventListener;
+                                                playSegmentS(43,67);
+                                                a18.style.display = 'none';
+                                                a18S.style.display = 'block';
+                                            });
+                                            document.getElementById('a18S').addEventListener('click', function() {
+                                                document.getElementById('a18S').removeEventListener;
+                                                pauseAudioS();
+                                                a18.style.display = 'block';
+                                                a18S.style.display = 'none';
+                                            });
+                                        </script>
+                                            
                                             <p>Do'a Al-Matsurat Sore</p>
                                             <p>3x baca</p>
                                         </div>
@@ -610,6 +1215,27 @@
                                         <p class="text-justify mb-6 dark:text-zinc-300">Di waktu sore kami memegang agama Islam, kalimat ikhlas, agama Nabi kita Muhammad shallallahu ‘alaihi wa sallam, dan agama ayah kami Ibrahim, yang berdiri di atas jalan yang lurus, muslim dan tidak tergolong orang-orang musyrik.</p>
                                     </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                         <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            
+                                            <button id="a19"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a19S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a19 = document.getElementById('a19');
+                                            var a19S = document.getElementById('a19S');
+                                            document.getElementById('a19').addEventListener('click', function() {
+                                                document.getElementById('a19').removeEventListener;
+                                                playSegmentS(115,134);
+                                                a19.style.display = 'none';
+                                                a19S.style.display = 'block';
+                                            });
+                                            document.getElementById('a19S').addEventListener('click', function() {
+                                                document.getElementById('a19S').removeEventListener;
+                                                pauseAudioS();
+                                                a19.style.display = 'block';
+                                                a19S.style.display = 'none';
+                                            });
+                                        </script>
+
                                             <p>Do'a Al-Matsurat Sore</p>
                                             <p>3x baca</p>
                                         </div>
@@ -617,6 +1243,25 @@
                                         <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, sesungguhnya aku bersore hari dari-Mu dalam kenikmatan, kesehatan dan perlindungan. Maka sempurnakannlah untukku kenikmatan, kesehatan dan perlindungan-Mu itu di dunia dan akhirat.</p>
                                     </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                         <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                            <button id="a79"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a79S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a79 = document.getElementById('a79');
+                                            var a79S = document.getElementById('a79S');
+                                            document.getElementById('a79').addEventListener('click', function() {
+                                                document.getElementById('a79').removeEventListener;
+                                                playSegmentS(170, 184);
+                                                a79.style.display = 'none';
+                                                a79S.style.display = 'block';
+                                            });
+                                            document.getElementById('a79S').addEventListener('click', function() {
+                                                document.getElementById('a79S').removeEventListener;
+                                                pauseAudioS();
+                                                a79.style.display = 'block';
+                                                a79S.style.display = 'none';
+                                            });
+                                        </script>
                                             <p>Do'a Al-Matsurat Sore</p>
                                             <p>3x baca</p>
                                         </div>
@@ -627,6 +1272,25 @@
                                 
                                 <div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a80"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a80S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a80 = document.getElementById('a80');
+                                            var a80S = document.getElementById('a80S');
+                                            document.getElementById('a80').addEventListener('click', function() {
+                                                document.getElementById('a80').removeEventListener;
+                                                playSegment(844,854);
+                                                a80.style.display = 'none';
+                                                a80S.style.display = 'block';
+                                            });
+                                            document.getElementById('a80S').addEventListener('click', function() {
+                                                document.getElementById('a80S').removeEventListener;
+                                                pauseAudio();
+                                                a80.style.display = 'block';
+                                                a80S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat / Dzikir</p>
                                         <p>3x baca</p>
                                     </div>
@@ -634,6 +1298,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Ya Tuhanku, Segala puji bagiMu sebagaimana seyogyanya kemuliaan wajahMu dan keagungan kekuasaanMu.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a81"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a81S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a81 = document.getElementById('a81');
+                                            var a81S = document.getElementById('a81S');
+                                            document.getElementById('a81').addEventListener('click', function() {
+                                                document.getElementById('a81').removeEventListener;
+                                                playSegment(872,881);
+                                                a81.style.display = 'none';
+                                                a81S.style.display = 'block';
+                                            });
+                                            document.getElementById('a81S').addEventListener('click', function() {
+                                                document.getElementById('a81S').removeEventListener;
+                                                pauseAudio();
+                                                a81.style.display = 'block';
+                                                a81S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat / Dzikir Do'a</p>
                                         <p>3x baca</p>
                                     </div>
@@ -641,6 +1324,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Aku ridha Allah sebagai Rabb, Islam sebagai agama, dan Muhammad sebagai Rasul. Ya Allah, tambahkanlah aku ilmu dan berikanlah aku rizqi akan kepahaman, Dan jadikanlah aku termasuk golongan orang-orang yang shalih</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a82"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a82S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a82 = document.getElementById('a82');
+                                            var a82S = document.getElementById('a82S');
+                                            document.getElementById('a82').addEventListener('click', function() {
+                                                document.getElementById('a82').removeEventListener;
+                                                playSegment(904,914);
+                                                a82.style.display = 'none';
+                                                a82S.style.display = 'block';
+                                            });
+                                            document.getElementById('a82S').addEventListener('click', function() {
+                                                document.getElementById('a82S').removeEventListener;
+                                                pauseAudio();
+                                                a82.style.display = 'block';
+                                                a82S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat / Dzikir</p>
                                         <p>3x baca</p>
                                     </div>
@@ -648,6 +1350,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Maha Suci Allah dan Segala Puji bagiNya, sebanyak bilangan makhlukNya, seridha diriNya, setimbangan ‘arsy-Nya, dan sebanyak tinta dari kata-kataNya.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a83"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a83S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a83 = document.getElementById('a83');
+                                            var a83S = document.getElementById('a83S');
+                                            document.getElementById('a83').addEventListener('click', function() {
+                                                document.getElementById('a83').removeEventListener;
+                                                playSegment(938,952);
+                                                a83.style.display = 'none';
+                                                a83S.style.display = 'block';
+                                            });
+                                            document.getElementById('a83S').addEventListener('click', function() {
+                                                document.getElementById('a83S').removeEventListener;
+                                                pauseAudio();
+                                                a83.style.display = 'block';
+                                                a83S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat / Dzikir</p>
                                         <p>3x baca</p>
                                     </div>
@@ -655,6 +1376,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Dengan nama Allah Yang bersama NamaNya sesuatu apa pun tidak akan celaka baik di bumi dan di langit. Dialah Maha Medengar lagi maha Mengetahui.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a84"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a84S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a84 = document.getElementById('a84');
+                                            var a84S = document.getElementById('a84S');
+                                            document.getElementById('a84').addEventListener('click', function() {
+                                                document.getElementById('a84').removeEventListener;
+                                                playSegment(979,992);
+                                                a84.style.display = 'none';
+                                                a84S.style.display = 'block';
+                                            });
+                                            document.getElementById('a84S').addEventListener('click', function() {
+                                                document.getElementById('a84S').removeEventListener;
+                                                pauseAudio();
+                                                a84.style.display = 'block';
+                                                a84S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat</p>
                                         <p>3x baca</p>
                                     </div>
@@ -662,6 +1402,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah sesungguhnya kami berlindung kepadaMu dari menyekutukanMu dengan sesuatu yang kami ketahui, dan kami memohon ampunanMu dari apa-apa yang tidak kami ketahui.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a85"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a85S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a85 = document.getElementById('a85');
+                                            var a85S = document.getElementById('a85S');
+                                            document.getElementById('a85').addEventListener('click', function() {
+                                                document.getElementById('a85').removeEventListener;
+                                                playSegment(1019,1028);
+                                                a85.style.display = 'none';
+                                                a85S.style.display = 'block';
+                                            });
+                                            document.getElementById('a85S').addEventListener('click', function() {
+                                                document.getElementById('a85S').removeEventListener;
+                                                pauseAudio();
+                                                a85.style.display = 'block';
+                                                a85S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat</p>
                                         <p>3x baca</p>
                                     </div>
@@ -669,6 +1428,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Aku berlindung dengan kalimat Allah yang sempurna dari keburukan apa-apa yang Dia ciptakan.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a86"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a86S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a86 = document.getElementById('a86');
+                                            var a86S = document.getElementById('a86S');
+                                            document.getElementById('a86').addEventListener('click', function() {
+                                                document.getElementById('a86').removeEventListener;
+                                                playSegment(1047,1069);
+                                                a86.style.display = 'none';
+                                                a86S.style.display = 'block';
+                                            });
+                                            document.getElementById('a86S').addEventListener('click', function() {
+                                                document.getElementById('a86S').removeEventListener;
+                                                pauseAudio();
+                                                a86.style.display = 'block';
+                                                a86S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat</p>
                                         <p>3x baca</p>
                                     </div>
@@ -676,6 +1454,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, aku berlindung kepada-Mu dari rasa gelisah dan sedih, dari kelemahan dan kemalasan, dari sifat pengecut dan bakhil, dan dari lilitan hutang dan kesewenang-wenangan orang.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a87"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a87S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a87 = document.getElementById('a87');
+                                            var a87S = document.getElementById('a87S');
+                                            document.getElementById('a87').addEventListener('click', function() {
+                                                document.getElementById('a87').removeEventListener;
+                                                playSegment2(27,48);
+                                                a87.style.display = 'none';
+                                                a87S.style.display = 'block';
+                                            });
+                                            document.getElementById('a87S').addEventListener('click', function() {
+                                                document.getElementById('a87S').removeEventListener;
+                                                pauseAudio2();
+                                                a87.style.display = 'block';
+                                                a87S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat</p>
                                         <p>3x baca</p>
                                     </div>
@@ -683,6 +1480,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah berikanlah kesehatan bagi badanku, bagi pendengaranku, bagi penglihatanku, bagi qolbunku (hatiku).</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a88"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a88S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a88 = document.getElementById('a88');
+                                            var a88S = document.getElementById('a88S');
+                                            document.getElementById('a88').addEventListener('click', function() {
+                                                document.getElementById('a88').removeEventListener;
+                                                playSegment2(58,76);
+                                                a88.style.display = 'none';
+                                                a88S.style.display = 'block';
+                                            });
+                                            document.getElementById('a88S').addEventListener('click', function() {
+                                                document.getElementById('a88S').removeEventListener;
+                                                pauseAudio2();
+                                                a88.style.display = 'block';
+                                                a88S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat</p>
                                         <p>3x baca</p>
                                     </div>
@@ -690,6 +1506,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah sungguh aku berlindung kepadaMu dari kekufuran dan kefaqiran, Ya Allah sungguh aku berlindung kepadaMu dari azab kubur, tidak ada Ilah kecuali Engkau.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700" id="section1">
                                     <div class="flex justify-between p-4 bg-red-600 text-white sticky top-0">
+                                        <button id="a89"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a89S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a89 = document.getElementById('a89');
+                                            var a89S = document.getElementById('a89S');
+                                            document.getElementById('a89').addEventListener('click', function() {
+                                                document.getElementById('a89').removeEventListener;
+                                                playSegment2(173,221);
+                                                a89.style.display = 'none';
+                                                a89S.style.display = 'block';
+                                            });
+                                            document.getElementById('a89S').addEventListener('click', function() {
+                                                document.getElementById('a89S').removeEventListener;
+                                                pauseAudio2();
+                                                a89.style.display = 'block';
+                                                a89S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat / Dzikir Do'a / Istighfar Sayyid</p>
                                         <p>3x / 100x baca</p>
                                     </div>
@@ -697,6 +1532,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah, Engkau Tuhanku, tiada Tuhan kecuali Engkau. Engkau ciptakan aku dan aku adalah hamba-Mu. Aku berada di atas janjiMu, semampuku. Aku berlindung kepadaMu dari keburukan perbuatanku. Aku mengakui banyaknya nikmat (yang Engkau anugerahkan) kepadaku dan aku mengakui dosa-dosaku, maka ampunilah aku. Karena sesungguhnya tiada yang mengampuni dosa-dosa melainkan Engkau</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a90"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a90S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a90 = document.getElementById('a90');
+                                            var a90S = document.getElementById('a90S');
+                                            document.getElementById('a90').addEventListener('click', function() {
+                                                document.getElementById('a90').removeEventListener;
+                                                playSegment2(320,336);
+                                                a90.style.display = 'none';
+                                                a90S.style.display = 'block';
+                                            });
+                                            document.getElementById('a90S').addEventListener('click', function() {
+                                                document.getElementById('a90S').removeEventListener;
+                                                pauseAudio2();
+                                                a90.style.display = 'block';
+                                                a90S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat / Dzikir Do'a</p>
                                         <p>3x baca</p>
                                     </div>
@@ -704,6 +1558,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Aku memohon ampunan Allah Yang Tiada Tuhan melainkan Dia, Yang Maha Hidup dan Maha Mengurus (makhluk-Nya).</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a91"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a91S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a91 = document.getElementById('a91');
+                                            var a91S = document.getElementById('a91S');
+                                            document.getElementById('a91').addEventListener('click', function() {
+                                                document.getElementById('a91').removeEventListener;
+                                                playSegment2(372,441);
+                                                a91.style.display = 'none';
+                                                a91S.style.display = 'block';
+                                            });
+                                            document.getElementById('a91S').addEventListener('click', function() {
+                                                document.getElementById('a91S').removeEventListener;
+                                                pauseAudio2();
+                                                a91.style.display = 'block';
+                                                a91S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat / Dzikir Do'a</p>
                                         <p>10x baca</p>
                                     </div>
@@ -711,6 +1584,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah berikanlah shalawat kepada Nabi Muhammad dan keluarga Nabi Muhammad, sebagaimana telah Engkau berikan kepada Nabi Ibrahim dan keluarga Nabi Ibrahim. Berikanlah barakah kepada Nabi Muhammad dan keluarga Nabi Muhammad, sebagaimana telah Engkau berikan kepada Nabi Ibrahim dan keluarga Nabi Ibrahim. Di alam Engkaulah Yang Maha Terpuji lagi Maha Mulia.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a92"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a92S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a92 = document.getElementById('a92');
+                                            var a92S = document.getElementById('a92S');
+                                            document.getElementById('a92').addEventListener('click', function() {
+                                                document.getElementById('a92').removeEventListener;
+                                                playSegment2(581,599);
+                                                a92.style.display = 'none';
+                                                a92S.style.display = 'block';
+                                            });
+                                            document.getElementById('a92S').addEventListener('click', function() {
+                                                document.getElementById('a92S').removeEventListener;
+                                                pauseAudio2();
+                                                a92.style.display = 'block';
+                                                a92S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat / Dzikir</p>
                                         <p>100x baca</p>
                                     </div>
@@ -718,6 +1610,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Maha Suci Allah, segala puji bagi Allah, tiada Tuhan melainkan Allah dan Allah Maha Besar.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a93"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a93S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a93 = document.getElementById('a93');
+                                            var a93S = document.getElementById('a93S');
+                                            document.getElementById('a93').addEventListener('click', function() {
+                                                document.getElementById('a93').removeEventListener;
+                                                playSegment2(635,654);
+                                                a93.style.display = 'none';
+                                                a93S.style.display = 'block';
+                                            });
+                                            document.getElementById('a93S').addEventListener('click', function() {
+                                                document.getElementById('a93S').removeEventListener;
+                                                pauseAudio2();
+                                                a93.style.display = 'block';
+                                                a93S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat / Dzikir</p>
                                         <p>10x baca</p>
                                     </div>
@@ -725,6 +1636,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Tiada Tuhan melainkan Allah semata, yang tiada sekutu bagi-Nya, bagi-Nya kerajaan dan bagi-Nya segala puji, dan Dia berkuasa ata segala sesuatu.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a94"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a94S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a94 = document.getElementById('a94');
+                                            var a94S = document.getElementById('a94S');
+                                            document.getElementById('a94').addEventListener('click', function() {
+                                                document.getElementById('a94').removeEventListener;
+                                                playSegment2(694,712);
+                                                a94.style.display = 'none';
+                                                a94S.style.display = 'block';
+                                            });
+                                            document.getElementById('a94S').addEventListener('click', function() {
+                                                document.getElementById('a94S').removeEventListener;
+                                                pauseAudio2();
+                                                a94.style.display = 'block';
+                                                a94S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat / Dzikir Do'a</p>
                                         <p>3x baca</p>
                                     </div>
@@ -732,6 +1662,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Maha suci Engkau ya Allah, dan segala puji bagi-Mu. Aku bersaksi bahwa tiada Tuhan melainkan Engkau, aku memohon ampunan dan bertaubat kepada-Mu</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a95"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a95S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a95 = document.getElementById('a95');
+                                            var a95S = document.getElementById('a95S');
+                                            document.getElementById('a95').addEventListener('click', function() {
+                                                document.getElementById('a95').removeEventListener;
+                                                playSegment2(751,821);
+                                                a95.style.display = 'none';
+                                                a95S.style.display = 'block';
+                                            });
+                                            document.getElementById('a95S').addEventListener('click', function() {
+                                                document.getElementById('a95S').removeEventListener;
+                                                pauseAudio2();
+                                                a95.style.display = 'block';
+                                                a95S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat / Shalawat</p>
                                         <p>1x baca</p>
                                     </div>
@@ -740,6 +1689,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Ya Allah berikanlah shalawat kepada Nabi Muhammad; hamba-Mu, nabi-Mu, dan Rasul-Mu; Nabi yang ummi. Juga kepada keluarga dan para sahabatnya serta berilah keselamatan sebanyak yang terjangkau oleh ilmu-Mu yang tergores oleh pena-Mu, dan yang terangkum oleh kitab-Mu. Ridhailah ya Allah para pemimpin kami, Abu Bakar, Umar, Utsman, dan Ali, semua sahabat, semua tabi’in dan orang-orang yang mengikuti mereka sampai hari pembalasan</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
+                                        <button id="a96"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a96S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a96 = document.getElementById('a96');
+                                            var a96S = document.getElementById('a96S');
+                                            document.getElementById('a96').addEventListener('click', function() {
+                                                document.getElementById('a96').removeEventListener;
+                                                playSegment2(821,850);
+                                                a96.style.display = 'none';
+                                                a96S.style.display = 'block';
+                                            });
+                                            document.getElementById('a96S').addEventListener('click', function() {
+                                                document.getElementById('a96S').removeEventListener;
+                                                pauseAudio2();
+                                                a96.style.display = 'block';
+                                                a96S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Do'a Al-Matsurat / Dzikir</p>
                                         <p>1x baca</p>
                                     </div>
@@ -749,6 +1717,25 @@
             
             <div id="doa"><div class="m-4 mt-8 border-b-2 border-green-600">
                                     <div class="flex justify-between p-4 bg-green-600 text-white sticky top-0">
+                                        <button id="a97"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a97S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a97 = document.getElementById('a97');
+                                            var a97S = document.getElementById('a97S');
+                                            document.getElementById('a97').addEventListener('click', function() {
+                                                document.getElementById('a97').removeEventListener;
+                                                playSegment2(851,890);
+                                                a97.style.display = 'none';
+                                                a97S.style.display = 'block';
+                                            });
+                                            document.getElementById('a97S').addEventListener('click', function() {
+                                                document.getElementById('a97S').removeEventListener;
+                                                pauseAudio2();
+                                                a97.style.display = 'block';
+                                                a97S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Surat Al-Imran ayat 26</p>
                                         <p>1x baca</p>
                                     </div>
@@ -756,6 +1743,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Katakanlah: "Wahai Tuhan Yang mempunyai kerajaan, Engkau berikan kerajaan kepada orang yang Engkau kehendaki dan Engkau cabut kerajaan dari orang yang Engkau kehendaki. Engkau muliakan orang yang Engkau kehendaki dan Engkau hinakan orang yang Engkau kehendaki. Di tangan Engkaulah segala kebajikan.Sesungguhnya Engkau Maha Kuasa atas segala sesuatu.</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-green-600">
                                     <div class="flex justify-between p-4 bg-green-600 text-white sticky top-0">
+                                        <button id="a98"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a98S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a98 = document.getElementById('a98');
+                                            var a98S = document.getElementById('a98S');
+                                            document.getElementById('a98').addEventListener('click', function() {
+                                                document.getElementById('a98').removeEventListener;
+                                                playSegment2(891,918);
+                                                a98.style.display = 'none';
+                                                a98S.style.display = 'block';
+                                            });
+                                            document.getElementById('a98S').addEventListener('click', function() {
+                                                document.getElementById('a98S').removeEventListener;
+                                                pauseAudio2();
+                                                a98.style.display = 'block';
+                                                a98S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Surat Al-Imran ayat 27</p>
                                         <p>1x baca</p>
                                     </div>
@@ -763,6 +1769,25 @@
                                     <p class="text-justify mb-6 dark:text-zinc-300">Engkau masukkan malam ke dalam siang dan Engkau masukkan siang ke dalam malam. Engkau keluarkan yang hidup dari yang mati, dan Engkau keluarkan yang mati dari yang hidup. Dan Engkau beri rezeki siapa yang Engkau kehendaki tanpa hisab (batas).</p>
                                 </div><div class="m-4 mt-8 border-b-2 border-green-600">
                                     <div class="flex justify-between p-4 bg-green-600 text-white sticky top-0">
+                                        <button id="a99"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="a99S" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            //Kode untuk sembunyi dan tampilkannya tombol play dan stop
+                                            var a99 = document.getElementById('a99');
+                                            var a99S = document.getElementById('a99S');
+                                            document.getElementById('a99').addEventListener('click', function() {
+                                                document.getElementById('a99').removeEventListener;
+                                                playSegment2(919,935);
+                                                a99.style.display = 'none';
+                                                a99S.style.display = 'block';
+                                            });
+                                            document.getElementById('a99S').addEventListener('click', function() {
+                                                document.getElementById('a99S').removeEventListener;
+                                                pauseAudio2();
+                                                a99.style.display = 'block';
+                                                a99S.style.display = 'none';
+                                            });
+                                        </script>
                                         <p>Dzikir</p>
                                         <p>1x baca</p>
                                     </div>
@@ -772,19 +1797,27 @@
                                 <div class="m-4 mt-8 border-b-2 border-green-600">
                                     <div class="flex justify-between p-4 bg-green-600 text-white sticky top-0">
                                         
-                                        <button id="robitohh">
-                                            <span class="material-symbols-outlined">
-                                                text_to_speech
-                                            </span>
-                                        </button>
+                                        <button id="btn-robitoh"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="btn-robitoh-stop" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
                                         <script>
-                                            // source: https://github.com/Jabinsarsaragih/studyVocabulary/blob/jabin/assets/js/script.js
-                                            const data = new Audio();
-                                            document.getElementById('robitohh').addEventListener('click', function() {
-                                                data.src = "rsc\\opus\\Rabithah_ai.opus";
-                                                data.play();
+                                            var robitoh = new Audio();
+                                            var btnStopRobitoh = document.getElementById('btn-robitoh-stop');
+                                            var btnPlayRobitoh = document.getElementById('btn-robitoh');
+                                            document.getElementById('btn-robitoh').addEventListener('click', function() {
+                                                robitoh.src = "rsc\\opus\\Rabithah_ai.opus";
+                                                robitoh.play();
+                                                robitoh.loop = true;
+                                                btnStopRobitoh.style.display = 'block';
+                                                btnPlayRobitoh.style.display = 'none';
+                                            });
+                                            document.getElementById('btn-robitoh-stop').addEventListener('click', function() {
+                                                robitoh.pause();
+                                                robitoh.currentTime = 0;
+                                                btnStopRobitoh.style.display = 'none';
+                                                btnPlayRobitoh.style.display = 'block';
                                             });
                                         </script>
+                                            <!-- js audio play idea, source: https://github.com/Jabinsarsaragih/studyVocabulary/blob/jabin/assets/js/script.js -->                                        
                                         <p>Doa Robitoh</p>
                                         <p>1x baca</p>
                                     </div>
@@ -793,6 +1826,26 @@
                                 </div>
                                 <div class="m-4 mt-8 border-b-2 border-red-600">
                                     <div class="flex justify-between p-4 bg-red-600 text-white sticky top-0">
+                                        <button id="btn-ist"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="btn-ist-stop" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            var ist = new Audio();
+                                            var btnStop = document.getElementById('btn-ist-stop');
+                                            var btnPlay = document.getElementById('btn-ist');
+                                            document.getElementById('btn-ist').addEventListener('click', function() {
+                                                ist.src = "rsc\\opus\\ast.opus";
+                                                ist.play();
+                                                ist.loop = true;
+                                                btnStop.style.display = 'block';
+                                                btnPlay.style.display = 'none';
+                                            });
+                                            document.getElementById('btn-ist-stop').addEventListener('click', function() {
+                                                ist.pause();
+                                                ist.currentTime = 0;
+                                                btnStop.style.display = 'none';
+                                                btnPlay.style.display = 'block';
+                                            });
+                                        </script>
                                         <p>Amalan Yaumiyah (Istighfar)</p>
                                         <a href="#section1"><span class="material-symbols-outlined">read_more</span></a>
                                         <p>100x baca</p>
@@ -803,14 +1856,15 @@
                             </div>
 
             <footer style="font-size: small;" class="text-center text-sm lg:text-base mt-10 mx-4 my-4 p-4 bold dark:text-white dark:border-zinc-700">
-                Referensi: <br><a href="https://almatsurat.vercel.app/" target="_blank" title="yogyakarta. we love open source">AAM</a>, <a href="https://play.google.com/store/apps/details?id=com.walukustudio.almatsurat" target="_blank" title="play store app">Waluku Studio</a>, <a href="https://play.google.com/store/apps/details?id=com.andi.alquran.id" target="_blank" title="play store app">Andi Unpam</a>,  <a href="https://docs.google.com/spreadsheets/d/1LumnHQXxxukTrm2_4yrBxzRcpWKQOfbFy-ueoTmVkGM/edit?usp=sharing" target="_blank" title="google spreadsheet">Amalan Yaumiyah</a>, <a href="https://openulis.com/bacaan-istighfar/" target="_blank" title="kalimat istighfar">Openulis</a>, <a href="https://www.youtube.com/watch?v=_c4HMgUK7Wc" target="_blank" title="audio listen">Excellenz School of Education</a>
+                Referensi: <br><a href="https://almatsurat.vercel.app/" target="_blank" title="yogyakarta. we love open source">AAM</a>, <a href="https://play.google.com/store/apps/details?id=com.walukustudio.almatsurat" target="_blank" title="play store app">Waluku Studio</a>, <a href="https://play.google.com/store/apps/details?id=com.andi.alquran.id" target="_blank" title="play store app">Andi Unpam</a>,  <a href="https://docs.google.com/spreadsheets/d/1LumnHQXxxukTrm2_4yrBxzRcpWKQOfbFy-ueoTmVkGM/edit?usp=sharing" target="_blank" title="google spreadsheet">Amalan Yaumiyah</a>, <a href="https://openulis.com/bacaan-istighfar/" target="_blank" title="kalimat istighfar">Openulis</a>, <a href="https://www.youtube.com/watch?v=_c4HMgUK7Wc" target="_blank" title="audio untuk listen">Excellenz School of Education</a>, <a href="https://www.youtube.com/watch?v=TfdS0O7_Jjc" target="_blank" title="audio istighfar">Inteam Digital</a>
                 <br>
-                <br>Alat Pendukung: <br><a href="https://www.naturalreaders.com/online/" target="_blank" title="web site">Natural Reader AI</a>, <a href="https://www.arabic-keyboard.org/editor/" target="_blank" title="teks editor kalimat arab">Arabic Online Editor</a>, <a href="https://fonts.google.com/icons" target="_blank" title="ikon-ikon yang dipakai">Google Fonts</a>, <a href="https://chatgpt.com" target="_blank" title="bantuan koding">ChatGPT</a>
+                <br>Alat Pendukung: <br><a href="https://www.naturalreaders.com/online/" target="_blank" title="web site">Natural Reader AI</a>, <a href="https://www.arabic-keyboard.org/editor/" target="_blank" title="teks editor kalimat arab">Arabic Online Editor</a>, <a href="https://fonts.google.com/icons" target="_blank" title="ikon-ikon yang dipakai">Google Fonts</a>, <a href="https://chatgpt.com" target="_blank" title="bantuan koding">ChatGPT</a>, <a href="https://www.lalal.ai/" target="_blank" title="audio instrument splitter">LALAL.AI</a>
                 <br>
                 <!-- <br>Tidak Digunakan: <br><a href="https://m.youtube.com/watch?v=bHl-YNM9MRM&list=LL&index=2&pp=gAQBiAQB" target="_blank" title="youtube channel">SANTRI DIGITAL</a>, -->
             </footer>
         </div>
 
      </div>
+    </div>
 </body>
 </html>
