@@ -272,21 +272,25 @@
         <div id="dotting">
             <span>(((</span><span>&lt;&gt;</span><span>)))</span>
         </div>
-        <div id="complete-icon"><span class="dot">&lt;&gt;</span></div> <!-- Ikon Selesai (<> hijau) -->
         <div id="loading-info" style="color: gray;">Preparing to load...</div>
         <div id="progress-bar">
             <div id="progress-bar-fill"></div>
         </div>
         <div id="percentage" style="color: blue;">0%</div>
+        <div id="file-size">Total File Size: 0 MB</div>
+        <div id="total-network-size">Downloaded: 0 MB</div>
+        <div style="font-size: small;"><br>Jika proses download sangat cepat artinya file sudah ter-cached dan tidak mengkonsumsi data internet Anda</div>
     </div>
     <script>
+        const loadingInfo = document.getElementById("loading-info");
+        const fileSizeInfo = document.getElementById("file-size");
+        const totalNetworkSizeInfo = document.getElementById("total-network-size");
         const progressBarFill = document.getElementById("progress-bar-fill");
         const percentageText = document.getElementById("percentage");
-        const loadingInfo = document.getElementById("loading-info");
         const dotting = document.getElementById("dotting");
-        const completeIcon = document.getElementById("complete-icon");
 
-        const filesToFetch = [
+        // URL untuk file yang akan diunduh
+        const fileUrls = [
             "index.html",
             "rsc/css/style.css",
             "rsc/woff2/AlQuran-IndoPak-by-QuranWBW.v.4.2.2-WL.woff2",
@@ -304,35 +308,86 @@
             "rsc/wav/info_boost"
         ];
 
-        let progress = 0;
-        const totalFiles = filesToFetch.length;
+        let totalSize = 0;   // Total ukuran semua file (dalam byte)
+        let downloadedSize = 0; // Ukuran total yang sudah diunduh
 
-        async function fetchFiles() {
-            for (let i = 0; i < totalFiles; i++) {
-                loadingInfo.textContent = `Fetching: ${filesToFetch[i]}`;
+        async function getTotalFileSize() {
+            for (let url of fileUrls) {
                 try {
-                    const response = await fetch(filesToFetch[i]);
-                    if (response.ok) {
-                        console.log(await response.json()); // Simulasi pemrosesan data
-                    }
-                } catch (error) {}
-                // Update progress bar
-                progress = ((i + 1) / totalFiles) * 100;
-                progressBarFill.style.width = progress + "%";
-                percentageText.textContent = Math.round(progress) + "%";
+                    const response = await fetch(url, { method: 'HEAD' });
+                    const size = parseInt(response.headers.get('Content-Length'), 10);
+                    if (!isNaN(size)) totalSize += size;
+                } catch (error) {
+                    console.warn(`Could not retrieve size for ${url}:`, error);
+                }
             }
-
-            // Semua file selesai dimuat
-            loadingInfo.textContent = "System ready :), let's go!";
-            dotting.style.display = "none"; // Hilangkan dotting css
-            completeIcon.style.display = "block"; // Tampilkan ikon selesai
-            setTimeout(() => {
-                document.getElementById("loading-screen").style.display = "none"; // Sembunyikan layar loading
-                document.getElementById("utama").style.display = "block"; // Tampilkan konten utama
-            }, 1000); // Tambahkan jeda waktu jika diinginkan
+            fileSizeInfo.textContent = `Total File Size: ${(totalSize / (1024 * 1024)).toFixed(2)} MB`;
         }
 
-        fetchFiles();
+        async function fetchFileWithProgress(url, fileIndex, totalFiles) {
+            try {
+                const response = await fetch(url);
+                const fileSize = parseInt(response.headers.get('Content-Length'), 10) || 0;
+                const reader = response.body.getReader();
+
+                let loaded = 0;
+                const stream = new ReadableStream({
+                    start(controller) {
+                        function push() {
+                            reader.read().then(({ done, value }) => {
+                                if (done) {
+                                    controller.close();
+                                    return;
+                                }
+                                loaded += value.length;
+                                downloadedSize += value.length;
+
+                                // Update progress bar
+                                const progress = (downloadedSize / totalSize) * 100;
+                                progressBarFill.style.width = `${progress}%`;
+                                percentageText.textContent = `${Math.round(progress)}%`;
+                                totalNetworkSizeInfo.textContent = `Downloaded: ${(downloadedSize / (1024 * 1024)).toFixed(2)} MB`;
+
+                                controller.enqueue(value);
+                                push();
+                            }).catch(err => {
+                                console.error("Error reading stream:", err);
+                                controller.error(err);
+                            });
+                        }
+                        push();
+                    }
+                });
+
+                // Ambil nama file dari URL
+                const fileName = url.split('/').pop() || `File ${fileIndex + 1}`;
+                await new Response(stream).blob();
+                loadingInfo.textContent = `Downloading: ${fileName} (${fileIndex + 1}/${totalFiles})`;
+
+
+            } catch (error) {
+                console.error("Error downloading file:", error);
+            }
+        }
+
+        async function startDownloading() {
+            await getTotalFileSize(); // Ambil ukuran semua file sebelum mulai download
+            loadingInfo.textContent = "Downloading files...";
+
+            for (let i = 0; i < fileUrls.length; i++) {
+                await fetchFileWithProgress(fileUrls[i], i, fileUrls.length);
+            }
+
+            // Semua file selesai diunduh
+            loadingInfo.textContent = "All Files Loaded! Let's go...";
+            dotting.innerHTML = "✔";
+            setTimeout(() => {
+            document.getElementById("loading-screen").style.display = "none"; // Sembunyikan layar loading
+            document.getElementById("utama").style.display = "block"; // Tampilkan konten utama
+        }, 1000); // Tambahkan jeda waktu jika diinginkan
+        }
+
+        startDownloading();
     </script>
 
     <div id="utama" style="display: none;">
