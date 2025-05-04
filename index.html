@@ -165,6 +165,50 @@
             }
         }
         
+        body {
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 20px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 12px; width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: blue;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
     </style>
     <script>
         if ('serviceWorker' in navigator) {
@@ -270,15 +314,15 @@
 
     <div id="loading-screen">
         <div id="dotting">
-            <span>(((</span><span>&lt;&gt;</span><span>)))</span>
+            <span>/</span><span>/</span><span>/</span>
         </div>
-        <div id="loading-info" style="color: gray;">Preparing to load...</div>
+        <div id="loading-info" style="color: gray;">Mohon tunggu...</div>
         <div id="progress-bar">
             <div id="progress-bar-fill"></div>
         </div>
-        <div id="percentage" style="color: blue;">0%</div>
-        <div id="file-size">Total File Size: 0 MB</div>
-        <div id="total-network-size">Downloaded: 0 MB</div>
+        <div id="percentage" style="color: blue;">Preparing...</div>
+        <div id="file-size">...</div>
+        <div id="total-network-size">...</div>
         <div style="font-size: small;"><br>Jika proses download sangat cepat artinya file sudah ter-cached dan tidak mengkonsumsi data internet Anda</div>
     </div>
     <script>
@@ -300,6 +344,7 @@
             "service-worker.js",
             "rsc/opus/Rabithah_ai.opus",
             "rsc/opus/ast.opus",
+            "rsc/opus/kafaratul.opus",
             "rsc/opus/Al.Matsurat.Pagi-000.opus",
             "rsc/opus/Al.Matsurat.Pagi-001.opus",
             "rsc/opus/Al.Matsurat.Petang-Trim.opus",
@@ -380,7 +425,7 @@
 
             // Semua file selesai diunduh
             loadingInfo.textContent = "All Files Loaded! Let's go...";
-            dotting.innerHTML = "✔";
+            dotting.innerHTML = "PASS";
             setTimeout(() => {
             document.getElementById("loading-screen").style.display = "none"; // Sembunyikan layar loading
             document.getElementById("utama").style.display = "block"; // Tampilkan konten utama
@@ -757,7 +802,31 @@
                     </script>
                 </div>
             </div>
-            
+            <p style="text-align: center;"><label class="switch"><input type="checkbox" id="darkToggle"><span class="slider"></span></label><br>Dark Mode</p>
+            <script>
+                const toggle = document.getElementById("darkToggle");
+                toggle.addEventListener("change", function () {
+                const bodyElements = document.getElementsByClassName("bdy");
+                if (this.checked) {
+                    // Dark mode aktif
+                    for (let i = 0; i < bodyElements.length; i++) {
+                    bodyElements[i].style.backgroundColor = "black";
+                    bodyElements[i].style.color = "white";
+                    // Dark mode diaktifkan, lalu dimatikan setelah 5 detik
+                    setTimeout(() => {
+                    toggle.checked = false;
+                    document.body.classList.remove("dark-mode");
+                    }, 500);
+                    }
+                } else {
+                    // Light mode
+                    /* for (let i = 0; i < bodyElements.length; i++) {
+                    bodyElements[i].style.backgroundColor = "palegoldenrod";
+                    bodyElements[i].style.color = "black";
+                    } */
+                }
+                });
+            </script>
             <div id="content"><div class="m-4 mt-8 border-b-2 border-zinc-700">
                                     <div class="flex justify-between p-4 bg-zinc-700 text-white sticky top-0">
                                         
@@ -1908,10 +1977,38 @@
                                     <p class="indopak" dir="rtl">أَسْتَغْفِرُ اللهَ| العَظِيْمَ</p> 
                                     <p class="text-justify mb-6 dark:text-zinc-300">Aku memohon ampunan kepada Allah | Yang Maha Agung.</p>
                                 </div>
+                                <div class="m-4 mt-8 border-b-2 border-red-600">
+                                    <div class="flex justify-between p-4 bg-red-600 text-white sticky top-0">
+                                        <button id="btn-kaf"><span class="material-symbols-outlined">play_circle</span></button>
+                                        <button id="btn-kaf-stop" style="display: none;"><span class="material-symbols-outlined">stop_circle</span></button>
+                                        <script>
+                                            var kaf = new Audio();
+                                            var btnStop = document.getElementById('btn-kaf-stop');
+                                            var btnPlay = document.getElementById('btn-kaf');
+                                            document.getElementById('btn-kaf').addEventListener('click', function() {
+                                                kaf.src = "rsc\\opus\\kafaratul.opus";
+                                                kaf.play();
+                                                kaf.loop = true;
+                                                btnStop.style.display = 'block';
+                                                btnPlay.style.display = 'none';
+                                            });
+                                            document.getElementById('btn-kaf-stop').addEventListener('click', function() {
+                                                kaf.pause();
+                                                kaf.currentTime = 0;
+                                                btnStop.style.display = 'none';
+                                                btnPlay.style.display = 'block';
+                                            });
+                                        </script>
+                                        <p>Doa Kafaratul Majelis</p>
+                                        <p>1x baca</p>
+                                    </div>
+                                    <p class="indopak" dir="rtl">سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، أَشْهَدُ أَنْ لاَ إِلَـٰهَ إِلاَّ أَنْتَ، أَسْتَغْفِرُكَ، وَأَتُوْبُ إِلَيْكَ</p> 
+                                    <p class="text-justify mb-6 dark:text-zinc-300">Maha Suci Engkau ya Allah, aku memujiMu. Aku bersaksi bahwa tidak ada sesembahan yang berhak disembah kecuali Engkau, aku minta ampun dan bertaubat kepada-Mu.</p>
+                                </div>
                             </div>
 
             <footer style="font-size: small;" class="text-center text-sm lg:text-base mt-10 mx-4 my-4 p-4 bold dark:text-white dark:border-zinc-700">
-                Referensi: <br><a href="https://almatsurat.vercel.app/" target="_blank" title="yogyakarta. we love open source">AAM</a>, <a href="https://play.google.com/store/apps/details?id=com.walukustudio.almatsurat" target="_blank" title="play store app">Waluku Studio</a>, <a href="https://play.google.com/store/apps/details?id=com.andi.alquran.id" target="_blank" title="play store app">Andi Unpam</a>,  <a href="https://docs.google.com/spreadsheets/d/1LumnHQXxxukTrm2_4yrBxzRcpWKQOfbFy-ueoTmVkGM/edit?usp=sharing" target="_blank" title="google spreadsheet">Amalan Yaumiyah</a>, <a href="https://openulis.com/bacaan-istighfar/" target="_blank" title="kalimat istighfar">Openulis</a>, <a href="https://www.youtube.com/watch?v=_c4HMgUK7Wc" target="_blank" title="audio untuk listen">Excellenz School of Education</a>, <a href="https://www.youtube.com/watch?v=TfdS0O7_Jjc" target="_blank" title="audio istighfar">Inteam Digital</a>
+                Referensi: <br><a href="https://almatsurat.vercel.app/" target="_blank" title="yogyakarta. we love open source">AAM</a>, <a href="https://play.google.com/store/apps/details?id=com.walukustudio.almatsurat" target="_blank" title="play store app">Waluku Studio</a>, <a href="https://play.google.com/store/apps/details?id=com.andi.alquran.id" target="_blank" title="play store app">Andi Unpam</a>,  <a href="https://docs.google.com/spreadsheets/d/1LumnHQXxxukTrm2_4yrBxzRcpWKQOfbFy-ueoTmVkGM/edit?usp=sharing" target="_blank" title="google spreadsheet">Amalan Yaumiyah</a>, <a href="https://openulis.com/bacaan-istighfar/" target="_blank" title="kalimat istighfar">Openulis</a>, <a href="https://www.youtube.com/watch?v=_c4HMgUK7Wc" target="_blank" title="audio untuk listen">Excellenz School of Education</a>, <a href="https://www.youtube.com/watch?v=TfdS0O7_Jjc" target="_blank" title="audio istighfar">Inteam Digital</a>, <a href="https://alamisharia.co.id/blogs/doa-kafaratul-majelis" target="_blank" title="doa-kafaratul-majelis">ALAMI</a>, <a href="https://www.facebook.com/watch/?v=734133838467763" target="_blank" title="kaf audio fb">Surabaya Mengaji</a>
                 <br>
                 <br>Alat Pendukung: <br><a href="https://www.naturalreaders.com/online/" target="_blank" title="web site">Natural Reader AI</a>, <a href="https://www.arabic-keyboard.org/editor/" target="_blank" title="teks editor kalimat arab">Arabic Online Editor</a>, <a href="https://fonts.google.com/icons" target="_blank" title="ikon-ikon yang dipakai">Google Fonts</a>, <a href="https://chatgpt.com" target="_blank" title="bantuan koding">ChatGPT</a>, <a href="https://www.lalal.ai/" target="_blank" title="audio instrument splitter">LALAL.AI</a>
                 <br>
