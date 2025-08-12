@@ -2018,5 +2018,31 @@
 
      </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Membuat objek untuk membaca parameter dari URL saat ini
+            const params = new URLSearchParams(window.location.search);
+            
+            // Mengambil nilai dari parameter 'action' (akan berisi 'pagi' atau 'sore')
+            const action = params.get('action');
+
+            // Memeriksa apakah fungsi pagi() dan sore() memang ada
+            if (typeof pagi === 'function' && typeof sore === 'function') {
+                if (action === 'pagi') {
+                    console.log('Perintah dari URL: Memanggil fungsi pagi().');
+                    pagi();
+                } else if (action === 'sore') {
+                    console.log('Perintah dari URL: Memanggil fungsi sore().');
+                    sore();
+                }
+            } else {
+                console.warn('Fungsi `pagi()` atau `sore()` tidak dapat ditemukan di halaman ini.');
+            }
+
+            // Untuk menangani #istighfar, browser akan otomatis menggulir ke sana.
+            // Tidak perlu kode tambahan karena ID 'istighfar' sudah ada.
+        });
+    </script>
 </body>
 </html>
