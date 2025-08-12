@@ -1,12 +1,8 @@
 /* --- Global & Fonts --- */
-body {
-    font-family: "Montserrat", sans-serif;
-    background-color: #f0f0f0;
-    color: #333;
-    transition: background-color 0.3s, color 0.3s;
-    overscroll-behavior: contain;
-    margin: 0;
+:root {
+    --arabic-font-size: 28px; /* Default font size variable */
 }
+body { font-family: "Montserrat", sans-serif; background-color: #f0f0f0; color: #333; transition: background-color 0.3s, color 0.3s; overscroll-behavior: contain; margin: 0; }
 .sofadi-one-regular { font-family: "Sofadi One", system-ui; font-weight: 400; }
 .montserrat-400 { font-family: "Montserrat", sans-serif; font-weight: 400; }
 .potrait { font-size: 100%; }
@@ -19,6 +15,7 @@ body.dark .item-header { background-color: #2c2c2c !important; }
 body.dark a { color: #58a6ff; }
 body.dark .translation { color: #ccc; }
 body.dark .fly-button-back { background-color: rgba(44, 44, 44, 0.7); }
+body.dark .settings-controls { background-color: #1e1e1e; border-color: #333; }
 
 /* --- Layout & Views --- */
 .hidden { display: none !important; }
@@ -35,18 +32,39 @@ body.dark .fly-button-back { background-color: rgba(44, 44, 44, 0.7); }
 .info-box h2 { margin-top: 0; }
 
 /* --- Dzikir View & Items --- */
-.dzikir-header { position: relative; padding-bottom: 1rem; border-bottom: 1px solid #ddd; margin-bottom: 1rem; }
-body.dark .dzikir-header { border-bottom-color: #333; }
+.dzikir-header { text-align: center; }
 .dzikir-item { background-color: #fff; margin: 1rem 0; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; }
 .item-header { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; color: white; position: sticky; top: 0; z-index: 10; }
 .item-header p { margin: 0; font-weight: bold; }
 .play-btn { background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
 .play-btn .material-symbols-outlined { font-size: 28px; }
-.indopak { font-family: 'MyCustomFont', 'Scheherazade New', serif; font-size: 28px; padding: 1rem; text-align: right; line-height: 1.8; }
+.indopak { font-family: 'MyCustomFont', 'Scheherazade New', serif; font-size: var(--arabic-font-size); padding: 1rem; text-align: right; line-height: 1.8; transition: font-size 0.2s; }
 .translation { padding: 0 1rem 1rem 1rem; text-align: justify; font-size: 0.95em; color: #555; }
-/* View-specific Display */
-body.view-pagi .dzikir-sore, body.view-pagi #listen-sore { display: none; }
-body.view-sore .dzikir-pagi, body.view-sore #listen-pagi { display: none; }
+body.view-pagi .dzikir-sore, body.view-pagi .listen-wrapper[data-listen='sore'] { display: none; }
+body.view-sore .dzikir-pagi, body.view-sore .listen-wrapper[data-listen='pagi'] { display: none; }
+
+/* --- Header Controls (Listen, Font Slider, Dark Mode) --- */
+.settings-controls { display: flex; flex-direction: column; gap: 1rem; align-items: center; background-color: #fff; padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid #e5e5e5; }
+.font-slider-container { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 300px;}
+.font-slider-container label { margin-bottom: 0.5rem; font-size: 0.9em; }
+.slider-range { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background: #ddd; outline: none; border-radius: 5px; opacity: 0.7; transition: opacity .2s; }
+.slider-range:hover { opacity: 1; }
+.slider-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; background: #007bff; cursor: pointer; border-radius: 50%; }
+.slider-range::-moz-range-thumb { width: 20px; height: 20px; background: #007bff; cursor: pointer; border-radius: 50%; border: none; }
+.toggle-container { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; font-size: 0.9em; }
+.switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 28px; }
+.slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: #2563eb; }
+input:checked + .slider:before { transform: translateX(22px); }
+
+/* --- Listen Buttons --- */
+.listen-container { margin-top: 1rem; display: flex; justify-content: center; gap: 1rem; }
+.listen-btn { background-color: #eee; border: 1px solid #ddd; border-radius: 8px; padding: 0.5rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
+body.dark .listen-btn { background-color: #2c2c2c; border-color: #444; }
+.listen-container audio { display: none; margin-top: 0.5rem; }
+.listen-container audio.visible { display: block; width: 100%; }
 
 /* --- Colors for Headers --- */
 .bg-zinc-700 { background-color: #3f3f46; }
@@ -56,31 +74,14 @@ body.view-sore .dzikir-pagi, body.view-sore #listen-pagi { display: none; }
 /* --- Floating Buttons & Counter --- */
 .fly-button, .fly-button-3 { position: fixed; bottom: 1rem; z-index: 999; border-radius: 9999px; padding: .75rem; border: none; color: white; cursor: pointer; user-select: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 .fly-button { right: 1rem; }
-.fly-button-1 { right: 6rem; border-radius: 8px; width: 40px; text-align: center; }
+.fly-button-1 { right: 6rem; border-radius: 8px; width: 40px; text-align: center; padding-top: 1rem; padding-bottom: 1rem; }
 .fly-button-3 { left: 1rem; border-radius: 8px; }
 .bg-blue-600 { background-color: #2563eb; }
 .bg-orange-600 { background-color: #ea580c; }
 .fly-button-back { position: fixed; top: 1rem; left: 1rem; z-index: 999; display: flex; align-items: center; gap: 0.5rem; background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(5px); border: none; border-radius: 8px; padding: 0.5rem 1rem; cursor: pointer; }
 body.no-scroll { overflow: hidden; }
 
-/* --- Dark Mode Toggle --- */
-.toggle-container { text-align: center; margin-top: 1rem; }
-.switch { position: relative; display: inline-block; width: 60px; height: 34px; }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-.slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-input:checked + .slider { background-color: #2563eb; }
-input:checked + .slider:before { transform: translateX(26px); }
-
-/* --- Listen Buttons --- */
-.listen-container { margin-top: 1rem; }
-.listen-btn { background: none; border: none; cursor: pointer; }
-.listen-container audio { display: none; margin-top: 0.5rem; }
-.listen-container audio.visible { display: inline-block; }
-
-/* --- Font Face --- */
-@font-face {
-    font-family: 'MyCustomFont';
-    src: url('../woff2/AlQuran-IndoPak-by-QuranWBW.v.4.2.2-WL.woff2') format('woff2');
-    font-display: swap;
-}
+/* --- Font Face & Footer --- */
+@font-face { font-family: 'MyCustomFont'; src: url('../woff2/AlQuran-IndoPak-by-QuranWBW.v.4.2.2-WL.woff2') format('woff2'); font-display: swap; }
+.main-footer { font-size: small; text-align: center; padding: 2rem 1rem 1rem; border-top: 1px solid #ddd; margin-top: 2rem; }
+body.dark .main-footer { border-top-color: #333; }
