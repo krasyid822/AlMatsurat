@@ -2021,27 +2021,43 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Membuat objek untuk membaca parameter dari URL saat ini
             const params = new URLSearchParams(window.location.search);
-            
-            // Mengambil nilai dari parameter 'action' (akan berisi 'pagi' atau 'sore')
             const action = params.get('action');
 
-            // Memeriksa apakah fungsi pagi() dan sore() memang ada
-            if (typeof pagi === 'function' && typeof sore === 'function') {
-                if (action === 'pagi') {
-                    console.log('Perintah dari URL: Memanggil fungsi pagi().');
-                    pagi();
-                } else if (action === 'sore') {
-                    console.log('Perintah dari URL: Memanggil fungsi sore().');
-                    sore();
-                }
-            } else {
-                console.warn('Fungsi `pagi()` atau `sore()` tidak dapat ditemukan di halaman ini.');
+            // 1. Tetap jalankan fungsi pagi() atau sore() seperti biasa
+            if (typeof pagi === 'function' && action === 'pagi') {
+                pagi();
+            } else if (typeof sore === 'function' && action === 'sore') {
+                sore();
             }
 
-            // Untuk menangani #istighfar, browser akan otomatis menggulir ke sana.
-            // Tidak perlu kode tambahan karena ID 'istighfar' sudah ada.
+            // 2. Cek apakah tujuan URL adalah #istighfar
+            if (window.location.hash === '#istighfar') {
+                const istighfarElement = document.getElementById('istighfar');
+                
+                // 3. Buat "pengawas" yang akan mengecek setiap 200 milidetik
+                const checkVisibility = setInterval(() => {
+                    const utamaContainer = document.getElementById('utama');
+                    
+                    // 4. Jika konten utama (#utama) sudah terlihat...
+                    if (utamaContainer && utamaContainer.style.display === 'block') {
+                        
+                        // ...hentikan pengawasan...
+                        clearInterval(checkVisibility);
+
+                        // ...dan langsung perintahkan untuk menggulir ke elemen Istighfar
+                        if (istighfarElement) {
+                            console.log('Konten utama terlihat, menggulir ke #istighfar...');
+                            istighfarElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                }, 200); // Interval pengecekan
+
+                // Pengaman untuk menghentikan "pengawas" setelah 10 detik jika ada masalah
+                setTimeout(() => {
+                    clearInterval(checkVisibility);
+                }, 10000);
+            }
         });
     </script>
 </body>
