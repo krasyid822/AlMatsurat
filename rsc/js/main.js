@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- SELECTORS --- //
     const B = document.body;
+    const Root = document.documentElement;
     const Selectors = {
         loadingScreen: document.getElementById('loading-screen'),
         loadingInfo: document.getElementById('loading-info'),
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clickButton: document.getElementById('clickButton'),
         resetButton: document.getElementById('resetButton'),
         darkToggle: document.getElementById('darkToggle'),
+        fontSlider: document.getElementById('fontSlider'),
         listenContainer: document.getElementById('listen-container'),
     };
 
@@ -28,11 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rabithah: document.getElementById('audioRabithah'),
         istighfar: document.getElementById('audioIstighfar'),
         kafaratul: document.getElementById('audioKafaratul'),
-        sfx: {
-            nav: document.getElementById('sfxNav'),
-            info: document.getElementById('sfxInfo'),
-            reset: document.getElementById('sfxReset'),
-        }
+        sfx: { nav: document.getElementById('sfxNav'), info: document.getElementById('sfxInfo'), reset: document.getElementById('sfxReset'), }
     };
 
     // --- STATE --- //
@@ -43,44 +41,24 @@ document.addEventListener('DOMContentLoaded', () => {
         currentView: 'home',
         loadingMessageInterval: null,
     };
-
+    
     // --- ASSETS & LOADING --- //
-    const ASSETS_TO_LOAD = [
-        "rsc/css/style.css", "rsc/js/main.js", "manifest.json", "service-worker.js",
-        "rsc/png/icon.png",
-        "rsc/woff2/AlQuran-IndoPak-by-QuranWBW.v.4.2.2-WL.woff2",
-        "rsc/opus/Al.Matsurat.Pagi-000.opus", "rsc/opus/Al.Matsurat.Pagi-001.opus",
-        "rsc/opus/Al.Matsurat.Petang-Trim.opus", "rsc/opus/Rabithah_ai.opus",
-        "rsc/opus/ast.opus", "rsc/opus/kafaratul.opus",
-        "rsc/wav/nav_boost.wav", "rsc/wav/info_boost.wav", "rsc/wav/recycle_boost.wav"
-    ];
-
-    const LOADING_MESSAGES = [
-        "Mengumpulkan berkah...", "Menyiapkan ketenangan jiwa...",
-        "Memuat dzikir pagi & petang...", "Sedang mengunduh kebaikan...",
-        "Menghubungkan hati dengan Ilahi...", "Hampir selesai..."
-    ];
+    const ASSETS_TO_LOAD = [ "rsc/css/style.css", "rsc/js/main.js", "manifest.json", "service-worker.js", "rsc/png/icon.png", "rsc/woff2/AlQuran-IndoPak-by-QuranWBW.v.4.2.2-WL.woff2", "rsc/opus/Al.Matsurat.Pagi-000.opus", "rsc/opus/Al.Matsurat.Pagi-001.opus", "rsc/opus/Al.Matsurat.Petang-Trim.opus", "rsc/opus/Rabithah_ai.opus", "rsc/opus/ast.opus", "rsc/opus/kafaratul.opus", "rsc/wav/nav_boost.wav", "rsc/wav/info_boost.wav", "rsc/wav/recycle_boost.wav" ];
+    const LOADING_MESSAGES = [ "Mengumpulkan berkah...", "Menyiapkan ketenangan jiwa...", "Memuat dzikir pagi & petang...", "Sedang mengunduh kebaikan...", "Menghubungkan hati dengan Ilahi...", "Hampir selesai..." ];
 
     // --- AUDIO CONTROLLER --- //
     const AudioController = {
         play: (audioElement, startTime, endTime, isLoop = false) => {
             AudioController.stop();
             if (!audioElement) return;
-
             audioElement.currentTime = startTime;
             audioElement.play();
             State.activeAudio = audioElement;
-
             if (isLoop) {
                 audioElement.loop = true;
             } else {
                 audioElement.loop = false;
-                State.activeListener = () => {
-                    if (audioElement.currentTime >= endTime) {
-                        audioElement.currentTime = startTime;
-                        audioElement.play();
-                    }
-                };
+                State.activeListener = () => { if (audioElement.currentTime >= endTime) { audioElement.currentTime = startTime; audioElement.play(); } };
                 audioElement.addEventListener('timeupdate', State.activeListener);
             }
         },
@@ -94,27 +72,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 State.activeAudio = null;
                 State.activeListener = null;
             }
-            // Also stop all potentially looping audios
-            Object.values(AudioElements).forEach(audio => {
-                if (typeof audio.pause === 'function' && !audio.paused) {
-                    audio.pause();
-                }
-            });
+            Object.values(AudioElements).forEach(audio => { if (typeof audio.pause === 'function' && !audio.paused) { audio.pause(); } });
         },
-        playSoundEffect: (sfx) => {
-            if (sfx) {
-                sfx.currentTime = 0;
-                sfx.play();
-            }
-        }
+        playSoundEffect: (sfx) => { if (sfx) { sfx.currentTime = 0; sfx.play(); } }
     };
 
     // --- UI CONTROLLER --- //
     const UI = {
         setView: (view) => {
             State.currentView = view;
-            window.location.hash = ''; // Clear hash on view change
-
+            window.location.hash = '';
             if (view === 'home') {
                 Selectors.homeView.classList.remove('hidden');
                 Selectors.dzikirView.classList.add('hidden');
@@ -125,12 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 Selectors.dzikirView.classList.remove('hidden');
                 B.className = B.className.replace(/view-\w+/g, '').trim();
                 B.classList.add(`view-${view}`);
-                
                 if (view === 'pagi') {
                     Selectors.dzikirTitle.textContent = "Al Matsurat Sugro Pagi";
                     Selectors.dzikirSubtitle.textContent = "Biasakan membaca setiap pagi";
                     document.title = "Al Matsurat Pagi";
-                } else { // sore
+                } else {
                     Selectors.dzikirTitle.textContent = "Al Matsurat Sugro Sore";
                     Selectors.dzikirSubtitle.textContent = "Biasakan membaca setiap sore";
                     document.title = "Al Matsurat Sore";
@@ -143,8 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('darkMode', isDark);
         },
         updateCounter: () => {
-            Selectors.counter.textContent = State.count;
+            Selectors.counter.querySelector('b').textContent = State.count;
             B.classList.toggle('no-scroll', State.count !== 0);
+        },
+        updateFontSize: (size) => {
+            Root.style.setProperty('--arabic-font-size', `${size}px`);
+            localStorage.setItem('arabicFontSize', size);
         }
     };
 
@@ -173,18 +143,13 @@ document.addEventListener('DOMContentLoaded', () => {
         handleMainClick: (e) => {
             const target = e.target.closest('[data-action], .play-btn');
             if (!target) return;
-            
-            // --- View Switching --- //
             if (target.dataset.action === 'setView') {
                 UI.setView(target.dataset.view);
                 return;
             }
-
-            // --- Unified Audio Play/Pause --- //
             if (target.classList.contains('play-btn')) {
                 const item = target.closest('.dzikir-item');
                 const icon = target.querySelector('.material-symbols-outlined');
-
                 if (State.activeAudio && State.activeAudio.dataset.sourceId === item.dataset.audioId) {
                     AudioController.stop();
                     icon.textContent = 'play_circle';
@@ -193,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const audioId = item.dataset.audioId;
                     const audioEl = document.getElementById(audioId);
                     if (audioEl) {
-                        audioEl.dataset.sourceId = audioId; // Track source
+                        audioEl.dataset.sourceId = audioId;
                         const start = parseFloat(item.dataset.start || 0);
                         const end = parseFloat(item.dataset.end || audioEl.duration);
                         const isLoop = item.dataset.loop === 'true';
@@ -203,29 +168,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return;
             }
-             // --- Listen Buttons --- //
             if (target.dataset.action === 'listen') {
-                const audioPlayer = target.nextElementSibling;
-                audioPlayer.classList.add('visible');
-                audioPlayer.play();
-                target.style.display = 'none';
+                const wrapper = target.parentElement;
+                const audioPlayer = wrapper.querySelector('audio');
+                const isVisible = audioPlayer.classList.toggle('visible');
+                if (isVisible) {
+                    audioPlayer.play();
+                    target.innerHTML = `<span class="material-symbols-outlined">volume_off</span> Sembunyikan`;
+                } else {
+                    audioPlayer.pause();
+                    target.innerHTML = `<span class="material-symbols-outlined">speaker</span> Dengarkan`;
+                }
             }
         },
         handleKeyDown: (e) => {
             if (State.currentView === 'home') return;
-            if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                Counter.increment();
-            } else if (e.key.toLowerCase() === 'control') {
-                e.preventDefault();
-                Counter.reset();
-            }
+            if (e.key === 'ArrowRight') { e.preventDefault(); Counter.increment(); }
+            else if (e.key.toLowerCase() === 'control') { e.preventDefault(); Counter.reset(); }
         }
     };
 
     // --- INITIALIZATION --- //
     const init = () => {
-        // --- Service Worker --- //
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('service-worker.js')
@@ -234,45 +198,46 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         
-        // --- Setup Listen Buttons --- //
         Selectors.listenContainer.innerHTML = `
-            <div id="listen-pagi">
-                <button class="listen-btn" data-action="listen"><span class="material-symbols-outlined">speaker</span><br>Dengarkan Pagi</button>
+            <div class="listen-wrapper" data-listen="pagi">
+                <button class="listen-btn" data-action="listen"><span class="material-symbols-outlined">speaker</span> Dengarkan</button>
                 <audio src="https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Pagi.opus" controlslist="nodownload" preload="none"></audio>
             </div>
-            <div id="listen-sore">
-                <button class="listen-btn" data-action="listen"><span class="material-symbols-outlined">speaker</span><br>Dengarkan Sore</button>
+            <div class="listen-wrapper" data-listen="sore">
+                <button class="listen-btn" data-action="listen"><span class="material-symbols-outlined">speaker</span> Dengarkan</button>
                 <audio src="https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Petang.opus" controlslist="nodownload" preload="none"></audio>
             </div>
         `;
 
-        // --- Event Listeners --- //
         Selectors.mainContent.addEventListener('click', Handlers.handleMainClick);
         Selectors.clickButton.addEventListener('click', Counter.increment);
         Selectors.resetButton.addEventListener('click', Counter.reset);
         Selectors.darkToggle.addEventListener('change', (e) => UI.toggleDarkMode(e.target.checked));
+        Selectors.fontSlider.addEventListener('input', (e) => UI.updateFontSize(e.target.value));
         document.addEventListener('keydown', Handlers.handleKeyDown);
 
-        // --- Set Initial Dark Mode --- //
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const savedTheme = localStorage.getItem('darkMode');
         const isDark = savedTheme !== null ? savedTheme === 'true' : prefersDark;
         Selectors.darkToggle.checked = isDark;
         UI.toggleDarkMode(isDark);
         
-        // --- Start Loading Process --- //
+        const savedFontSize = localStorage.getItem('arabicFontSize') || 28;
+        Selectors.fontSlider.value = savedFontSize;
+        UI.updateFontSize(savedFontSize);
+        
         startLoadingSequence();
     };
 
-    // --- LOADING SEQUENCE --- //
     async function fetchWithProgress(url, index, total) {
         try {
             await fetch(url);
+        } catch (error) {
+            console.warn(`Could not fetch ${url}:`, error);
+        } finally {
             const progress = ((index + 1) / total) * 100;
             Selectors.progressBarFill.style.width = `${progress}%`;
             Selectors.percentageText.textContent = `${Math.round(progress)}%`;
-        } catch (error) {
-            console.warn(`Could not fetch ${url}:`, error);
         }
     }
 
@@ -283,45 +248,30 @@ document.addEventListener('DOMContentLoaded', () => {
             const randomIndex = Math.floor(Math.random() * LOADING_MESSAGES.length);
             Selectors.loadingMessage.textContent = LOADING_MESSAGES[randomIndex];
         }, 2000);
-
         for (let i = 0; i < ASSETS_TO_LOAD.length; i++) {
             await fetchWithProgress(ASSETS_TO_LOAD[i], i, ASSETS_TO_LOAD.length);
         }
-
         clearInterval(State.loadingMessageInterval);
         Selectors.loadingInfo.textContent = "Semua file siap!";
         Selectors.loadingMessage.textContent = "Selamat berdzikir...";
-
         setTimeout(() => {
             Selectors.loadingScreen.style.opacity = '0';
             Selectors.mainContent.classList.remove('hidden');
             B.classList.remove('loading');
-            
-            // Handle deep links after content is visible
             handleUrlParams();
-
-            setTimeout(() => {
-                Selectors.loadingScreen.classList.add('hidden');
-            }, 500);
+            setTimeout(() => { Selectors.loadingScreen.classList.add('hidden'); }, 500);
         }, 1000);
     }
     
     function handleUrlParams() {
         const params = new URLSearchParams(window.location.search);
-        const action = params.get('action'); // 'pagi' or 'sore'
-        const hash = window.location.hash; // '#istighfar'
-
-        if (action === 'pagi' || action === 'sore') {
-            UI.setView(action);
-        }
-
+        const action = params.get('action');
+        const hash = window.location.hash;
+        if (action === 'pagi' || action === 'sore') { UI.setView(action); }
         if (hash) {
-            // Use timeout to ensure smooth scrolling after view transition
             setTimeout(() => {
                 const targetElement = document.querySelector(hash);
-                if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                if (targetElement) { targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
             }, 100);
         }
     }
