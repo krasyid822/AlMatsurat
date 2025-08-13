@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Beri jeda 100ms agar browser siap sepenuhnya
                 setTimeout(() => {
                     targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
+                }, 5000);
             }
         }
     };
