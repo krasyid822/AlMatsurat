@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const updateCounter = (value) => {
         count = value;
-        ui.updateCounterView(count); // Memanggil fungsi UI
+        ui.updateCounterView(count);
         
         if (navigator.vibrate) navigator.vibrate(value === 0 ? 200 : 50);
 
@@ -92,21 +92,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
-    const handleUrlParams = () => {
+    // #### PERUBAHAN DI SINI: Memisahkan logika URL dan Scroll ####
+    const handleActionParam = () => {
         const params = new URLSearchParams(window.location.search);
         const action = params.get('action');
         if (action === 'pagi') ui.showPagi();
         if (action === 'sore') ui.showSore();
+    };
 
+    const handleHashScroll = () => {
         if (window.location.hash) {
-            const checkVisibility = setInterval(() => {
-                if (elements.utama.style.display === 'block') {
-                    clearInterval(checkVisibility);
-                    const targetElement = document.querySelector(window.location.hash);
-                    if (targetElement) targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            }, 200);
-            setTimeout(() => clearInterval(checkVisibility), 10000);
+            const targetElement = document.querySelector(window.location.hash);
+            if (targetElement) {
+                // Beri jeda 100ms agar browser siap sepenuhnya
+                setTimeout(() => {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
         }
     };
 
@@ -191,7 +193,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // #### PERUBAHAN ALUR LOGIKA DI SINI ####
     ui.generateContent();
-    ui.showApp();
-    handleUrlParams();
+    handleActionParam(); // 1. Atur tampilan pagi/sore terlebih dahulu
+    ui.showApp(() => { // 2. Tampilkan aplikasi, lalu jalankan scroll sebagai callback
+        handleHashScroll();
+    });
 });
