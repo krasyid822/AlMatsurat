@@ -5,334 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Al Matsurat</title>
     <meta name="description" content="Bacalah al matsurat sebelum berangkat dan sepulang kerja">
+    <meta name="google-site-verification" content="upN7jUrhwfOZ1VG5OUB0fBHKpY_UlUdytzKAgIU10ks">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="32x32" href="rsc/png/icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sofadi+One&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="rsc/css/style.css">
-
-    <style>
-        .loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #f0f0f0; color: #333; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: "Montserrat", sans-serif; text-align: center; transition: opacity 0.5s ease-out; z-index: 10000; }
-        .loading-spinner { width: 60px; height: 60px; border: 5px solid rgba(0, 0, 0, 0.1); border-top-color: #007bff; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        #loading-info { font-size: 1.1em; margin-bottom: 15px; color: #555; }
-        #loading-message { font-size: 0.9em; color: #777; min-height: 20px; margin-bottom: 15px; }
-        .progress-bar { width: 80%; max-width: 300px; height: 10px; background-color: #e0e0e0; border-radius: 5px; overflow: hidden; margin-bottom: 10px; }
-        .progress-bar-fill { width: 0%; height: 100%; background-color: #007bff; transition: width 0.4s ease-in-out; }
-        #percentage { font-size: 1em; font-weight: bold; color: #007bff; }
-        .loading-screen.dark { background-color: #121212; color: #e0e0e0; }
-        .loading-screen.dark .loading-spinner { border-color: rgba(255, 255, 255, 0.1); border-top-color: #58a6ff; }
-        .loading-screen.dark #loading-info { color: #ccc; }
-        .loading-screen.dark #loading-message { color: #999; }
-        .loading-screen.dark .progress-bar-fill, .loading-screen.dark #percentage { color: #58a6ff; }
-        .hidden { display: none; }
-        body.loading { overflow: hidden; }
-    </style>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Sofadi+One&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="bdy loading">
-    <div id="loading-screen" class="loading-screen">
-        <div class="loading-spinner"></div>
-        <div id="loading-info">Mempersiapkan...</div>
-        <div id="loading-message">Mengumpulkan berkah...</div>
-        <div class="progress-bar"><div id="progress-bar-fill"></div></div>
-        <div id="percentage">0%</div>
+<body class="bdy">
+
+    <div id="loading-screen">
+        <div id="dotting">
+            <span>/</span><span>/</span><span>/</span>
+        </div>
+        <div id="loading-info" style="color: gray;">Mohon tunggu...</div>
+        <div id="progress-bar">
+            <div id="progress-bar-fill"></div>
+        </div>
+        <div id="percentage" style="color: blue;">0%</div>
+        <div id="file-size">...</div>
+        <div id="total-network-size">...</div>
+        <div class="loading-note"><br>Jika proses download sangat cepat artinya file sudah ter-cached dan tidak mengkonsumsi data internet Anda</div>
     </div>
 
-    <div id="utama" class="hidden">
-        <audio id="audioPagi" src="rsc/opus/Al.Matsurat.Pagi-000.opus" preload="auto"></audio>
-        <audio id="audioPagi2" src="rsc/opus/Al.Matsurat.Pagi-001.opus" preload="auto"></audio>
-        <audio id="audioSore" src="rsc/opus/Al.Matsurat.Petang-Trim.opus" preload="auto"></audio>
-        <audio id="audioRabithah" src="rsc/opus/Rabithah_ai.opus" loop></audio>
-        <audio id="audioIstighfar" src="rsc/opus/ast.opus" loop></audio>
-        <audio id="audioKafaratul" src="rsc/opus/kafaratul.opus" loop></audio>
-        <audio id="sfxNav" src="rsc/wav/nav_boost.wav" preload="auto"></audio>
-        <audio id="sfxInfo" src="rsc/wav/info_boost.wav" preload="auto"></audio>
-        <audio id="sfxReset" src="rsc/wav/recycle_boost.wav" preload="auto"></audio>
+    <div id="utama" style="display: none;">
+        <audio id="audioF" src="rsc/opus/Al.Matsurat.Pagi-000.opus"></audio>
+        <audio id="audioF2" src="rsc/opus/Al.Matsurat.Pagi-001.opus"></audio>
+        <audio id="audioFSore" src="rsc/opus/Al.Matsurat.Petang-Trim.opus"></audio>
+        <audio id="robitohAudio" src="rsc/opus/Rabithah_ai.opus" loop></audio>
+        <audio id="istighfarAudio" src="rsc/opus/ast.opus" loop></audio>
+        <audio id="kafaratulAudio" src="rsc/opus/kafaratul.opus" loop></audio>
+        <audio id="navAudio" src="rsc/wav/nav_boost"></audio>
+        <audio id="infoAudio" src="rsc/wav/info_boost"></audio>
+        <audio id="recycleAudio" src="rsc/wav/recycle_boost"></audio>
 
-        <div class="view-container" id="home-view">
-            <h1 class="montserrat-400 potrait"><b><u>Al Matsurat Sugra</u></b></h1>
+        <div class="home">
+            <h1 class="main-font potrait"><b><u>Al Matsurat Sugra</u></b></h1>
             <sub class="sofadi-one-regular potrait">Bacalah al matsurat sebelum dan sepulang kerja</sub>
             <div class="button-container">
-                <button class="button" data-action="setView" data-view="pagi">
-                    <span class="material-symbols-outlined icon-lg">light_mode</span>
+                <button class="button" id="btn-pagi">
+                    <span class="material-symbols-outlined adaptive-icon" style="font-size: 700%;">light_mode</span>
                     <div class="sofadi-one-regular">Pagi</div>
                 </button>
                 <div class="sofadi-one-regular button">dan</div>
-                <button class="button" data-action="setView" data-view="sore">
-                    <span class="material-symbols-outlined icon-lg">wb_twilight</span>
+                <button class="button" id="btn-sore">
+                    <span class="material-symbols-outlined adaptive-icon" style="font-size: 700%;">wb_twilight</span>
                     <div class="sofadi-one-regular">Sore</div>
                 </button>
             </div>
-            <div class="montserrat-400 info-box">
+            <div class="main-font">
                 <h2><b>Tentang Al-Matsurat</b></h2>
-                <p>Dzikir ini disusun oleh <a href="https://en.wikipedia.org/wiki/Hassan_al-Banna" target="_blank">Imam Hasan Al-Banna</a>.</p>
+                <p class="sofadi-one-regular">Diciptakan oleh <a href="https://www.google.com/search?&q=Imam+Hasan+Al-Banna">Imam Hasan Al-Banna</a>, pendiri <a href="https://www.google.com/search?&q=Ikhwanul+Muslimin">Ikhwanul Muslimin (IM)</a>. Diketahui <a href="https://ukmipolmed.com/">UKMI</a> juga terlihat berada di jalan ini.</p>
             </div>
-            <div class="usr-feedback"><p>Laporkan masalah <a href="https://github.com/krasyid822/AlMatsurat/issues" target="_blank"><u>di sini</u></a></p></div>
+            <div class="usr-feedback">
+                <p>report anomaly <a href="https://github.com/krasyid822/AlMatsurat/issues"><u>here</u></a></p>
+            </div>
         </div>
 
-        <div class="view-container hidden" id="dzikir-view">
-            <div class="dzikir-header">
-                <button data-action="setView" data-view="home" class="fly-button-back"><span class="material-symbols-outlined">arrow_back</span>Kembali</button>
-                <div class="text-center my-9">
-                    <h1 class="font-bold text-2xl" id="dzikir-title">Al Matsurat</h1>
-                    <p id="dzikir-subtitle">Pagi & Sore</p>
-                    <div class="controls-container">
-                        <div id="listen-container" class="listen-container"></div>
-                    </div>
-                </div>
-                 <div class="settings-controls">
-                    <div class="font-slider-container">
-                        <label for="fontSlider">Ukuran Font Arab</label>
-                        <input type="range" min="20" max="48" value="28" class="slider-range" id="fontSlider">
-                    </div>
-                    <div class="toggle-container">
-                        <label class="switch">
-                            <input type="checkbox" id="darkToggle"><span class="slider"></span>
-                        </label>
-                        <label for="darkToggle">Dark Mode</label>
-                    </div>
-                </div>
+        <div class="pagi">
+            <button id="btn-kembali" class="fly-button-back"><span class="material-symbols-outlined">arrow_back</span>Kembali</button>
+            <button class="fly-button-3" id="resetButton">Reset<br>Count<br>(Ctrl)</button>
+            
+            <div class="action-buttons-container">
+                <span id="counter"><b>0</b></span>
+                <button id="clickButton"><br><br>Count<br>(→)</button>
             </div>
 
-            <div class="container max-w-xl mx-auto" id="content-container">
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="2" data-end="10">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Ta'awudz</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">اَعُوْذُ بِاللّٰهِ السَّمِيْعِ الْعَلِيْمِ مِنَ الشَّيْطَانِ الرَّجِيْمِ</p>
-                    <p class="translation">Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="10" data-end="56">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Surat Al - Fatihah</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ ۝ اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَۙ ۝ الرَّحْمٰنِ الرَّحِيْمِۙ ۝ مٰلِكِ يَوْمِ الدِّيْنِۗ ۝ اِيَّاكَ نَعْبُدُ وَاِيَّاكَ نَسْتَعِيْنُۗ ۝ اِهْدِنَا الصِّرَاطَ الْمُسْتَقِيْمَۙ ۝ صِرَاطَ الَّذِيْنَ اَنْعَمْتَ عَلَيْهِمْ ەۙ غَيْرِ الْمَغْضُوْبِ عَلَيْهِمْ وَلَا الضَّاۤلِّيْنَ ۝</p>
-                    <p class="translation">(1) Dengan menyebut nama Allah Yang Maha Pemurah lagi Maha Penyayang. (2) Segala puji bagi Allah, Tuhan semesta alam...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="66" data-end="123">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Surat Al - Baqarah Ayat 1-5</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">الۤمّۤ ۚ ۝ ذٰلِكَ الْكِтٰبُ لَا رَيْبَ ۛ فِيْهِ ۛ هُدًى لِّلْمُتَّقِيْنَۙ ۝ الَّذِيْنَ يُؤْمِنُوْنَ بِالْغَيْبِ وَيُقِيْمُوْنَ الصَّلٰوةَ وَمِمَّا رَزَقْنٰهُمْ يُنْفِقُوْنَ ۙ ۝ وَالَّذِيْنَ يُؤْمِنُوْنَ بِمَآ اُنْزِلَ اِلَيْكَ وَمَآ اُنْزِلَ مِنْ قَبْلِكَ ۚ وَبِالْاٰخِرَةِ هُمْ يُوْقِنُوْنَۗ ۝ اُولٰۤىِٕكَ عَلٰى هُدًى مِّنْ رَّبِّهِمْ ۙ وَاُولٰۤىِٕكَ هُمُ الْمُفْلِحُوْنَ ۝</p>
-                    <p class="translation">(1) Alif Laam Miim. (2) Kitab (Al Qur’an) ini tidak ada keraguan padanya; petunjuk bagi mereka yang bertaqwa...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="123" data-end="181">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Surat Al-Baqarah Ayat 255</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">اَللّٰهُ لَآ اِلٰهَ اِلَّا هُوَۚ اَلْحَيُّ الْقَيُّوْمُ ەۚ لَا تَأْخُذُهٗ سِنَةٌ وَّلَا نَوْمٌۗ لَهٗ مَا فِى السَّمٰوٰتِ وَمَا فِى الْاَرْضِۗ مَنْ ذَا الَّذِيْ يَشْفَعُ عِنْدَهٗٓ اِلَّا بِاِذْنِهٖۗ يَعْلَمُ مَا بَيْنَ اَيْدِيْهِمْ وَمَا خَلْفَهُمْۚ وَلَا يُحِيْطُوْنَ بِشَيْءٍ مِّنْ عِلْمِهٖٓ اِلَّا بِمَا شَاۤءَۚ وَسِعَ كُرْسِيُّهُ السَّمٰوٰتِ وَالْاَرْضَۚ وَلَا يَـُٔوْدُهٗ حِفْظُهُمَاۚ وَهُوَ الْعَلِيُّ الْعَظِيْمُ ۝</p>
-                    <p class="translation">Allah, tidak ada Tuhan (yang berhak disembah) melainkan Dia Yang Hidup kekal lagi terus menerus mengurus (makhluk-Nya)...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="181" data-end="207">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Surat Al-Baqarah Ayat 256</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">لَآ اِكْرَاهَ فِى الدِّيْنِۗ قَدْ تَّبَيَّنَ الرُّشْدُ مِنَ الْغَيِّ ۚ فَمَنْ يَّكْفُرْ بِالطَّاغُوْتِ وَيُؤْمِنْۢ بِاللّٰهِ فَقَدِ اسْتَمْسَكَ بِالْعُرْوَةِ الْوُثْقٰى لَا انْفِصَامَ لَهَا ۗوَاللّٰهُ سَمِيْعٌ عَلِيْمٌ ۝</p>
-                    <p class="translation">Tidak ada paksaan untuk (memasuki) agama (Islam); sesungguhnya telah jelas jalan yang benar daripada jalan yang sesat...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="207" data-end="240">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Surat Al-Baqarah Ayat 257</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">اَللّٰهُ وَلِيُّ الَّذِيْنَ اٰمَنُوْا يُخْرِجُهُمْ مِّنَ الظُّلُمٰتِ اِلَى النُّوْرِۗ وَالَّذِيْنَ كَفَرُوْٓا اَوْلِيَاۤؤُهُمُ الطَّاغُوْتُ يُخْرِجُوْنَهُمْ مِّنَ النُّوْرِ اِلَى الظُّلُمٰتِۗ اُولٰۤىِٕكَ اَصْحٰبُ النَّارِۚ هُمْ فِيْهَا خٰلِدُوْنَ ۝</p>
-                    <p class="translation">Allah Pelindung orang-orang yang beriman; Dia mengeluarkan mereka dari kegelapan (kekafiran) kepada cahaya (iman)...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="240" data-end="271">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Surat Al-Baqarah Ayat 284</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">لِلّٰهِ مَا فِى السَّمٰوٰتِ وَمَا فِى الْاَ رْضِ ۗ وَاِ نْ تُبْدُوْا مَا فِيْۤ اَنْفُسِكُمْ اَوْ تُخْفُوْهُ يُحَا سِبْكُمْ بِهِ اللّٰهُ ۗ فَيَـغْفِرُ لِمَنْ يَّشَآءُ وَيُعَذِّبُ مَنْ يَّشَآءُ ۗ وَا للّٰهُ عَلٰى كُلِّ شَيْءٍ قَدِيْرٌ ۝</p>
-                    <p class="translation">Kepunyaan Allah-lah segala apa yang ada di langit dan apa yang ada di bumi...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="271" data-end="307">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Surat Al-Baqarah Ayat 285</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">اٰمَنَ الرَّسُوْلُ بِمَآ اُنْزِلَ اِلَيْهِ مِنْ رَّبِّهٖ وَالْمُؤْمِنُوْنَۗ كُلٌّ اٰمَنَ بِاللّٰهِ وَمَلٰۤىِٕكَتِهٖ وَكُتُبِهٖ وَرُسُلِهٖۗ لَا نُفَرِّقُ بَيْنَ اَحَدٍ مِّنْ رُّسُلِهٖ ۗ وَقَالُوْا سَمِعْنَا وَاَطَعْنَا غُفْرَانَكَ رَبَّنَا وَاِلَيْكَ الْمَصِيْرُ ۝</p>
-                    <p class="translation">Rasul telah beriman kepada Al Qur'an yang diturunkan kepadanya dari Tuhannya, demikian pula orang-orang yang beriman...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="308" data-end="377">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Surat Al-Baqarah Ayat 286</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">لَا يُكَلِّفُ اللّٰهُ نَفْسًا اِلَّا وُسْعَهَا ۗ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَآ اِنْ نَّسِيْنَآ اَوْ اَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَآ اِصْرًا كَمَا حَمَلْتَهٗ عَلَى الَّذِيْنَ مِنْ قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهٖۚ وَاعْفُ عَنَّاۗ وَاغْفِرْ لَنَاۗ وَارْحَمْنَا ۗ اَنْتَ مَوْلٰىنَا فَانْصُرْنَا عَلَى الْقَوْمِ الْكٰفِرِيْنَ ۝</p>
-                    <p class="translation">Allah tidak membebani seseorang melainkan sesuai dengan kesanggupannya...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="384" data-end="397">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Surat Al-Ikhlas</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">قُلْ هُوَ اللّٰهُ اَحَدٌۚ ۝ اَللّٰهُ الصَّمَدُۚ ۝ لَمْ يَلِدْ وَلَمْ يُوْلَدْۙ ۝ وَلَمْ يَكُنْ لَّهٗ كُفُوًا اَحَدٌ ۝</p>
-                    <p class="translation">(1) Katakanlah: “Dia-lah Allah, Yang Maha Esa, (2) Allah adalah Tuhan yang bergantung kepada-Nya segala sesuatu...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="441" data-end="465">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Surat Al-Falaq</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">قُلْ اَعُوْذُ بِرَبِّ الْفَلَقِۙ ۝ مِنْ شَرِّ مَا خَلَقَۙ ۝ وَمِنْ شَرِّ غَاسِقٍ اِذَا وَقَبَۙ ۝ وَمِنْ شَرِّ النَّفّٰثٰتِ فِى الْعُقَدِۙ ۝ وَمِنْ شَرِّ حَاسِدٍ اِذَا حَسَدَ ۝</p>
-                    <p class="translation">(1) Katakanlah: “Aku berlindung kepada Tuhan Yang Menguasai subuh, (2) dari kejahatan makhluk-Nya...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="529" data-end="559">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Surat An-Nas</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">قُلْ اَعُوْذُ بِرَبِّ النَّاسِۙ ۝ مَلِكِ النَّاسِۙ ۝ اِلٰهِ النَّاسِۙ ۝ مِنْ شَرِّ الْوَسْوَاسِ ەۙ الْخَنَّاسِۖ ۝ الَّذِيْ يُوَسْوِسُ فِيْ صُدُوْرِ النَّاسِۙ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ ۝</p>
-                    <p class="translation">(1) Katakanlah: “Aku berlindung kepada Tuhan (yang memelihara dan menguasai) manusia...</p>
-                </div>
-
-                <div class="dzikir-pagi">
-                    <div class="dzikir-item" data-audio-id="audioPagi" data-start="627" data-end="643">
-                        <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat Pagi</p><p>3x</p></div>
-                        <p class="indopak" dir="rtl">أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلّٰهِ , وَالْحَمْدُ لِلّٰهِ لَا شَرِيْكَ لَهُ , لَا إِلَهَ إِلَّا هُوَ وَإِلَيْهِ النُّشُوْرُ</p>
-                        <p class="translation">Kami berpagi hari dan berpagi hari pula kerjaan milik Allah. Segala puji bagi Allah, tiada sekutu bagi-Nya, tiada Tuhan melainkan Dia dan kepada-Nya tempat kembali.</p>
+            <div class="container max-w-xl mx-auto">
+                <div class="pagi-dis">
+                    <div class="text-center my-9">
+                        <h1 class="font-bold text-2xl">Al Matsurat Sugro Pagi</h1>
+                        <p>Biasakan membaca Al Matsurat sugro setiap pagi</p>
+                        <br>
+                        <button id="btn-listenn" class="listen-button">
+                            <span class="material-symbols-outlined">speaker</span><br>Dengarkan
+                        </button>
+                        <div class="audio-container">
+                            <audio id="aud-listenn" src="https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Pagi.opus" controls controlslist="nodownload" preload="none" style="display: none;"></audio>
+                        </div>
                     </div>
-                    <div class="dzikir-item" data-audio-id="audioPagi" data-start="673" data-end="697">
-                        <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat Pagi</p><p>3x</p></div>
-                        <p class="indopak" dir="rtl">اَصْبَحْنَا عَلَى فِطْرَةِ الْإِسْلَامِ، وَكَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِيْنِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ وَعَلَى مِلَّةِ أَبِيْنَا إِبْرَاهِيْمَ حَنِيْفًا وَمَا كَانَ مِنَ الْمُشْرِكِيْنَ</p>
-                        <p class="translation">Di waktu pagi kami memegang agama Islam, kalimat ikhlas, agama Nabi kita Muhammad shallallahu ‘alaihi wa sallam, dan agama ayah kami Ibrahim...</p>
-                    </div>
-                    <div class="dzikir-item" data-audio-id="audioPagi" data-start="747" data-end="765">
-                        <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat Pagi</p><p>3x</p></div>
-                        <p class="indopak" dir="rtl">اللّٰهُـمَّ إِنِّيْ أَصْبَحْتُ مِنْكَ فِيْ نِعْمَةٍ وَعَافِيَةٍ وَسِتْرٍ , فَأَتِمَّ عَلَيَّ نِعْمَتَكَ وَعَافِيَتَكَ وَسِتْرَكَ فِيْ الدِّيْنِ وَالدُّنْيَا وَالْأَخِرَةِ</p>
-                        <p class="translation">Ya Allah, sesungguhnya aku berpagi hari dari-Mu dalam kenikmatan, kesehatan dan perlindungan...</p>
-                    </div>
-                    <div class="dzikir-item" data-audio-id="audioPagi" data-start="801" data-end="815">
-                        <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat Pagi</p><p>3x</p></div>
-                        <p class="indopak" dir="rtl">اَللّٰهُـمَّ مَا أَصْبَحَ بِيْ مِنْ نِعْمَةٍ , أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ , لَا شَرِيْكَ لَكَ , فَلَكَ الْحَمْدُ , وَلَكَ الشُّكْرُ</p>
-                        <p class="translation">Ya Allah, kenikmatan yang aku atau salah seorang dari makhluk-Mu berpagi hari dengannya adalah dari-Mu semata...</p>
+                </div>
+                <div class="sore">
+                    <div class="text-center my-9">
+                        <h1 class="font-bold text-2xl">Al Matsurat Sugro Sore</h1>
+                        <p>Biasakan membaca Al Matsurat sugro setiap sore</p>
+                        <br>
+                        <button id="btn-listenn-sore" class="listen-button">
+                            <span class="material-symbols-outlined">speaker</span><br>Dengarkan
+                        </button>
+                        <div class="audio-container">
+                            <audio id="aud-listenn-sore" src="https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Petang.opus" controls controlslist="nodownload" preload="none" style="display: none;"></audio>
+                        </div>
                     </div>
                 </div>
 
-                <div class="dzikir-sore">
-                    <div class="dzikir-item" data-audio-id="audioSore" data-start="1" data-end="15">
-                        <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat Sore</p><p>3x</p></div>
-                        <p class="indopak" dir="rtl">أَمْسَيْنَا وَ أَمْسَ الْمُلْكُ لِلَّهِ وَلْحَمْدُ لِلهِ لَا شَرِيْكَ لَهُ لَا إِلَهَ إِلَّاهُوَ وَإِلَيْهِ الْمَصِيْرُ</p>
-                        <p class="translation">Kami bersore hari dan bersore hari pula kerajaan milik Allah. Segala puji bagi Allah, tiada sekutu bagi-Nya, tiada Tuhan melainkan Dia dan kepada-Nya tempat kembali.</p>
-                    </div>
-                    <div class="dzikir-item" data-audio-id="audioSore" data-start="43" data-end="67">
-                        <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat Sore</p><p>3x</p></div>
-                        <p class="indopak" dir="rtl">أَمْسَيْنَا عَلَى فِطْرَةِ اْلإِسْلاَمِ وَعَلَى كَلِمَةِ اْلإِخْلاَصِ وَعَلَى دِيْنِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ وَعَلَى مِلَّةِ أَبِيْنَا إِبْرَاهِيْمَ حَنِيْفًا مُسْلِمًا وَمَا كَانَ مِنَ الْمُشْرِكِيْنَ</p>
-                        <p class="translation">Di waktu sore kami memegang agama Islam, kalimat ikhlas, agama Nabi kita Muhammad shallallahu ‘alaihi wa sallam...</p>
-                    </div>
-                    <div class="dzikir-item" data-audio-id="audioSore" data-start="115" data-end="134">
-                        <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat Sore</p><p>3x</p></div>
-                        <p class="indopak" dir="rtl">اللَّهُمَّ إِنِّي أَمْسَيتُ مِنْكَ فِي نِعْمَةٍ وَعَافِيَةٍ وَسِتْر فَأَتِمَّ عَلَيَّ نِعْمَتَكَ وَعَافِيَتَكَ وَسِتْرَكَ فِي الدُّنْيَا وَالآخِرَة</p>
-                        <p class="translation">Ya Allah, sesungguhnya aku bersore hari dari-Mu dalam kenikmatan, kesehatan dan perlindungan...</p>
-                    </div>
-                    <div class="dzikir-item" data-audio-id="audioSore" data-start="170" data-end="184">
-                        <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat Sore</p><p>3x</p></div>
-                        <p class="indopak" dir="rtl">اللَّهُمَّ مَا أَمْسَ بِيْ مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لاَ شَرِيْكَ لَكَ فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ</p>
-                        <p class="translation">Ya Allah, kenikmatan yang aku atau salah seorang dari makhluk-Mu bersore hari dengannya adalah dari-Mu semata...</p>
-                    </div>
-                </div>
+                <p style="text-align: center;">
+                    <label class="switch"><input type="checkbox" id="darkToggle"><span class="slider"></span></label><br>Dark Mode
+                </p>
 
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="844" data-end="854">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">يَارَبِّيْ لَكَ الْحَمْدُ كَمَا يَنْبَغِيْ لِجَلَالِ وَجْهِكَ الْكَرِيْمِ وَعَظِيْمِ سُلْطَانِكَ</p>
-                    <p class="translation">Ya Tuhanku, Segala puji bagiMu sebagaimana seyogyanya kemuliaan wajahMu dan keagungan kekuasaanMu.</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="872" data-end="881">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">رَضِتُ بِاللّٰهِ رَبَّا وَبِالْإِسْلاَمِ دِيْنَا وَبِمُحَمَّدٍ نَبِيًّا وَرَسُوْلاَ. رَبِّ زِدْ نِيْ عِلْمًـا وَرْزُقْنِـيْ فَهْمًـا وَاجْعَلْنِيْ مِنَ الصَّالِحِيْنَ</p>
-                    <p class="translation">Aku ridha Allah sebagai Rabb, Islam sebagai agama, dan Muhammad sebagai Rasul...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="904" data-end="914">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">سُبْحَانَ اللّٰهِ وَبِحَمْدِهِ عَدَدَ خَلْقِهِ وَرِضَا نَفْسِهِ وَزِنَةَ عَرْشِهِ وَمِدَادَ كَلِمَاتِهِ</p>
-                    <p class="translation">Maha Suci Allah dan Segala Puji bagiNya, sebanyak bilangan makhlukNya, seridha diriNya, setimbangan ‘arsy-Nya, dan sebanyak tinta dari kata-kataNya.</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="938" data-end="952">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">بِسْمِ اللّٰهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ</p>
-                    <p class="translation">Dengan nama Allah Yang bersama NamaNya sesuatu apa pun tidak akan celaka baik di bumi dan di langit. Dialah Maha Medengar lagi maha Mengetahui.</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="979" data-end="992">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">اللّٰهُـمَّ إِنَّا نَعُوْذُبِكَ مِنْ أَنْ نُشْرِكَ بِكَ شَيْئًا نَعْلَمُهُ وَنَسْتَغْفِرُكَ لِمَا لَا نَعْلَمُهُ</p>
-                    <p class="translation">Ya Allah sesungguhnya kami berlindung kepadaMu dari menyekutukanMu dengan sesuatu yang kami ketahui...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="1019" data-end="1028">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">أَعُوْذُ بِكَلِمَاتِ اللّٰهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ</p>
-                    <p class="translation">Aku berlindung dengan kalimat Allah yang sempurna dari keburukan apa-apa yang Dia ciptakan.</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi" data-start="1047" data-end="1069">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">اَللّٰهُـمَّ اِنِّى اَعُوْذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ , وَاَعُوذُ بِكَ مِنَ الْعَجْزِ وَالْكَسَلِ , وَاَعُوذُ بِكَ مِنَ الْجُبْنِ وَالْبُخْلِ , وَاَعُوذُ بِكَ مِنْ غَلَبَةِ الدَّيْنِ وَقَهْرِ الرِّ جَالِ</p>
-                    <p class="translation">Ya Allah, aku berlindung kepada-Mu dari rasa gelisah dan sedih, dari kelemahan dan kemalasan...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi2" data-start="27" data-end="48">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">اللّٰهُـمَّ عَافِنِي فِي بَدَنِي , اللّٰهُـمَّ عَافِنِي فِي سَمْعِي , اللّٰهُـمَّ عَافِنِي فِي بَصَرِي , اللّٰهُـمَّ عَافِنِيْ فِيْ قَلْبِيْ</p>
-                    <p class="translation">Ya Allah berikanlah kesehatan bagi badanku, bagi pendengaranku, bagi penglihatanku, bagi qolbunku (hatiku).</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi2" data-start="58" data-end="76">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Do'a Al-Matsurat</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">اللّٰهُـмَّ إِنِّي أَعُوْذُبِكَ مِنَ الْكُفْرِ وَالْفَقْرِ , وَأَعُوْذُبِكَ مِنْ عَذَابِ الْقَبْرِ , لَآ إِلَهَ إِلَّا أَنْتَ</p>
-                    <p class="translation">Ya Allah sungguh aku berlindung kepadaMu dari kekufuran dan kefaqiran, Ya Allah sungguh aku berlindung kepadaMu dari azab kubur...</p>
-                </div>
-                <div class="dzikir-item" id="istighfar" data-audio-id="audioPagi2" data-start="173" data-end="221">
-                    <div class="item-header bg-red-600"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Sayyidul Istighfar</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">اَللّٰهُـمَّ أَنْتَ رَبِّيْ لاَ إِلَهَ إِلاَّ أَنْتَ , خَلَقْتَنِيْ وَأَنَا عَبْدُكَ , وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ , أَعُوْذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ , أَبُوْءُ لَكَ بِنِعْمَتِكَ عَلَيَّ , وَأَبُوْءُ بِذَنْبِيْ فَاغْفِرْ لِيْ فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوْبَ إِلاَّ أَنْتَ</p>
-                    <p class="translation">Ya Allah, Engkau Tuhanku, tiada Tuhan kecuali Engkau. Engkau ciptakan aku dan aku adalah hamba-Mu...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi2" data-start="320" data-end="336">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Istighfar</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">أَسْتَغْفِرُ اللّٰهَ الَّذِي لَآ إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ</p>
-                    <p class="translation">Aku memohon ampunan Allah Yang Tiada Tuhan melainkan Dia, Yang Maha Hidup dan Maha Mengurus (makhluk-Nya).</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi2" data-start="372" data-end="441">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Shalawat</p><p>10x</p></div>
-                    <p class="indopak" dir="rtl">اللّٰهُـمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِ سَيِّدِنَا مُحَمَّدٍ , كَمَا صَلَّيْتَ عَـلَى سَيِّدِنَا إِبْرَاهِيْمَ وَعَلَى آلِ سَيِّدِنَا إِبْرَاهِيْمَ , وَبَارِكْ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِ سَيِّدِنَا مُحَمَّدٍ , كَمَا بَارَكْتَ عَلَى سَيِّدِنَا إِبْرَاهِيْمَ وَعَلَى آلِ سَيِّدِنَا إِبْرَاهِيْمَ , فِيْ الْعَالَمِيْنَ، إِنَّكَ حَمِيْدٌ مَجِيْدٌ</p>
-                    <p class="translation">Ya Allah berikanlah shalawat kepada Nabi Muhammad dan keluarga Nabi Muhammad, sebagaimana telah Engkau berikan kepada Nabi Ibrahim...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi2" data-start="581" data-end="599">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Tasbih</p><p>100x</p></div>
-                    <p class="indopak" dir="rtl">سُبْحَانَ اللّٰهِ, وَالْحَمْدُ لِلّٰهِ , وَلَآ إِلَهَ إِلَّا اللّٰهُ , وَاللّٰهُ أَكْبَرُ</p>
-                    <p class="translation">Maha Suci Allah, segala puji bagi Allah, tiada Tuhan melainkan Allah dan Allah Maha Besar.</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi2" data-start="635" data-end="654">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Tahlil</p><p>10x</p></div>
-                    <p class="indopak" dir="rtl">لَآ إِلَـهَ إِلَّا اللّٰهُ وَحْدَهُ لَاشَرِيْكَ لَهُ , لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِيْ وَيُمِيْتُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيْرُ</p>
-                    <p class="translation">Tiada Tuhan melainkan Allah semata, yang tiada sekutu bagi-Nya, bagi-Nya kerajaan dan bagi-Nya segala puji...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi2" data-start="694" data-end="712">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Doa Penutup Majelis</p><p>3x</p></div>
-                    <p class="indopak" dir="rtl">سُبْحَانَكَ اللّٰهُـمَّ وَبِحَمْدِكَ , أَشْهَدُ أَنْ لَآ إِلَهَ إِلَّآ أَنْتَ , أَسْتَغْفِرُكَ وَأَتُوْبُ إِلَيْكَ</p>
-                    <p class="translation">Maha suci Engkau ya Allah, dan segala puji bagi-Mu. Aku bersaksi bahwa tiada Tuhan melainkan Engkau...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi2" data-start="751" data-end="821">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Shalawat</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">اللّٰهُـمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ عَبْدِكَ وَرَسُوْلِكَ النَّبِيِّ الْأُمِّيِّ وَعَلَى آلِهِ وَصَحْبِهِ وَسَلِّمْ تَسْلِيْمًا عَدَدَمَا أَحَاطَ بِهِ عِلْمُكَ وَخَطَّ بِهِ قَلَمُكَ وَأَحْصَاهُ كِتَابُكَ , وَارْضَ اللَّهُمَّ عَنْ سَادَاتِنَا أَبِي بَكْرٍ وَعُمَرَ وَعُثْمَانَ وَعَلِيٍّ , وَعَنِ الصَّحَابَةِ أَجْمَعِيْنَ , وَعَنِ التَّابِعِيْنَ وَتَابِعِيْهِمْ بِإِحْسَانٍ إِلَى يَوْمِ الدِّيْنِ</p>
-                    <p class="translation">Ya Allah berikanlah shalawat kepada Nabi Muhammad; hamba-Mu, nabi-Mu, dan Rasul-Mu; Nabi yang ummi...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi2" data-start="821" data-end="850">
-                    <div class="item-header bg-zinc-700"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Penutup</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">سُبْحَانَ رَبِّكَ رَبِّ الْعِزَّةِ عَمَّا يَصِفُوْنَ , وَسَلَامٌ عَلَى الْمُرْسَلِيْنَ , وَالْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِيْنَ</p>
-                    <p class="translation">Maha suci Tuhanmu; Tuhan kemuliaan, dari apa-apa yang mereka sifatkan. Keselamatan semoga tercurah kepada para utusan dan segala puji bagi Allah, Tuhan semesta alam.</p>
-                </div>
-                
-                <div class="dzikir-item" data-audio-id="audioPagi2" data-start="851" data-end="890">
-                    <div class="item-header bg-green-600"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Surat Al-Imran ayat 26</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">قُلِ اللّٰهُمَّ مٰلِكَ الْمُلْكِ تُؤْتِى الْمُلْكَ مَنْ تَشَآءُ وَتَنْزِعُ الْمُلْكَ مِمَّنْ تَشَآءُ ۖ وَتُعِزُّ مَنْ تَشَآءُ وَتُذِلُّ مَنْ تَشَآءُ ۗ بِيَدِكَ الْخَيْرُ ۗ اِنَّكَ عَلٰى كُلِّ شَيْءٍ قَدِيْرٌ ۝</p>
-                    <p class="translation">Katakanlah: "Wahai Tuhan Yang mempunyai kerajaan, Engkau berikan kerajaan kepada orang yang Engkau kehendaki dan Engkau cabut kerajaan dari orang yang Engkau kehendaki...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi2" data-start="891" data-end="918">
-                    <div class="item-header bg-green-600"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Surat Al-Imran ayat 27</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">تُوْلِجُ الَّيْلَ فِى النَّهَارِ وَتُوْلِجُ النَّهَارَ فِى الَّيْلِ وَتُخْرِجُ الْحَيَّ مِنَ الْمَيِّتِ وَتُخْرِجُ الْمَيِّتَ مِنَ الْحَيِّ وَتَرْزُقُ مَنْ تَشَاۤءُ بِغَيْرِ حِسَابٍ ۝</p>
-                    <p class="translation">Engkau masukkan malam ke dalam siang dan Engkau masukkan siang ke dalam malam. Engkau keluarkan yang hidup dari yang mati...</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioPagi2" data-start="919" data-end="935">
-                    <div class="item-header bg-green-600"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Dzikir</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">اَللَّهُمَّ إِنَّ هَذَا إِقْبَالُ نَهَارِكَ وَإِدْبَارُ لَيْلِكَ وَأَصْوَاتُ دُعَاتِكَ فَاغْفِرْلِي</p>
-                    <p class="translation">Ya Allah, sesungguhnya ini adalah siang-Mu yang telah menjelang dan siang-Mu yang tengah berlalu serta suara-suara penyeru-Mu, maka ampunilah aku.</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioRabithah" data-loop="true">
-                    <div class="item-header bg-green-600"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Doa Robitoh</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">اَللّهُمَّ إِنَّكَ تَعْلَمُ أَنَّ هَذِهِ الْقُلُوْبَ، قَدِ اجْتَمَعَتْ عَلَى مَحَبَّتِكَ وَالْتَقَتْ عَلَى طَاعَتِكَ، وَتَوَحَّدَتْ عَلَى دَعْوَتِكَ وَتَعَاهَدَتْ عَلَى نُصْرَةِ شَرِيْعَتِكَ فَوَثِّقِ اللَّهُمَّ رَابِطَتَهَا، وَأَدِمْ وُدَّهَا، وَاهْدِهَا سُبُلَهَا وَامْلَأَهَا بِنُوْرِكَ الَّذِيْ لاَ يَخْبُوْا وَاشْرَحْ صُdُوْرَهَا بِفَيْضِ الْإِيْمَانِ بِكَ، وَجَمِيْلِ التَّوَكُّلِ عَلَيْكَ وَاَحْيِهَا بِمَعْرِفَتِكَ، وَأَمِتْهَا عَلَى الشَّهَادَةِ فِي سَبِيْلِكَ إِنَّكَ نِعْمَ الْمَوْلَى وَنِعْمَ النَّصِيْرِ. اَللَّهُمَّ أَمِيْنَ. وَصَلِّ اللَّهُمَّ عَلَى سَيِّدَنَا مُحَمَّدٍ وَعَلَى آلِهِ وَصَحْبِهِ وَسَلِّمَ</p>
-                    <p class="translation">Ya Allah, sesungguhnya Engkau Maha Mengetahui bahawa hati-hati ini, telah berhimpun di atas dasar kecintaan terhadapmu...</p>
-                </div>
-                <div class="dzikir-item" id="istighfar-loop" data-audio-id="audioIstighfar" data-loop="true">
-                    <div class="item-header bg-red-600"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Amalan Yaumiyah (Istighfar)</p><p>100x</p></div>
-                    <p class="indopak" dir="rtl">أَسْتَغْفِرُ اللهَ| العَظِيْمَ</p>
-                    <p class="translation">Aku memohon ampunan kepada Allah | Yang Maha Agung.</p>
-                </div>
-                <div class="dzikir-item" data-audio-id="audioKafaratul" data-loop="true">
-                    <div class="item-header bg-red-600"><button class="play-btn"><span class="material-symbols-outlined">play_circle</span></button><p>Doa Kafaratul Majelis</p><p>1x</p></div>
-                    <p class="indopak" dir="rtl">سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، أَشْهَدُ أَنْ لاَ إِلَـٰهَ إِلاَّ أَنْتَ، أَسْتَغْفِرُكَ، وَأَتُوْبُ إِلَيْكَ</p>
-                    <p class="translation">Maha Suci Engkau ya Allah, aku memujiMu. Aku bersaksi bahwa tidak ada sesembahan yang berhak disembah kecuali Engkau...</p>
-                </div>
+                <div id="content-container">
+                    </div>
+
+                <footer style="font-size: small;" class="text-center text-sm lg:text-base mt-10 mx-4 my-4 p-4 bold">
+                    Referensi: <br><a href="https://almatsurat.vercel.app/" target="_blank" title="yogyakarta. we love open source">AAM</a>, <a href="https://play.google.com/store/apps/details?id=com.walukustudio.almatsurat" target="_blank" title="play store app">Waluku Studio</a>, <a href="https://play.google.com/store/apps/details?id=com.andi.alquran.id" target="_blank" title="play store app">Andi Unpam</a>,  <a href="https://docs.google.com/spreadsheets/d/1LumnHQXxxukTrm2_4yrBxzRcpWKQOfbFy-ueoTmVkGM/edit?usp=sharing" target="_blank" title="google spreadsheet">Amalan Yaumiyah</a>, <a href="https://openulis.com/bacaan-istighfar/" target="_blank" title="kalimat istighfar">Openulis</a>, <a href="https://www.youtube.com/watch?v=_c4HMgUK7Wc" target="_blank" title="audio untuk listen">Excellenz School of Education</a>, <a href="https://www.youtube.com/watch?v=TfdS0O7_Jjc" target="_blank" title="audio istighfar">Inteam Digital</a>, <a href="https://alamisharia.co.id/blogs/doa-kafaratul-majelis" target="_blank" title="doa-kafaratul-majelis">ALAMI</a>, <a href="https://www.facebook.com/watch/?v=734133838467763" target="_blank" title="kaf audio fb">Surabaya Mengaji</a>
+                    <br><br>
+                    Alat Pendukung: <br><a href="https://www.naturalreaders.com/online/" target="_blank" title="web site">Natural Reader AI</a>, <a href="https://www.arabic-keyboard.org/editor/" target="_blank" title="teks editor kalimat arab">Arabic Online Editor</a>, <a href="https://fonts.google.com/icons" target="_blank" title="ikon-ikon yang dipakai">Google Fonts</a>, <a href="https://chatgpt.com" target="_blank" title="bantuan koding">ChatGPT</a>, <a href="https://www.lalal.ai/" target="_blank" title="audio instrument splitter">LALAL.AI</a>, <a href="https://g.co/gemini/share/23b80d207dc8" target="_blank" title="refactoring-tuning code">Gemini AI</a>
+                </footer>
             </div>
-
-             <button class="fly-button-3 bg-orange-600" id="resetButton">Reset<br>(Ctrl)</button>
-            <span id="counter" class="fly-button-1 fly-button-2 bg-blue-600"><b>0</b></span>
-            <button class="fly-button bg-blue-600" id="clickButton">Count<br>(→)</button>
         </div>
-
-        <footer class="main-footer">
-            Referensi: <br><a href="https://almatsurat.vercel.app/" target="_blank">AAM</a>, <a href="https://play.google.com/store/apps/details?id=com.walukustudio.almatsurat" target="_blank">Waluku Studio</a>, <a href="https://play.google.com/store/apps/details?id=com.andi.alquran.id" target="_blank">Andi Unpam</a>, <a href="https://docs.google.com/spreadsheets/d/1LumnHQXxxukTrm2_4yrBxzRcpWKQOfbFy-ueoTmVkGM/edit?usp=sharing" target="_blank">Amalan Yaumiyah</a>, <a href="https://openulis.com/bacaan-istighfar/" target="_blank">Openulis</a>, <a href="https://www.youtube.com/watch?v=_c4HMgUK7Wc" target="_blank">Excellenz School of Education</a>, <a href="https://www.youtube.com/watch?v=TfdS0O7_Jjc" target="_blank">Inteam Digital</a>, <a href="https://alamisharia.co.id/blogs/doa-kafaratul-majelis" target="_blank">ALAMI</a>, <a href="https://www.facebook.com/watch/?v=734133838467763" target="_blank">Surabaya Mengaji</a>
-            <br><br>Alat Pendukung: <br><a href="https://www.naturalreaders.com/online/" target="_blank">Natural Reader AI</a>, <a href="https://www.arabic-keyboard.org/editor/" target="_blank">Arabic Online Editor</a>, <a href="https://fonts.google.com/icons" target="_blank">Google Fonts</a>, <a href="https://chatgpt.com" target="_blank">ChatGPT</a>, <a href="https://www.lalal.ai/" target="_blank">LALAL.AI</a>
-        </footer>
     </div>
-    <script src="rsc/js/main.js"></script>
+    
+    <script src="data.js"></script>
+    <script src="ui.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
