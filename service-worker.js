@@ -1,107 +1,90 @@
-const CACHE_NAME = 'al-matsurat-cache-v1.1'; // Increment version to force update
+// Nama dan versi cache. Ubah versi jika Anda memperbarui file di dalam rscFilesToCache.
+const CACHE_NAME = 'rsc-cache-v1';
 
-// List of all files to be cached on install
-const URLS_TO_CACHE = [
-    '/',
-    'index.html',
+// Daftar lengkap file di dalam folder rsc yang harus di-cache.
+const rscFilesToCache = [
     'rsc/css/style.css',
-    'rsc/js/main.js',
-    'manifest.json',
-    'rsc/png/icon.png',
-    // Fonts
-    'https://fonts.googleapis.com/css2?family=Sofadi+One&family=Montserrat:wght@400;700&display=swap',
-    'https://fonts.gstatic.com/s/sofadione/v23/JIA2UVBxd-L_bFc_fA0f7p13oQ.woff2', // Specific font file
-    'https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459WRhyzbi.woff2', // Specific font file
     'rsc/woff2/AlQuran-IndoPak-by-QuranWBW.v.4.2.2-WL.woff2',
-    // Audio files
-    'rsc/opus/Al.Matsurat.Pagi-000.opus',
-    'rsc/opus/Al.Matsurat.Pagi-001.opus',
-    'rsc/opus/Al.Matsurat.Petang-Trim.opus',
+    'rsc/woff2/material-icon.woff2',
+    'rsc/png/icon.png',
+    'rsc/png/splash.png',
     'rsc/opus/Rabithah_ai.opus',
     'rsc/opus/ast.opus',
     'rsc/opus/kafaratul.opus',
-    'rsc/wav/recycle_boost.wav',
-    'rsc/wav/nav_boost.wav',
-    'rsc/wav/info_boost.wav',
-    // Icons
-    'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
-    'https://fonts.gstatic.com/s/materialsymbolsoutlined/v166/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2' // Specific icon font
+    'rsc/opus/Al.Matsurat.Pagi-000.opus',
+    'rsc/opus/Al.Matsurat.Pagi-001.opus',
+    'rsc/opus/Al.Matsurat.Petang-Trim.opus',
+    'rsc/wav/recycle_boost',
+    'rsc/wav/nav_boost',
+    'rsc/wav/info_boost'
 ];
 
-// Install event: Open a cache and add all URLs to it
+// 1. Event 'install': Menyimpan semua file rsc ke dalam cache.
 self.addEventListener('install', event => {
+    console.log('Service Worker: Menginstall...');
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('Opened cache');
-                // Use addAll to fetch and cache all resources
-                // It's atomic: if one file fails, the entire operation fails.
-                return cache.addAll(URLS_TO_CACHE);
+                console.log('Service Worker: Membuka cache dan menyimpan aset rsc.');
+                return cache.addAll(rscFilesToCache);
             })
-            .catch(error => {
-                console.error('Failed to cache resources during install:', error);
+            .then(() => {
+                // Melewati fase waiting agar service worker baru segera aktif.
+                self.skipWaiting();
             })
     );
 });
 
-// Activate event: Clean up old caches
+// 2. Event 'activate': Membersihkan cache lama jika ada versi cache baru.
 self.addEventListener('activate', event => {
-    const cacheWhitelist = [CACHE_NAME];
+    console.log('Service Worker: Mengaktifkan...');
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
                 cacheNames.map(cacheName => {
-                    if (cacheWhitelist.indexOf(cacheName) === -1) {
-                        console.log('Deleting old cache:', cacheName);
+                    // Jika nama cache tidak sama dengan yang sekarang, hapus.
+                    if (cacheName !== CACHE_NAME) {
+                        console.log('Service Worker: Menghapus cache lama:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
             );
         })
     );
+    // Mengambil alih kontrol halaman dengan segera.
+    return self.clients.claim();
 });
 
-// Fetch event: Serve from cache first, fallback to network
+// 3. Event 'fetch': Mengintersep permintaan jaringan.
 self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request)
-            .then(response => {
-                // Cache hit - return response from cache
-                if (response) {
-                    return response;
-                }
-
-                // Not in cache - fetch from network
-                return fetch(event.request).then(
-                    networkResponse => {
-                        // Check if we received a valid response
-                        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-                           if(networkResponse.type.includes('opaque')){
-                                //Don't cache opaque responses
-                           }else{
-                                return networkResponse;
-                           }
-                        }
-
-                        // IMPORTANT: Clone the response. A response is a stream
-                        // and because we want the browser to consume the response
-                        // as well as the cache consuming the response, we need
-                        // to clone it so we have two streams.
-                        const responseToCache = networkResponse.clone();
-
-                        caches.open(CACHE_NAME)
-                            .then(cache => {
-                                cache.put(event.request, responseToCache);
-                            });
-
-                        return networkResponse;
+    // Memeriksa apakah URL permintaan mengandung '/rsc/'.
+    if (event.request.url.includes('/rsc/')) {
+        // Jika ya, terapkan strategi "Cache First" untuk folder rsc.
+        event.respondWith(
+            caches.match(event.request)
+                .then(cachedResponse => {
+                    // Jika ditemukan di cache, kembalikan dari cache.
+                    if (cachedResponse) {
+                        // console.log('Menyajikan dari cache:', event.request.url);
+                        return cachedResponse;
                     }
-                );
-            })
-            .catch(error => {
-                console.error('Error in fetch handler:', error);
-                // Optionally, you can return a fallback page here
-                // e.g., return caches.match('/offline.html');
-            })
-    );
+                    
+                    // Jika tidak ada di cache, ambil dari jaringan.
+                    return fetch(event.request).then(networkResponse => {
+                        // Setelah diambil, simpan salinannya ke cache untuk penggunaan selanjutnya.
+                        return caches.open(CACHE_NAME).then(cache => {
+                            // Periksa apakah response valid sebelum di-cache
+                            if (networkResponse && networkResponse.status === 200) {
+                                cache.put(event.request, networkResponse.clone());
+                            }
+                            return networkResponse;
+                        });
+                    });
+                })
+        );
+    } else {
+        // Jika tidak, ambil langsung dari jaringan (Network Only).
+        // Ini berlaku untuk index.html, .js, .css di root, dll.
+        event.respondWith(fetch(event.request));
+    }
 });
