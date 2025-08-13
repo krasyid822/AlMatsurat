@@ -86,8 +86,9 @@ const ui = {
         }
     },
     
-    // Menampilkan layar loading selesai
-    showApp() {
+    // #### PERUBAHAN DI SINI ####
+    // Menampilkan layar loading selesai dan menjalankan callback jika ada
+    showApp(callback) {
         this.elements.loadingInfo.textContent = "All Files Loaded! Let's go...";
         this.elements.dotting.innerHTML = "PASS";
         this.elements.progressBarFill.style.width = '100%';
@@ -95,6 +96,10 @@ const ui = {
         setTimeout(() => {
             this.elements.loadingScreen.style.display = 'none';
             this.elements.utama.style.display = 'block';
+            // Jalankan fungsi callback setelah #utama ditampilkan
+            if (callback) {
+                callback();
+            }
         }, 1000);
     }
 };
