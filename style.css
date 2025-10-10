@@ -186,9 +186,22 @@ body.light-mode .adaptive-icon {
 #dotting span:nth-child(1) { animation-delay: 0s; }
 #dotting span:nth-child(2) { animation-delay: 0.3s; }
 #dotting span:nth-child(3) { animation-delay: 0.6s; }
+
+/* Animasi untuk loading dots */
+.loading-dots span {
+    animation: loading-pulse 1.5s infinite;
+}
+
 @keyframes dotting {
-    0%, 20% { opacity: 0; }
-    40%, 100% { opacity: 1; }
+    0%, 20% { opacity: 0; transform: scale(0.8); }
+    40% { opacity: 1; transform: scale(1.2); }
+    60%, 100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes loading-pulse {
+    0%, 20% { opacity: 0.3; transform: scale(0.8); }
+    40% { opacity: 1; transform: scale(1.2); }
+    60%, 100% { opacity: 0.5; transform: scale(1); }
 }
 
 /* #### PERUBAHAN DI SINI: Menambahkan kelas baru #### */

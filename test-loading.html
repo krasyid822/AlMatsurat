@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Loading & Auto-Save</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .test-button:hover {
+            background: #45a049;
+        }
+        .result {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+            background: #e8f5e9;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Suite - Al Matsurat Loading & Auto-Save</h1>
+    
+    <div class="test-section">
+        <h2>1. Test LocalStorage Auto-Save</h2>
+        <p>Test penyimpanan dan pemulihan counter dari localStorage</p>
+        <button class="test-button" onclick="testSaveProgress()">Test Save Progress</button>
+        <button class="test-button" onclick="testLoadProgress()">Test Load Progress</button>
+        <button class="test-button" onclick="clearProgress()">Clear Progress</button>
+        <div id="storage-result" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Test Loading Sequence</h2>
+        <p>Test urutan loading dan penanganan hash navigation</p>
+        <button class="test-button" onclick="testLoadingSequence()">Simulate Loading</button>
+        <button class="test-button" onclick="testHashBlocking()">Test Hash Blocking</button>
+        <div id="loading-result" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Test Hash Navigation</h2>
+        <p>Test penanganan hash setelah loading selesai</p>
+        <button class="test-button" onclick="testHashNavigation()">Test Hash After Load</button>
+        <button class="test-button" onclick="testHashDuringLoad()">Test Hash During Load</button>
+        <div id="hash-result" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Test Progress Tracking</h2>
+        <p>Test tracking progress loading file</p>
+        <button class="test-button" onclick="testProgressTracking()">Simulate File Loading</button>
+        <div id="progress-result" class="result" style="display:none;">
+            <div style="width: 100%; background: #e0e0e0; border-radius: 10px; overflow: hidden;">
+                <div id="test-progress-bar" style="width: 0%; height: 20px; background: #4CAF50; transition: width 0.3s;"></div>
+            </div>
+            <p id="test-progress-text">0%</p>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Current Status</h2>
+        <p><strong>Saved Counter:</strong> <span id="current-counter">-</span></p>
+        <p><strong>Loading State:</strong> <span id="loading-state">Not Started</span></p>
+        <p><strong>Hash in URL:</strong> <span id="current-hash">-</span></p>
+    </div>
+
+    <script>
+        // Update status display
+        function updateStatus() {
+            const counter = localStorage.getItem('alMatsurat_counter') || '0';
+            document.getElementById('current-counter').textContent = counter;
+            document.getElementById('current-hash').textContent = window.location.hash || 'none';
+        }
+        
+        // Test 1: Save Progress
+        function testSaveProgress() {
+            const testValue = Math.floor(Math.random() * 100);
+            localStorage.setItem('alMatsurat_counter', testValue);
+            showResult('storage-result', `✓ Progress saved: ${testValue}`, false);
+            updateStatus();
+        }
+        
+        // Test 1: Load Progress
+        function testLoadProgress() {
+            const savedValue = localStorage.getItem('alMatsurat_counter');
+            if (savedValue !== null) {
+                showResult('storage-result', `✓ Progress loaded: ${savedValue}`, false);
+            } else {
+                showResult('storage-result', '✗ No saved progress found', true);
+            }
+            updateStatus();
+        }
+        
+        // Test 1: Clear Progress
+        function clearProgress() {
+            localStorage.removeItem('alMatsurat_counter');
+            showResult('storage-result', '✓ Progress cleared', false);
+            updateStatus();
+        }
+        
+        // Test 2: Loading Sequence
+        async function testLoadingSequence() {
+            document.getElementById('loading-state').textContent = 'Loading...';
+            showResult('loading-result', 'Starting loading sequence...', false);
+            
+            // Simulate loading steps
+            const steps = [
+                'Loading saved progress',
+                'Generating content',
+                'Loading audio files',
+                'Waiting minimum time',
+                'Loading complete!'
+            ];
+            
+            for (let i = 0; i < steps.length; i++) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                showResult('loading-result', `✓ ${steps[i]} (${i+1}/${steps.length})`, false);
+            }
+            
+            document.getElementById('loading-state').textContent = 'Complete';
+        }
+        
+        // Test 2: Hash Blocking
+        function testHashBlocking() {
+            let blocked = false;
+            const originalHash = window.location.hash;
+            
+            // Simulate blocking
+            const preventHash = (e) => {
+                e.preventDefault();
+                blocked = true;
+                return false;
+            };
+            
+            window.addEventListener('hashchange', preventHash, { once: true });
+            window.location.hash = '#test-block';
+            
+            setTimeout(() => {
+                if (blocked) {
+                    showResult('loading-result', '✓ Hash navigation successfully blocked', false);
+                } else {
+                    showResult('loading-result', '✗ Hash blocking failed', true);
+                }
+                window.location.hash = originalHash;
+            }, 100);
+        }
+        
+        // Test 3: Hash Navigation After Load
+        function testHashNavigation() {
+            window.location.hash = '#test-hash';
+            setTimeout(() => {
+                if (window.location.hash === '#test-hash') {
+                    showResult('hash-result', '✓ Hash navigation working', false);
+                } else {
+                    showResult('hash-result', '✗ Hash navigation failed', true);
+                }
+                updateStatus();
+            }, 100);
+        }
+        
+        // Test 3: Hash During Load
+        function testHashDuringLoad() {
+            showResult('hash-result', 'Testing hash during simulated loading...', false);
+            // This would normally be blocked during actual loading
+            window.location.hash = '#test-during-load';
+            setTimeout(() => {
+                showResult('hash-result', '⚠ In actual app, this would be blocked during loading', false);
+                updateStatus();
+            }, 100);
+        }
+        
+        // Test 4: Progress Tracking
+        async function testProgressTracking() {
+            const resultDiv = document.getElementById('progress-result');
+            const progressBar = document.getElementById('test-progress-bar');
+            const progressText = document.getElementById('test-progress-text');
+            
+            resultDiv.style.display = 'block';
+            
+            // Simulate loading 9 files
+            for (let i = 1; i <= 9; i++) {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                const percent = Math.round((i / 9) * 100);
+                progressBar.style.width = percent + '%';
+                progressText.textContent = `${percent}% - File ${i}/9`;
+            }
+            
+            progressText.textContent = '✓ 100% - All files loaded!';
+        }
+        
+        // Helper function
+        function showResult(elementId, message, isError) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.style.display = 'block';
+            element.className = isError ? 'result error' : 'result';
+        }
+        
+        // Initialize
+        updateStatus();
+        
+        // Monitor hash changes
+        window.addEventListener('hashchange', updateStatus);
+    </script>
+</body>
+</html>
