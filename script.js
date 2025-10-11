@@ -48,11 +48,46 @@ document.addEventListener('DOMContentLoaded', () => {
     let stopPlaybackListener = null;
     let currentAudio = null;
     let isLoadingComplete = false;
-    let savedHash = window.location.hash;
+    let savedHash = '';
+    let scrollSaveTimeout = null;
     
     // --- FUNGSI-FUNGSI LOGIKA ---
     
-    // Fungsi untuk memuat progress dari localStorage
+    // Fungsi untuk menyimpan posisi scroll
+    const saveScrollPosition = () => {
+        if (scrollSaveTimeout) clearTimeout(scrollSaveTimeout);
+        scrollSaveTimeout = setTimeout(() => {
+            const scrollData = {
+                position: window.scrollY || window.pageYOffset,
+                timestamp: Date.now(),
+                url: window.location.pathname + window.location.search + window.location.hash
+            };
+            localStorage.setItem('alMatsurat_scrollPosition', JSON.stringify(scrollData));
+        }, 500); // Debounce 500ms
+    };
+    
+    // Fungsi untuk memuat posisi scroll
+    const loadScrollPosition = () => {
+        try {
+            const savedData = localStorage.getItem('alMatsurat_scrollPosition');
+            if (savedData) {
+                const scrollData = JSON.parse(savedData);
+                // Hanya restore jika URL sama dan tidak lebih dari 24 jam
+                const currentUrl = window.location.pathname + window.location.search;
+                const savedUrl = scrollData.url.split('#')[0]; // Ambil URL tanpa hash
+                const hoursPassed = (Date.now() - scrollData.timestamp) / (1000 * 60 * 60);
+                
+                if (savedUrl === currentUrl && hoursPassed < 24) {
+                    return scrollData.position;
+                }
+            }
+        } catch (e) {
+            console.error('Error loading scroll position:', e);
+        }
+        return null;
+    };
+    
+    // Fungsi untuk memuat progress counter dari localStorage
     const loadProgress = () => {
         const savedCount = localStorage.getItem('alMatsurat_counter');
         if (savedCount !== null) {
@@ -109,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
-    // #### PERUBAHAN DI SINI: Memisahkan logika URL dan Scroll ####
+    // #### PERBAIKAN: Memisahkan logika URL dan Scroll ####
     const handleActionParam = () => {
         const params = new URLSearchParams(window.location.search);
         const action = params.get('action');
@@ -117,13 +152,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (action === 'sore') ui.showSore();
     };
 
-    const handleHashScroll = () => {
+    const handleScrollRestoration = () => {
+        // Cek apakah ada hash di URL
+        if (window.location.hash) {
+            // Simpan hash untuk diproses nanti
+            savedHash = window.location.hash;
+            // Hapus hash sementara untuk mencegah auto-scroll browser
+            history.replaceState(null, null, window.location.pathname + window.location.search);
+        }
+        
+        // Jika ada hash yang disimpan, scroll ke sana
         if (savedHash) {
-            const targetElement = document.querySelector(savedHash);
-            if (targetElement) {
-                setTimeout(() => {
+            setTimeout(() => {
+                const targetElement = document.querySelector(savedHash);
+                if (targetElement) {
                     targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
+                    // Kembalikan hash ke URL setelah scroll
+                    history.replaceState(null, null, window.location.pathname + window.location.search + savedHash);
+                }
+            }, 300); // Tunggu setelah fade in selesai
+        } else {
+            // Jika tidak ada hash, restore posisi scroll terakhir
+            const savedPosition = loadScrollPosition();
+            if (savedPosition !== null && savedPosition > 0) {
+                setTimeout(() => {
+                    window.scrollTo({ top: savedPosition, behavior: 'smooth' });
+                }, 300);
             }
         }
     };
@@ -132,12 +186,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const preventHashNavigation = (e) => {
         if (!isLoadingComplete) {
             e.preventDefault();
+            savedHash = window.location.hash;
+            // Kembalikan ke URL tanpa hash
+            history.replaceState(null, null, window.location.pathname + window.location.search);
             return false;
         }
     };
     
     // Blokir hash navigation saat loading
     window.addEventListener('hashchange', preventHashNavigation);
+    
+    // Simpan posisi scroll saat user scroll
+    window.addEventListener('scroll', saveScrollPosition, { passive: true });
     
     // Fungsi loading dengan progress tracking
     const startLoading = async () => {
@@ -309,6 +369,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const startTime = Date.now();
         const minimumLoadingTime = 1500; // Minimum 1.5 detik untuk loading screen
         
+        // Simpan hash dari awal jika ada
+        if (window.location.hash) {
+            savedHash = window.location.hash;
+            // Hapus hash dari URL untuk mencegah browser auto-scroll
+            history.replaceState(null, null, window.location.pathname + window.location.search);
+        }
+        
         // 1. Load saved progress
         loadProgress();
         
@@ -335,9 +402,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // 7. Handle action params
         handleActionParam();
         
-        // 8. Show app and handle hash scroll
+        // 8. Show app and handle scroll restoration
         ui.showApp(() => {
-            handleHashScroll();
+            handleScrollRestoration();
         });
     })();
+    
+    // Cleanup: Save scroll position saat window ditutup
+    window.addEventListener('beforeunload', () => {
+        saveScrollPosition();
+    });
 });

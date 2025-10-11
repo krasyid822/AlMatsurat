@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Scroll Auto-Save & Hash Navigation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .content {
+            margin-top: 120px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .section {
+            background: white;
+            padding: 40px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            min-height: 400px;
+            scroll-margin-top: 100px;
+        }
+        .test-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .test-button:hover {
+            background: #45a049;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background: #e3f2fd;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .info-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧪 Test Scroll Auto-Save & Hash Navigation</h1>
+        <div class="status">
+            <strong>Posisi Scroll Saat Ini:</strong> <span id="current-position">0</span>px
+            <br>
+            <strong>Posisi Tersimpan:</strong> <span id="saved-position">-</span>
+            <br>
+            <strong>Hash Saat Ini:</strong> <span id="current-hash">none</span>
+        </div>
+        <button class="test-button" onclick="clearSavedPosition()">Clear Saved Position</button>
+        <button class="test-button" onclick="viewSavedData()">View Saved Data</button>
+    </div>
+
+    <div class="content">
+        <div class="info-box">
+            <h3>📋 Instruksi Testing:</h3>
+            <ol>
+                <li><strong>Test Auto-Save Scroll:</strong>
+                    <ul>
+                        <li>Scroll ke bawah (misalnya ke Section 3)</li>
+                        <li>Tunggu 1 detik (auto-save dengan debounce)</li>
+                        <li>Refresh halaman (F5)</li>
+                        <li>Halaman harus kembali ke posisi Section 3 ✅</li>
+                    </ul>
+                </li>
+                <li><strong>Test Hash Navigation:</strong>
+                    <ul>
+                        <li>Buka URL dengan hash: <code>?#section-5</code></li>
+                        <li>Halaman harus langsung scroll ke Section 5 ✅</li>
+                        <li>Hash harus diprioritaskan dibanding saved scroll</li>
+                    </ul>
+                </li>
+                <li><strong>Test Hash Priority:</strong>
+                    <ul>
+                        <li>Scroll ke Section 2, tunggu auto-save</li>
+                        <li>Buka <code>?#section-7</code></li>
+                        <li>Harus scroll ke Section 7, bukan Section 2 ✅</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="section" id="section-1">
+            <h2>📍 Section 1 - Al-Fatihah</h2>
+            <p>Ini adalah section pertama. Konten panjang untuk testing scroll...</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <button class="test-button" onclick="scrollToSection('section-5')">Jump to Section 5</button>
+        </div>
+
+        <div class="section" id="section-2">
+            <h2>📍 Section 2 - Al-Baqarah</h2>
+            <p>Section kedua dengan konten berbeda...</p>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <button class="test-button" onclick="scrollToSection('section-7')">Jump to Section 7</button>
+        </div>
+
+        <div class="section" id="section-3">
+            <h2>📍 Section 3 - Ayat Kursi</h2>
+            <p>Section ketiga untuk testing...</p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            <button class="test-button" onclick="testHashNavigation()">Test Hash Navigation</button>
+        </div>
+
+        <div class="section" id="section-4">
+            <h2>📍 Section 4 - Ali Imran</h2>
+            <p>Section keempat...</p>
+            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+
+        <div class="section" id="section-5">
+            <h2>📍 Section 5 - An-Nisa</h2>
+            <p>Section kelima di tengah-tengah...</p>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+            <button class="test-button" onclick="scrollToTop()">Back to Top</button>
+        </div>
+
+        <div class="section" id="section-6">
+            <h2>📍 Section 6 - Al-Maidah</h2>
+            <p>Section keenam...</p>
+            <p>Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        </div>
+
+        <div class="section" id="section-7">
+            <h2>📍 Section 7 - Al-An'am</h2>
+            <p>Section ketujuh...</p>
+            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+        </div>
+
+        <div class="section" id="section-8">
+            <h2>📍 Section 8 - Al-A'raf</h2>
+            <p>Section kedelapan...</p>
+            <p>Sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+        </div>
+
+        <div class="section" id="section-9">
+            <h2>📍 Section 9 - Al-Anfal</h2>
+            <p>Section kesembilan...</p>
+            <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
+        </div>
+
+        <div class="section" id="section-10">
+            <h2>📍 Section 10 - At-Taubah</h2>
+            <p>Section terakhir untuk testing...</p>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+            <button class="test-button" onclick="scrollToSection('section-1')">Back to Section 1</button>
+        </div>
+    </div>
+
+    <script>
+        let scrollTimeout = null;
+        
+        // Fungsi untuk menyimpan posisi scroll (sama seperti di script.js)
+        function saveScrollPosition() {
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const scrollData = {
+                    position: window.scrollY || window.pageYOffset,
+                    timestamp: Date.now(),
+                    url: window.location.pathname + window.location.search + window.location.hash
+                };
+                localStorage.setItem('alMatsurat_scrollPosition', JSON.stringify(scrollData));
+                updateStatus();
+            }, 500); // Debounce 500ms
+        }
+        
+        // Fungsi untuk memuat posisi scroll
+        function loadScrollPosition() {
+            try {
+                const savedData = localStorage.getItem('alMatsurat_scrollPosition');
+                if (savedData) {
+                    const scrollData = JSON.parse(savedData);
+                    const currentUrl = window.location.pathname + window.location.search;
+                    const savedUrl = scrollData.url.split('#')[0];
+                    const hoursPassed = (Date.now() - scrollData.timestamp) / (1000 * 60 * 60);
+                    
+                    if (savedUrl === currentUrl && hoursPassed < 24) {
+                        return scrollData.position;
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading scroll position:', e);
+            }
+            return null;
+        }
+        
+        // Update status display
+        function updateStatus() {
+            document.getElementById('current-position').textContent = Math.round(window.scrollY || window.pageYOffset);
+            
+            const savedData = localStorage.getItem('alMatsurat_scrollPosition');
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    document.getElementById('saved-position').textContent = 
+                        Math.round(data.position) + 'px (saved ' + 
+                        Math.round((Date.now() - data.timestamp) / 1000) + 's ago)';
+                } catch (e) {
+                    document.getElementById('saved-position').textContent = 'Error parsing data';
+                }
+            } else {
+                document.getElementById('saved-position').textContent = 'None';
+            }
+            
+            document.getElementById('current-hash').textContent = window.location.hash || 'none';
+        }
+        
+        // Scroll ke section tertentu
+        function scrollToSection(sectionId) {
+            window.location.hash = sectionId;
+        }
+        
+        // Scroll ke top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Clear saved position
+        function clearSavedPosition() {
+            localStorage.removeItem('alMatsurat_scrollPosition');
+            updateStatus();
+            alert('✓ Saved position cleared!');
+        }
+        
+        // View saved data
+        function viewSavedData() {
+            const savedData = localStorage.getItem('alMatsurat_scrollPosition');
+            if (savedData) {
+                alert('Saved Data:\n\n' + JSON.stringify(JSON.parse(savedData), null, 2));
+            } else {
+                alert('No saved data found');
+            }
+        }
+        
+        // Test hash navigation
+        function testHashNavigation() {
+            const testHash = '#section-8';
+            alert('Akan melakukan test hash navigation ke ' + testHash);
+            setTimeout(() => {
+                window.location.hash = testHash;
+            }, 500);
+        }
+        
+        // Event listeners
+        window.addEventListener('scroll', () => {
+            saveScrollPosition();
+            updateStatus();
+        }, { passive: true });
+        
+        window.addEventListener('hashchange', updateStatus);
+        
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            updateStatus();
+            
+            // Simulate loading complete and handle scroll restoration
+            setTimeout(() => {
+                if (window.location.hash) {
+                    // Hash has priority
+                    const targetElement = document.querySelector(window.location.hash);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                } else {
+                    // Restore saved position
+                    const savedPosition = loadScrollPosition();
+                    if (savedPosition !== null && savedPosition > 0) {
+                        window.scrollTo({ top: savedPosition, behavior: 'smooth' });
+                    }
+                }
+            }, 100);
+        });
+        
+        // Save before unload
+        window.addEventListener('beforeunload', saveScrollPosition);
+    </script>
+</body>
+</html>

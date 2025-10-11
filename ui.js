@@ -105,13 +105,15 @@ const ui = {
             // Fade in utama
             this.elements.utama.style.opacity = '0';
             this.elements.utama.style.transition = 'opacity 0.5s ease';
-            setTimeout(() => {
-                this.elements.utama.style.opacity = '1';
-            }, 50);
             
-            // Jalankan fungsi callback setelah #utama ditampilkan
+            // Tunggu sedikit sebelum fade in untuk memastikan rendering
+            requestAnimationFrame(() => {
+                this.elements.utama.style.opacity = '1';
+            });
+            
+            // Jalankan callback setelah fade in selesai
             if (callback) {
-                callback();
+                setTimeout(callback, 600); // Tunggu fade in selesai (500ms + buffer)
             }
         }, 500); // Tunggu fade out selesai
     }
