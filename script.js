@@ -285,9 +285,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- EVENT LISTENERS ---
     
-    elements.btnPagi.addEventListener('click', () => ui.showPagi());
-    elements.btnSore.addEventListener('click', () => ui.showSore());
-    elements.btnKembali.addEventListener('click', () => ui.showHome());
+    elements.btnPagi.addEventListener('click', () => {
+        // Tambahkan ?action=pagi ke URL
+        const newUrl = window.location.pathname + '?action=pagi';
+        history.pushState({ action: 'pagi' }, '', newUrl);
+        ui.showPagi();
+    });
+    
+    elements.btnSore.addEventListener('click', () => {
+        // Tambahkan ?action=sore ke URL
+        const newUrl = window.location.pathname + '?action=sore';
+        history.pushState({ action: 'sore' }, '', newUrl);
+        ui.showSore();
+    });
+    
+    elements.btnKembali.addEventListener('click', () => {
+        // Hapus parameter action dari URL saat kembali ke home
+        const newUrl = window.location.pathname;
+        history.pushState({ action: 'home' }, '', newUrl);
+        ui.showHome();
+    });
     
     elements.clickButton.addEventListener('click', () => updateCounter(count + 1));
     elements.resetButton.addEventListener('click', () => updateCounter(0));
@@ -354,6 +371,20 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     setupListenButton(elements.btnListenPagi, elements.audioListenPagi);
     setupListenButton(elements.btnListenSore, elements.audioListenSore);
+
+    // Handle browser back/forward button
+    window.addEventListener('popstate', (event) => {
+        if (isLoadingComplete) {
+            const action = getCurrentAction();
+            if (action === 'pagi') {
+                ui.showPagi();
+            } else if (action === 'sore') {
+                ui.showSore();
+            } else {
+                ui.showHome();
+            }
+        }
+    });
 
     // --- INISIALISASI APLIKASI ---
     if ('serviceWorker' in navigator) {
