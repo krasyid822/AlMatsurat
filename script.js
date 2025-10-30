@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let stopPlaybackListener = null;
     let currentAudio = null;
     let isLoadingComplete = false;
+    let isSkipped = false; // Flag untuk menandai jika loading dilewati
     let savedHash = '';
     let scrollSaveTimeout = null;
     
@@ -101,6 +102,16 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('alMatsurat_counter', count);
     };
     
+    const finishLoading = () => {
+        if (isLoadingComplete) return; // Mencegah eksekusi ganda
+        isLoadingComplete = true;
+        window.removeEventListener('hashchange', preventHashNavigation);
+        handleActionParam();
+        ui.showApp(() => {
+            handleScrollRestoration();
+        });
+    };
+
     const playSegment = (audio, startTime, endTime) => {
         currentAudio = audio;
         if (stopPlaybackListener) currentAudio.removeEventListener('timeupdate', stopPlaybackListener);
@@ -223,6 +234,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Preload semua audio files dengan progress tracking
         const loadPromises = filesToLoad.map(async (file) => {
             try {
+                // Jika loading sudah dilewati, jangan proses lagi
+                if (isSkipped) return null;
+
                 const response = await fetch(file);
                 
                 // Check if from cache
@@ -304,6 +318,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const newUrl = window.location.pathname;
         history.pushState({ action: 'home' }, '', newUrl);
         ui.showHome();
+    });
+
+    document.getElementById('skip-loading-button').addEventListener('click', () => {
+        if (isLoadingComplete) return;
+        isSkipped = true;
+        finishLoading();
     });
     
     elements.clickButton.addEventListener('click', () => updateCounter(count + 1));
@@ -416,6 +436,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. Start loading files
         await startLoading();
         
+        // Jika loading dilewati, jangan lanjutkan sisa alur
+        if (isSkipped) return;
+
         // 4. Ensure minimum loading time (agar user bisa melihat progress)
         const elapsedTime = Date.now() - startTime;
         const remainingTime = minimumLoadingTime - elapsedTime;
@@ -424,19 +447,8 @@ document.addEventListener('DOMContentLoaded', () => {
             await new Promise(resolve => setTimeout(resolve, remainingTime));
         }
         
-        // 5. Set flag loading complete
-        isLoadingComplete = true;
-        
-        // 6. Remove hash navigation blocker
-        window.removeEventListener('hashchange', preventHashNavigation);
-        
-        // 7. Handle action params
-        handleActionParam();
-        
-        // 8. Show app and handle scroll restoration
-        ui.showApp(() => {
-            handleScrollRestoration();
-        });
+        // 5. Selesaikan loading
+        finishLoading();
     })();
     
     // Cleanup: Save scroll position saat window ditutup

@@ -212,6 +212,14 @@ body.light-mode .adaptive-icon {
     max-width: 400px; /* Agar teks tidak terlalu lebar di layar besar */
 }
 
+#loading-screen .usr-feedback {
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+}
+
 
 /* DARK MODE SWITCH */
 .switch {
