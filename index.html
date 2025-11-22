@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,10 +11,13 @@
     <link rel="icon" type="image/png" sizes="32x32" href="rsc/png/icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Sofadi+One&display=swap" rel="stylesheet">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Sofadi+One&display=swap"
+        rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -30,8 +34,10 @@
         <div id="percentage" style="color: blue;">0%</div>
         <div id="file-size">File 0/9</div>
         <div id="total-network-size">Total: 0 MB</div>
-        <div class="loading-note"><br>Jika proses download sangat cepat artinya file sudah ter-cached dan tidak mengkonsumsi data internet Anda</div>
-        <button id="skip-loading-button" style="margin-top: 15px; padding: 8px 16px; background-color: blue; color: white; border: none; border-radius: 5px; cursor: pointer;">Lewati</button>
+        <div class="loading-note"><br>Jika proses download sangat cepat artinya file sudah ter-cached dan tidak
+            mengkonsumsi data internet Anda</div>
+        <button id="skip-loading-button"
+            style="margin-top: 15px; padding: 8px 16px; background-color: blue; color: white; border: none; border-radius: 5px; cursor: pointer;">Lewati</button>
         <div class="usr-feedback">
             <p>report anomaly <a href="https://github.com/krasyid822/AlMatsurat/issues"><u>here</u></a></p>
         </div>
@@ -64,7 +70,11 @@
             </div>
             <div class="main-font">
                 <h2><b>Tentang Al-Matsurat</b></h2>
-                <p class="sofadi-one-regular">Diciptakan oleh <a href="https://www.google.com/search?&q=Imam+Hasan+Al-Banna">Imam Hasan Al-Banna</a>, pendiri <a href="https://www.google.com/search?&q=Ikhwanul+Muslimin">Ikhwanul Muslimin (IM)</a>. Diketahui <a href="https://ukmipolmed.com/">UKMI</a> juga terlihat berada di jalan ini.</p>
+                <p class="sofadi-one-regular">Diciptakan oleh <a
+                        href="https://www.google.com/search?&q=Imam+Hasan+Al-Banna">Imam Hasan Al-Banna</a>, pendiri <a
+                        href="https://www.google.com/search?&q=Ikhwanul+Muslimin">Ikhwanul Muslimin (IM)</a>. Diketahui
+                    <a href="https://ukmipolmed.com/">UKMI</a> juga terlihat berada di jalan ini.
+                </p>
             </div>
             <div class="usr-feedback">
                 <p>report anomaly <a href="https://github.com/krasyid822/AlMatsurat/issues"><u>here</u></a></p>
@@ -72,9 +82,10 @@
         </div>
 
         <div class="pagi">
-            <button id="btn-kembali" class="fly-button-back"><span class="material-symbols-outlined">arrow_back</span>Kembali</button>
+            <button id="btn-kembali" class="fly-button-back"><span
+                    class="material-symbols-outlined">arrow_back</span>Kembali</button>
             <button class="fly-button-3" id="resetButton">Reset<br>Count<br>(Ctrl)</button>
-            
+
             <div class="action-buttons-container">
                 <span id="counter"><b>0</b></span>
                 <button id="clickButton"><br><br>Count<br>(→)</button>
@@ -90,7 +101,9 @@
                             <span class="material-symbols-outlined">speaker</span><br>Dengarkan
                         </button>
                         <div class="audio-container">
-                            <audio id="aud-listenn" src="https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Pagi.opus" controls controlslist="nodownload" preload="none" style="display: none;"></audio>
+                            <audio id="aud-listenn"
+                                src="https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Pagi.opus"
+                                controls controlslist="nodownload" preload="none" style="display: none;"></audio>
                         </div>
                     </div>
                 </div>
@@ -103,29 +116,57 @@
                             <span class="material-symbols-outlined">speaker</span><br>Dengarkan
                         </button>
                         <div class="audio-container">
-                            <audio id="aud-listenn-sore" src="https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Petang.opus" controls controlslist="nodownload" preload="none" style="display: none;"></audio>
+                            <audio id="aud-listenn-sore"
+                                src="https://github.com/krasyid822/AlMatsurat/releases/download/1/Al.Matsurat.Petang.opus"
+                                controls controlslist="nodownload" preload="none" style="display: none;"></audio>
                         </div>
                     </div>
                 </div>
 
                 <p style="text-align: center;">
-                    <label class="switch"><input type="checkbox" id="darkToggle"><span class="slider"></span></label><br>Dark Mode
+                    <label class="switch"><input type="checkbox" id="darkToggle"><span
+                            class="slider"></span></label><br>Dark Mode
                 </p>
 
                 <div id="content-container">
-                    </div>
+                </div>
 
                 <footer style="font-size: small;" class="text-center text-sm lg:text-base mt-10 mx-4 my-4 p-4 bold">
-                    Referensi: <br><a href="https://almatsurat.vercel.app/" target="_blank" title="yogyakarta. we love open source">AAM</a>, <a href="https://play.google.com/store/apps/details?id=com.walukustudio.almatsurat" target="_blank" title="play store app">Waluku Studio</a>, <a href="https://play.google.com/store/apps/details?id=com.andi.alquran.id" target="_blank" title="play store app">Andi Unpam</a>,  <a href="https://docs.google.com/spreadsheets/d/1LumnHQXxxukTrm2_4yrBxzRcpWKQOfbFy-ueoTmVkGM/edit?usp=sharing" target="_blank" title="google spreadsheet">Amalan Yaumiyah</a>, <a href="https://openulis.com/bacaan-istighfar/" target="_blank" title="kalimat istighfar">Openulis</a>, <a href="https://www.youtube.com/watch?v=_c4HMgUK7Wc" target="_blank" title="audio untuk listen">Excellenz School of Education</a>, <a href="https://www.youtube.com/watch?v=TfdS0O7_Jjc" target="_blank" title="audio istighfar">Inteam Digital</a>, <a href="https://alamisharia.co.id/blogs/doa-kafaratul-majelis" target="_blank" title="doa-kafaratul-majelis">ALAMI</a>, <a href="https://www.facebook.com/watch/?v=734133838467763" target="_blank" title="kaf audio fb">Surabaya Mengaji</a>
+                    Referensi: <br><a href="https://almatsurat.vercel.app/" target="_blank"
+                        title="yogyakarta. we love open source">AAM</a>, <a
+                        href="https://play.google.com/store/apps/details?id=com.walukustudio.almatsurat" target="_blank"
+                        title="play store app">Waluku Studio</a>, <a
+                        href="https://play.google.com/store/apps/details?id=com.andi.alquran.id" target="_blank"
+                        title="play store app">Andi Unpam</a>, <a
+                        href="https://docs.google.com/spreadsheets/d/1LumnHQXxxukTrm2_4yrBxzRcpWKQOfbFy-ueoTmVkGM/edit?usp=sharing"
+                        target="_blank" title="google spreadsheet">Amalan Yaumiyah</a>, <a
+                        href="https://openulis.com/bacaan-istighfar/" target="_blank"
+                        title="kalimat istighfar">Openulis</a>, <a href="https://www.youtube.com/watch?v=_c4HMgUK7Wc"
+                        target="_blank" title="audio untuk listen">Excellenz School of Education</a>, <a
+                        href="https://www.youtube.com/watch?v=TfdS0O7_Jjc" target="_blank"
+                        title="audio istighfar">Inteam Digital</a>, <a
+                        href="https://alamisharia.co.id/blogs/doa-kafaratul-majelis" target="_blank"
+                        title="doa-kafaratul-majelis">ALAMI</a>, <a
+                        href="https://www.facebook.com/watch/?v=734133838467763" target="_blank"
+                        title="kaf audio fb">Surabaya Mengaji</a>
                     <br><br>
-                    Alat Pendukung: <br><a href="https://www.naturalreaders.com/online/" target="_blank" title="web site">Natural Reader AI</a>, <a href="https://www.arabic-keyboard.org/editor/" target="_blank" title="teks editor kalimat arab">Arabic Online Editor</a>, <a href="https://fonts.google.com/icons" target="_blank" title="ikon-ikon yang dipakai">Google Fonts</a>, <a href="https://chatgpt.com" target="_blank" title="bantuan koding">ChatGPT</a>, <a href="https://www.lalal.ai/" target="_blank" title="audio instrument splitter">LALAL.AI</a>, <a href="https://g.co/gemini/share/23b80d207dc8" target="_blank" title="refactoring-tuning code">Gemini AI</a>
+                    Alat Pendukung: <br><a href="https://www.naturalreaders.com/online/" target="_blank"
+                        title="web site">Natural Reader AI</a>, <a href="https://www.arabic-keyboard.org/editor/"
+                        target="_blank" title="teks editor kalimat arab">Arabic Online Editor</a>, <a
+                        href="https://fonts.google.com/icons" target="_blank" title="ikon-ikon yang dipakai">Google
+                        Fonts</a>, <a href="https://chatgpt.com" target="_blank" title="bantuan koding">ChatGPT</a>, <a
+                        href="https://www.lalal.ai/" target="_blank" title="audio instrument splitter">LALAL.AI</a>, <a
+                        href="https://g.co/gemini/share/23b80d207dc8" target="_blank"
+                        title="refactoring-tuning code">Gemini AI</a>
                 </footer>
             </div>
         </div>
     </div>
-    
+
     <script src="data.js"></script>
     <script src="ui.js"></script>
     <script src="script.js"></script>
+    <script src="cursor-effects.js"></script>
 </body>
+
 </html>

@@ -6,7 +6,7 @@ const dzikirData = [
         arabic: 'اَعُوْذُ بِاللّٰهِ السَّمِيْعِ الْعَلِيْمِ مِنَ الشَّيْطَانِ الرَّجِيْمِ',
         translation: 'Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari godaan setan yang terkutuk.',
         audioFile: 'audioF',
-        audio: { pagi: { start: 2, end: 10 }, sore: { start: null, end: null } },
+        audio: { pagi: { start: 2, end: 10 }, sore: { start: 2, end: 10 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -16,7 +16,7 @@ const dzikirData = [
         arabic: 'بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ ۝ اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَۙ ۝ الرَّحْمٰنِ الرَّحِيْمِۙ ۝ مٰلِكِ يَوْمِ الدِّيْنِۗ ۝ اِيَّاكَ نَعْبُدُ وَاِيَّاكَ نَسْتَعِيْنُۗ ۝ اِهْدِنَا الصِّرَاطَ الْمُسْتَقِيْمَۙ ۝ صِرَاطَ الَّذِيْنَ اَنْعَمْتَ عَلَيْهِمْ ەۙ غَيْرِ الْمَغْضُوْبِ عَلَيْهِمْ وَلَا الضَّاۤلِّيْنَ ۝',
         translation: '(1) Dengan menyebut nama Allah Yang Maha Pemurah lagi Maha Penyayang. (2) Segala puji bagi Allah, Tuhan semesta alam. (3) Maha Pemurah lagi Maha Penyayang. (4) Yang menguasai di Hari Pembalasan. (5) Hanya Engkaulah yang kami sembah, dan hanya kepada Engkaulah kami meminta pertolongan. (6) Tunjukilah kami jalan yang lurus, (7) (yaitu) Jalan orang-orang yang telah Engkau beri nikmat kepada mereka; bukan (jalan) mereka yang dimurkai dan bukan (pula jalan) mereka yang sesat.',
         audioFile: 'audioF',
-        audio: { pagi: { start: 10, end: 56 }, sore: { start: null, end: null } },
+        audio: { pagi: { start: 10, end: 56 }, sore: { start: 10, end: 56 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -26,7 +26,7 @@ const dzikirData = [
         arabic: 'الۤمّۤ ۚ ۝ ذٰلِكَ الْكِتٰبُ لَا رَيْبَ ۛ فِيْهِ ۛ هُدًى لِّلْمُتَّقِيْنَۙ ۝ الَّذِيْنَ يُؤْمِنُوْنَ بِالْغَيْبِ وَيُقِيْمُوْنَ الصَّلٰوةَ وَمِمَّا رَزَقْنٰهُمْ يُنْفِقُوْنَ ۙ ۝ وَالَّذِيْنَ يُؤْمِنُوْنَ بِمَآ اُنْزِلَ اِلَيْكَ وَمَآ اُنْزِلَ مِنْ قَبْلِكَ ۚ وَبِالْاٰخِرَةِ هُمْ يُوْقِنُوْنَۗ ۝ اُولٰۤىِٕكَ عَلٰى هُدًى مِّنْ رَّبِّهِمْ ۙ وَاُولٰۤىِٕكَ هُمُ الْمُفْلِحُوْنَ ۝',
         translation: '(1) Alif Laam Miim. (2) Kitab (Al Qur’an) ini tidak ada keraguan padanya; petunjuk bagi mereka yang bertaqwa, (3) (yaitu) mereka yang beriman kepada yang gaib, yang mendirikan shalat dan menafkahkan sebahagian rezki yang Kami anugerahkan kepada mereka, (4) dan mereka yang beriman kepada Kitab (Al Qur’an) yang telah diturunkan kepadamu dan Kitab-kitab yang telah diturunkan sebelummu, serta mereka yakin akan adanya (kehidupan) akhirat. (5) Mereka itulah yang tetap mendapat petunjuk dari Tuhan mereka, dan merekalah orang-orang yang beruntung.',
         audioFile: 'audioF',
-        audio: { pagi: { start: 66, end: 123 }, sore: { start: null, end: null } },
+        audio: { pagi: { start: 66, end: 123 }, sore: { start: 66, end: 123 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -36,7 +36,7 @@ const dzikirData = [
         arabic: 'اَللّٰهُ لَآ اِلٰهَ اِلَّا هُوَۚ اَلْحَيُّ الْقَيُّوْمُ ەۚ لَا تَأْخُذُهٗ سِنَةٌ وَّلَا نَوْمٌۗ لَهٗ مَا فِى السَّمٰوٰتِ وَمَا فِى الْاَرْضِۗ مَنْ ذَا الَّذِيْ يَشْفَعُ عِنْدَهٗٓ اِلَّا بِاِذْنِهٖۗ يَعْلَمُ مَا بَيْنَ اَيْدِيْهِمْ وَمَا خَلْفَهُمْۚ وَلَا يُحِيْطُوْنَ بِشَيْءٍ مِّنْ عِلْمِهٖٓ اِلَّا بِمَا شَاۤءَۚ وَسِعَ كُرْسِيُّهُ السَّمٰوٰتِ وَالْاَرْضَۚ وَلَا يَـُٔوْدُهٗ حِفْظُهُمَاۚ وَهُوَ الْعَلِيُّ الْعَظِيْمُ ۝',
         translation: 'Allah, tidak ada Tuhan (yang berhak disembah) melainkan Dia Yang Hidup kekal lagi terus menerus mengurus (makhluk-Nya); tidak mengantuk dan tidak tidur. Kepunyaan-Nya apa yang di langit dan di bumi. Tiada yang dapat memberi syafaat di sisi Allah tanpa izin-Nya. Allah mengetahui apa-apa yang di hadapan mereka dan di belakang mereka, dan mereka tidak mengetahui apa-apa dari ilmu Allah melainkan apa yang dikehendaki-Nya. Kursi Allah meliputi langit dan bumi. Dan Allah tidak merasa berat memelihara keduanya, dan Allah Maha Tinggi lagi Maha Besar.',
         audioFile: 'audioF',
-        audio: { pagi: { start: 123, end: 181 }, sore: { start: null, end: null } },
+        audio: { pagi: { start: 123, end: 181 }, sore: { start: 123, end: 181 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -46,7 +46,7 @@ const dzikirData = [
         arabic: 'لَآ اِكْرَاهَ فِى الدِّيْنِۗ قَدْ تَّبَيَّنَ الرُّشْدُ مِنَ الْغَيِّ ۚ فَمَنْ يَّكْفُرْ بِالطَّاغُوْتِ وَيُؤْمِنْۢ بِاللّٰهِ فَقَدِ اسْتَمْسَكَ بِالْعُرْوَةِ الْوُثْقٰى لَا انْفِصَامَ لَهَا ۗوَاللّٰهُ سَمِيْعٌ عَلِيْمٌ ۝',
         translation: 'Tidak ada paksaan untuk (memasuki) agama (Islam); sesungguhnya telah jelas jalan yang benar daripada jalan yang sesat. Karena itu barang siapa yang ingkar kepada Thaghut dan beriman kepada Allah, maka sesungguhnya ia telah berpegang kepada buhu tali yang amat kuat yang tidak akan putus. Dan Allah Maha Mendengar lagi Maha Mengetahui.',
         audioFile: 'audioF',
-        audio: { pagi: { start: 181, end: 207 }, sore: { start: null, end: null } },
+        audio: { pagi: { start: 181, end: 207 }, sore: { start: 181, end: 207 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -56,7 +56,7 @@ const dzikirData = [
         arabic: 'اَللّٰهُ وَلِيُّ الَّذِيْنَ اٰمَنُوْا يُخْرِجُهُمْ مِّنَ الظُّلُمٰتِ اِلَى النُّوْرِۗ وَالَّذِيْنَ كَفَرُوْٓا اَوْلِيَاۤؤُهُمُ الطَّاغُوْتُ يُخْرِجُوْنَهُمْ مِّنَ النُّوْرِ اِلَى الظُّلُمٰتِۗ اُولٰۤىِٕكَ اَصْحٰبُ النَّارِۚ هُمْ فِيْهَا خٰلِدُوْنَ ۝',
         translation: 'Allah Pelindung orang-orang yang beriman; Dia mengeluarkan mereka dari kegelapan (kekafiran) kepada cahaya (iman). Dan orang-orang yang kafir, pelindung-pelindungnya ialah setan, yang mengeluarkan mereka dari cahaya kepada kegelapan (kekafiran). Mereka itu adalah penghuni neraka; mereka kekal di dalamnya.',
         audioFile: 'audioF',
-        audio: { pagi: { start: 207, end: 240 }, sore: { start: null, end: null } },
+        audio: { pagi: { start: 207, end: 240 }, sore: { start: 207, end: 240 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -66,7 +66,7 @@ const dzikirData = [
         arabic: 'لِلّٰهِ مَا فِى السَّمٰوٰتِ وَمَا فِى الْاَ رْضِ ۗ وَاِ نْ تُبْدُوْا مَا فِيْۤ اَنْفُسِكُمْ اَوْ تُخْفُوْهُ يُحَا سِبْكُمْ بِهِ اللّٰهُ ۗ فَيَـغْفِرُ لِمَنْ يَّشَآءُ وَيُعَذِّبُ مَنْ يَّشَآءُ ۗ وَا للّٰهُ عَلٰى كُلِّ شَيْءٍ قَدِيْرٌ ۝',
         translation: 'Kepunyaan Allah-lah segala apa yang ada di langit dan apa yang ada di bumi. Dan jika kamu melahirkan apa yang ada di dalam hatimu atau kamu menyembunyikannya, niscaya Allah akan membuat perhitungan dengan kamu tentang perbuatanmu itu. Maka Allah mengampuni siapa yang dikehendaki-Nya dan menyiksa siapa yang dikehendaki-Nya; dan Allah Maha Kuasa atas segala sesuatu.',
         audioFile: 'audioF',
-        audio: { pagi: { start: 240, end: 271 }, sore: { start: null, end: null } },
+        audio: { pagi: { start: 240, end: 271 }, sore: { start: 240, end: 271 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -76,7 +76,7 @@ const dzikirData = [
         arabic: 'اٰمَنَ الرَّسُوْلُ بِمَآ اُنْزِلَ اِلَيْهِ مِنْ رَّبِّهٖ وَالْمُؤْمِنُوْنَۗ كُلٌّ اٰمَنَ بِاللّٰهِ وَمَلٰۤىِٕكَتِهٖ وَكُتُبِهٖ وَرُسُلِهٖۗ لَا نُفَرِّقُ بَيْنَ اَحَدٍ مِّنْ رُّسُلِهٖ ۗ وَقَالُوْا سَمِعْنَا وَاَطَعْنَا غُفْرَانَكَ رَبَّنَا وَاِلَيْكَ الْمَصِيْرُ ۝',
         translation: "Rasul telah beriman kepada Al Qur'an yang diturunkan kepadanya dari Tuhannya, demikian pula orang-orang yang beriman. Semuanya beriman kepada Allah, malaikat-malaikat-Nya, kitab-kitab-Nya dan rasul-rasul-Nya. (Mereka mengatakan): \"Kami tidak membeda-bedakan antara seseorang pun (dengan yang lain) dari rasul rasul-Nya\", dan mereka mengatakan: \"Kami dengar dan kami taat\". (Mereka berdoa):\"Ampunilah kami ya Tuhan kami dan kepada Engkaulah tempat kembali\".",
         audioFile: 'audioF',
-        audio: { pagi: { start: 271, end: 307 }, sore: { start: null, end: null } },
+        audio: { pagi: { start: 271, end: 307 }, sore: { start: 271, end: 307 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -86,7 +86,7 @@ const dzikirData = [
         arabic: 'لَا يُكَلِّفُ اللّٰهُ نَفْسًا اِلَّا وُسْعَهَا ۗ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَاۤ اِنْ نَّسِيْنَاۤ اَوْ اَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَاۤ اِصْرًا كَمَا حَمَلْتَهٗ عَلَى الَّذِيْنَ مِنْ قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَا قَةَ لَنَا بِهٖ ۚ وَا عْفُ عَنَّا ۗ وَا غْفِرْ لَنَا ۗ وَا رْحَمْنَا ۗ اَنْتَ مَوْلٰٮنَا فَا نْصُرْنَا عَلَى الْقَوْمِ الْكٰفِرِيْنَ ۝',
         translation: 'Allah tidak membebani seseorang melainkan sesuai dengan kesanggupannya. Ia mendapat pahala (dari kebajikan) yang diusahakannya dan ia mendapat siksa (dari kejahatan) yang dikerjakannya. (Mereka berdo`a): "Ya Tuhan kami, janganlah Engkau hukum kami jika kami lupa atau kami tersalah. Ya Tuhan kami, janganlah Engkau bebankan kepada kami beban yang berat sebagaimana Engkau bebankan kepada orang-orang yang sebelum kami. Ya Tuhan kami, janganlah Engkau pikulkan kepada kami apa yang tak sanggup kami memikulnya. Beri maaflah kami; ampunilah kami; dan rahmatilah kami. Engkaulah Penolong kami, maka tolonglah kami terhadap kaum yang kafir".',
         audioFile: 'audioF',
-        audio: { pagi: { start: 308, end: 377 }, sore: { start: null, end: null } },
+        audio: { pagi: { start: 308, end: 377 }, sore: { start: 308, end: 377 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -127,7 +127,7 @@ const dzikirData = [
         arabic: 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلّٰهِ , وَالْحَمْدُ لِلّٰهِ لَا شَرِيْكَ لَهُ , لَا إِلَهَ إِلَّا هُوَ وَإِلَيْهِ النُّشُوْرُ',
         translation: 'Kami berpagi hari dan berpagi hari pula kerjaan milik Allah. Segala puji bagi Allah, tiada sekutu bagi-Nya, tiada Tuhan melainkan Dia dan kepada-Nya tempat kembali.',
         audioFile: 'audioF',
-        audio: { pagi: { start: 627, end: 643 }, sore: { start: null, end: null } },
+        audio: { pagi: { start: 627, end: 643 }, sore: { start: 0, end: 0 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -138,7 +138,7 @@ const dzikirData = [
         arabic: 'أَمْسَيْنَا وَ أَمْسَ الْمُلْكُ لِلَّهِ وَلْحَمْدُ لِلهِ لَا شَرِيْكَ لَهُ لَا إِلَهَ إِلَّاهُوَ وَإِلَيْهِ الْمَصِيْرُ',
         translation: 'Kami bersore hari dan bersore hari pula kerajaan milik Allah. Segala puji bagi Allah, tiada sekutu bagi-Nya, tiada Tuhan melainkan Dia dan kepada-Nya tempat kembali.',
         audioFile: 'audioFSore',
-        audio: { pagi: { start: null, end: null }, sore: { start: 1, end: 15 } },
+        audio: { pagi: { start: 0, end: 0 }, sore: { start: 1, end: 15 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -149,7 +149,7 @@ const dzikirData = [
         arabic: 'اَصْبَحْنَا عَلَى فِطْرَةِ الْإِسْلَامِ، وَكَلِمَةِ الْإِخْلَاصِ، وَعَلَى دِيْنِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ وَعَلَى مِلَّةِ أَبِيْنَا إِبْرَاهِيْمَ حَنِيْفًا وَمَا كَانَ مِنَ الْمُشْرِكِيْنَ',
         translation: 'Di waktu pagi kami memegang agama Islam, kalimat ikhlas, agama Nabi kita Muhammad shallallahu ‘alaihi wa sallam, dan agama ayah kami Ibrahim, yang berdiri di atas jalan yang lurus, muslim dan tidak tergolong orang-orang musyrik.',
         audioFile: 'audioF',
-        audio: { pagi: { start: 673, end: 697 }, sore: { start: null, end: null } },
+        audio: { pagi: { start: 673, end: 697 }, sore: { start: 0, end: 0 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -160,7 +160,7 @@ const dzikirData = [
         arabic: 'أَمْسَيْنَا عَلَى فِطْرَةِ اْلإِسْلاَمِ وَعَلَى كَلِمَةِ اْلإِخْلاَصِ وَعَلَى دِيْنِ نَبِيِّنَا مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ وَعَلَى مِلَّةِ أَبِيْنَا إِبْرَاهِيْمَ حَنِيْفًا مُسْلِمًا وَمَا كَانَ مِنَ الْمُشْرِكِيْنَ',
         translation: 'Di waktu sore kami memegang agama Islam, kalimat ikhlas, agama Nabi kita Muhammad shallallahu ‘alaihi wa sallam, dan agama ayah kami Ibrahim, yang berdiri di atas jalan yang lurus, muslim dan tidak tergolong orang-orang musyrik.',
         audioFile: 'audioFSore',
-        audio: { pagi: { start: null, end: null }, sore: { start: 43, end: 67 } },
+        audio: { pagi: { start: 0, end: 0 }, sore: { start: 43, end: 67 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -171,7 +171,7 @@ const dzikirData = [
         arabic: 'اللّٰهُـمَّ إِنِّيْ أَصْبَحْتُ مِنْكَ فِيْ نِعْمَةٍ وَعَافِيَةٍ وَسِتْرٍ , فَأَتِمَّ عَلَيَّ نِعْمَتَكَ وَعَافِيَتَكَ وَسِتْرَكَ فِيْ الدِّيْنِ وَالدُّنْيَا وَالْأَخِرَةِ',
         translation: 'Ya Allah, sesungguhnya aku berpagi hari dari-Mu dalam kenikmatan, kesehatan dan perlindungan. Maka sempurnakannlah untukku kenikmatan, kesehatan dan perlindungan-Mu itu di dunia dan akhirat.',
         audioFile: 'audioF',
-        audio: { pagi: { start: 747, end: 765 }, sore: { start: null, end: null } },
+        audio: { pagi: { start: 747, end: 765 }, sore: { start: 0, end: 0 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -182,7 +182,7 @@ const dzikirData = [
         arabic: 'اللَّهُمَّ إِنِّي أَمْسَيتُ مِنْكَ فِي نِعْمَةٍ وَعَافِيَةٍ وَسِتْر فَأَتِمَّ عَلَيَّ نِعْمَتَكَ وَعَافِيَتَكَ وَسِتْرَكَ فِي الدُّنْيَا وَالآخِرَة',
         translation: 'Ya Allah, sesungguhnya aku bersore hari dari-Mu dalam kenikmatan, kesehatan dan perlindungan. Maka sempurnakannlah untukku kenikmatan, kesehatan dan perlindungan-Mu itu di dunia dan akhirat.',
         audioFile: 'audioFSore',
-        audio: { pagi: { start: null, end: null }, sore: { start: 115, end: 134 } },
+        audio: { pagi: { start: 0, end: 0 }, sore: { start: 115, end: 134 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -193,7 +193,7 @@ const dzikirData = [
         arabic: 'اَللّٰهُـمَّ مَا أَصْبَحَ بِيْ مِنْ نِعْمَةٍ , أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ , لَا شَرِيْكَ لَكَ , فَلَكَ الْحَمْدُ , وَلَكَ الشُّكْرُ',
         translation: 'Ya Allah, kenikmatan yang aku atau salah seorang dari makhluk-Mu berpagi hari dengannya adalah dari-Mu semata; tiada sekutu bagi-Mu. Maka bagi-Mu segala puji dan rasa syukur.',
         audioFile: 'audioF',
-        audio: { pagi: { start: 801, end: 815 }, sore: { start: null, end: null } },
+        audio: { pagi: { start: 801, end: 815 }, sore: { start: 0, end: 0 } },
         headerClass: 'bg-zinc-700'
     },
     {
@@ -204,7 +204,7 @@ const dzikirData = [
         arabic: 'اللَّهُمَّ مَا أَمْسَ بِيْ مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ لاَ شَرِيْكَ لَكَ فَلَكَ الْحَمْدُ وَلَكَ الشُّكْرُ',
         translation: 'Ya Allah, kenikmatan yang aku atau salah seorang dari makhluk-Mu bersore hari dengannya adalah dari-Mu semata; tiada sekutu bagi-Mu. Maka bagi-Mu segala puji dan rasa syukur.',
         audioFile: 'audioFSore',
-        audio: { pagi: { start: null, end: null }, sore: { start: 170, end: 184 } },
+        audio: { pagi: { start: 0, end: 0 }, sore: { start: 170, end: 184 } },
         headerClass: 'bg-zinc-700'
     },
     {

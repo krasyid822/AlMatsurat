@@ -85,7 +85,7 @@ const ui = {
             document.body.classList.add('no-scroll');
         }
     },
-    
+
     // #### PERUBAHAN DI SINI ####
     // Menampilkan layar loading selesai dan menjalankan callback jika ada
     showApp(callback) {
@@ -93,24 +93,24 @@ const ui = {
         this.elements.dotting.innerHTML = "✓ SELESAI";
         this.elements.progressBarFill.style.width = '100%';
         this.elements.percentageText.textContent = '100%';
-        
+
         // Tambahkan animasi fade out untuk loading screen
         this.elements.loadingScreen.style.transition = 'opacity 0.5s ease';
         this.elements.loadingScreen.style.opacity = '0';
-        
+
         setTimeout(() => {
             this.elements.loadingScreen.style.display = 'none';
             this.elements.utama.style.display = 'block';
-            
+
             // Fade in utama
             this.elements.utama.style.opacity = '0';
             this.elements.utama.style.transition = 'opacity 0.5s ease';
-            
+
             // Tunggu sedikit sebelum fade in untuk memastikan rendering
             requestAnimationFrame(() => {
                 this.elements.utama.style.opacity = '1';
             });
-            
+
             // Jalankan callback setelah fade in selesai
             if (callback) {
                 setTimeout(callback, 600); // Tunggu fade in selesai (500ms + buffer)

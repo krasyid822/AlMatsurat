@@ -39,10 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
             recycle: document.getElementById('recycleAudio')
         }
     };
-    
+
     // --- INISIALISASI UI MODULE ---
     ui.init(elements);
-    
+
     // --- STATE & LOGIKA APLIKASI ---
     let count = 0;
     let stopPlaybackListener = null;
@@ -51,9 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let isSkipped = false; // Flag untuk menandai jika loading dilewati
     let savedHash = '';
     let scrollSaveTimeout = null;
-    
+
     // --- FUNGSI-FUNGSI LOGIKA ---
-    
+
     // Fungsi untuk menyimpan posisi scroll
     const saveScrollPosition = () => {
         if (scrollSaveTimeout) clearTimeout(scrollSaveTimeout);
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('alMatsurat_scrollPosition', JSON.stringify(scrollData));
         }, 500); // Debounce 500ms
     };
-    
+
     // Fungsi untuk memuat posisi scroll
     const loadScrollPosition = () => {
         try {
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentUrl = window.location.pathname + window.location.search;
                 const savedUrl = scrollData.url.split('#')[0]; // Ambil URL tanpa hash
                 const hoursPassed = (Date.now() - scrollData.timestamp) / (1000 * 60 * 60);
-                
+
                 if (savedUrl === currentUrl && hoursPassed < 24) {
                     return scrollData.position;
                 }
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return null;
     };
-    
+
     // Fungsi untuk memuat progress counter dari localStorage
     const loadProgress = () => {
         const savedCount = localStorage.getItem('alMatsurat_counter');
@@ -96,12 +96,12 @@ document.addEventListener('DOMContentLoaded', () => {
             ui.updateCounterView(count);
         }
     };
-    
+
     // Fungsi untuk menyimpan progress ke localStorage
     const saveProgress = () => {
         localStorage.setItem('alMatsurat_counter', count);
     };
-    
+
     const finishLoading = () => {
         if (isLoadingComplete) return; // Mencegah eksekusi ganda
         isLoadingComplete = true;
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playSegment = (audio, startTime, endTime) => {
         currentAudio = audio;
         if (stopPlaybackListener) currentAudio.removeEventListener('timeupdate', stopPlaybackListener);
-        
+
         currentAudio.currentTime = startTime;
         currentAudio.play();
 
@@ -135,12 +135,12 @@ document.addEventListener('DOMContentLoaded', () => {
             stopPlaybackListener = null;
         }
     };
-    
+
     const updateCounter = (value) => {
         count = value;
         ui.updateCounterView(count);
         saveProgress(); // Simpan otomatis setiap perubahan
-        
+
         if (navigator.vibrate) navigator.vibrate(value === 0 ? 200 : 50);
 
         if (count === 0) {
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.audios.info.play();
         }
     };
-    
+
     // #### PERBAIKAN: Memisahkan logika URL dan Scroll ####
     const handleActionParam = () => {
         const params = new URLSearchParams(window.location.search);
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Hapus hash sementara untuk mencegah auto-scroll browser
             history.replaceState(null, null, window.location.pathname + window.location.search);
         }
-        
+
         // Jika ada hash yang disimpan, scroll ke sana
         if (savedHash) {
             setTimeout(() => {
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     };
-    
+
     // Mencegah navigasi hash sampai loading selesai
     const preventHashNavigation = (e) => {
         if (!isLoadingComplete) {
@@ -203,13 +203,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         }
     };
-    
+
     // Blokir hash navigation saat loading
     window.addEventListener('hashchange', preventHashNavigation);
-    
+
     // Simpan posisi scroll saat user scroll
     window.addEventListener('scroll', saveScrollPosition, { passive: true });
-    
+
     // Fungsi loading dengan progress tracking
     const startLoading = async () => {
         const filesToLoad = [
@@ -223,14 +223,14 @@ document.addEventListener('DOMContentLoaded', () => {
             'rsc/wav/info_boost',
             'rsc/wav/recycle_boost'
         ];
-        
+
         let loadedCount = 0;
         let totalSize = 0;
         let loadedSize = 0;
         let allFromCache = true;
-        
+
         elements.loadingInfo.textContent = 'Memuat file...';
-        
+
         // Preload semua audio files dengan progress tracking
         const loadPromises = filesToLoad.map(async (file) => {
             try {
@@ -238,46 +238,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (isSkipped) return null;
 
                 const response = await fetch(file);
-                
+
                 // Check if from cache
-                const fromCache = response.headers.get('x-cache') === 'HIT' || 
-                                 response.type === 'basic';
+                const fromCache = response.headers.get('x-cache') === 'HIT' ||
+                    response.type === 'basic';
                 if (!fromCache) allFromCache = false;
-                
+
                 const contentLength = response.headers.get('content-length');
                 const fileSize = contentLength ? parseInt(contentLength, 10) : 0;
                 totalSize += fileSize;
-                
+
                 const reader = response.body.getReader();
                 let receivedLength = 0;
                 const chunks = [];
-                
+
                 while (true) {
-                    const {done, value} = await reader.read();
+                    const { done, value } = await reader.read();
                     if (done) break;
-                    
+
                     chunks.push(value);
                     receivedLength += value.length;
                     loadedSize += value.length;
-                    
+
                     // Update progress
                     const totalProgress = totalSize || (filesToLoad.length * 1024 * 1024); // Estimate if unknown
                     const percentComplete = Math.min(Math.round((loadedSize / totalProgress) * 100), 100);
                     elements.progressBarFill.style.width = percentComplete + '%';
                     elements.percentageText.textContent = percentComplete + '%';
                 }
-                
+
                 loadedCount++;
                 elements.fileSizeInfo.textContent = `File ${loadedCount}/${filesToLoad.length}`;
-                
+
                 const fileName = file.split('/').pop();
                 elements.loadingInfo.textContent = `${fromCache ? '✓ Cache' : '⬇ Download'}: ${fileName}`;
-                
+
                 // Update overall progress based on file count
                 const fileProgress = Math.round((loadedCount / filesToLoad.length) * 100);
                 elements.progressBarFill.style.width = fileProgress + '%';
                 elements.percentageText.textContent = fileProgress + '%';
-                
+
                 // Combine chunks into blob
                 const blob = new Blob(chunks);
                 return URL.createObjectURL(blob);
@@ -288,31 +288,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 return null;
             }
         });
-        
+
         await Promise.all(loadPromises);
-        
+
         const sizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
-        elements.totalNetworkSizeInfo.textContent = allFromCache 
+        elements.totalNetworkSizeInfo.textContent = allFromCache
             ? `✓ Semua file dari cache (${sizeInMB} MB)`
             : `Total terdownload: ${sizeInMB} MB`;
     };
 
     // --- EVENT LISTENERS ---
-    
+
     elements.btnPagi.addEventListener('click', () => {
         // Tambahkan ?action=pagi ke URL
         const newUrl = window.location.pathname + '?action=pagi';
         history.pushState({ action: 'pagi' }, '', newUrl);
         ui.showPagi();
     });
-    
+
     elements.btnSore.addEventListener('click', () => {
         // Tambahkan ?action=sore ke URL
         const newUrl = window.location.pathname + '?action=sore';
         history.pushState({ action: 'sore' }, '', newUrl);
         ui.showSore();
     });
-    
+
     elements.btnKembali.addEventListener('click', () => {
         // Hapus parameter action dari URL saat kembali ke home
         const newUrl = window.location.pathname;
@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isSkipped = true;
         finishLoading();
     });
-    
+
     elements.clickButton.addEventListener('click', () => updateCounter(count + 1));
     elements.resetButton.addEventListener('click', () => updateCounter(0));
 
@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.resetButton.click();
         }
     });
-    
+
     const setupListenButton = (btn, audio) => {
         btn.addEventListener('click', () => {
             audio.style.display = 'block';
@@ -419,23 +419,23 @@ document.addEventListener('DOMContentLoaded', () => {
     (async () => {
         const startTime = Date.now();
         const minimumLoadingTime = 1500; // Minimum 1.5 detik untuk loading screen
-        
+
         // Simpan hash dari awal jika ada
         if (window.location.hash) {
             savedHash = window.location.hash;
             // Hapus hash dari URL untuk mencegah browser auto-scroll
             history.replaceState(null, null, window.location.pathname + window.location.search);
         }
-        
+
         // 1. Load saved progress
         loadProgress();
-        
+
         // 2. Generate content
         ui.generateContent();
-        
+
         // 3. Start loading files
         await startLoading();
-        
+
         // Jika loading dilewati, jangan lanjutkan sisa alur
         if (isSkipped) return;
 
@@ -446,11 +446,11 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.loadingInfo.textContent = 'Menyelesaikan...';
             await new Promise(resolve => setTimeout(resolve, remainingTime));
         }
-        
+
         // 5. Selesaikan loading
         finishLoading();
     })();
-    
+
     // Cleanup: Save scroll position saat window ditutup
     window.addEventListener('beforeunload', () => {
         saveScrollPosition();
